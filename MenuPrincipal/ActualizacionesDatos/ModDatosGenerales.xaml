@@ -1,0 +1,61 @@
+﻿<Window x:Class="MenuPrincipal.ActualizacionesDatos.ModDatosGenerales"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+
+        xmlns:local="clr-namespace:MenuPrincipal.ActualizacionesDatos"
+        mc:Ignorable="d"
+             Title="Menu de Modificaciones" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid>
+
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#9e1717" Offset="0.272"/>
+                <GradientStop Color="#cd9112" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Rectángulo detrás del contenido -->
+        <Rectangle Margin="20,20,20,20" RadiusX="10" RadiusY="10" Fill="White">
+            <Rectangle.Effect>
+                <DropShadowEffect/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <!-- Header del menú -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0">
+            <TextBlock Text="Menú de Modificaciones" HorizontalAlignment="Center" 
+                    FontSize="30" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBlock Text="A continuación, seleccione el apartado a modificar" FontSize="20"/>
+        </StackPanel>
+
+        <!-- Botones en un Grid para distribuirlos en dos filas -->
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Primera fila de botones -->
+            <Button x:Name="btnCarrera" Content="Carrera" Width="140" Height="40" Margin="10" 
+                 Cursor="Hand" Grid.Row="0" Grid.Column="0" Click="btnCarrera_Click"/>
+            <Button x:Name="btnCategorias" Content="Categorías" Width="140" Height="40" Margin="10" 
+                 Cursor="Hand" Grid.Row="0" Grid.Column="1" Click="btnCategorias_Click"/>
+
+            <!-- Segunda fila de botones -->
+            <Button x:Name="btnEditoriales" Content="Editoriales" Width="140" Height="40" Margin="10" 
+                 Cursor="Hand" Grid.Row="1" Grid.Column="0" Click="btnEditoriales_Click" />
+            <Button x:Name="btnAutores" Content="Autores" Width="140" Height="40" Margin="10" 
+                 Cursor="Hand" Grid.Row="1" Grid.Column="1" Click="btnAutores_Click"/>
+            <Button x:Name="btnProveedores" Content="Proveedores" Width="140" Height="40" Margin="10" 
+                 Cursor="Hand" Grid.Row="1" Grid.Column="2" Click="btnProveedores_Click" />
+        </Grid>
+    </Grid>
+</Window>

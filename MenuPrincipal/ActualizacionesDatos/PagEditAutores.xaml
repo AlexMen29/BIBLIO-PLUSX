@@ -1,0 +1,79 @@
+﻿<Page x:Class="MenuPrincipal.ActualizacionesDatos.PagEditAutores"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MenuPrincipal.ActualizacionesDatos"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Autores">
+    <Grid Background="White" Margin="20">
+
+        <!-- Título de la página -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,10">
+            <TextBlock Text="Editar Datos de Autores" FontSize="20" FontWeight="Bold" 
+               Foreground="#333" HorizontalAlignment="Center"/>
+            <TextBlock Text="Seleccione un Autor para modificar " 
+               FontSize="14" Foreground="#666" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- DataGrid para mostrar carreras -->
+        <DataGrid x:Name="AutoresDataGrid" AutoGenerateColumns="False" Margin="0,80,0,200" 
+          IsReadOnly="True" ItemsSource="{Binding}" SelectionChanged="AutoresDataGrid_SelectionChanged">
+            <!-- Columnas del DataGrid -->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding AutorID}" Width="*" />
+                <DataGridTextColumn Header="Nombre de Autor" Binding="{Binding NombreAutor}" Width="2*" />
+                <DataGridTextColumn Header="Nacionalidad" Binding="{Binding Nacionalidad}" Width="2*" />
+                <DataGridTextColumn Header="Fecha Nacimiento" Width="2*" Binding="{Binding FechaNacimiento, StringFormat={}{0:dd/MM/yyyy}}" />
+                <DataGridTextColumn Header="Bibliografia" Binding="{Binding Bibliografia}" Width="2*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Panel para editar nombre de la carrera -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Width="300">
+
+            <!-- TextBox para nuevo nombre de la carrera -->
+            <TextBox x:Name="txtNuevoNombre"
+             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+             materialDesign:HintAssist.Hint="Nuevo nombre"
+             Width="275" Margin="0,0,0,10"/>
+
+            <TextBox x:Name="txtNacionalidad"
+             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+             materialDesign:HintAssist.Hint="Nacionalidad"
+             Width="275" Margin="0,0,0,10"/>
+
+            <DatePicker x:Name="DateFecha"
+            SelectedDate="{Binding FechaNacimiento}"
+            DisplayDateStart="1900-01-01"
+            DisplayDateEnd="2100-12-31"
+            Width="275"
+            Margin="0,0,0,10"
+            materialDesign:HintAssist.Hint="Fecha de nacimiento" />
+
+            <TextBox x:Name="txtBibliografia"
+             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+             materialDesign:HintAssist.Hint="Bibliografia"
+             Width="275" Margin="0,0,0,10"/>
+
+            <!-- Botón de actualización -->
+            <StackPanel Orientation="Horizontal">
+
+
+                <Button x:Name="btnActualizar" Content="Actualizar" Width="150" Height="30" Margin="10,10" 
+                FontWeight="Bold"
+                Cursor="Hand"                 
+                HorizontalAlignment="Center" Click="btnActualizar_Click"/>
+
+                <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30" 
+                  FontWeight="Bold"
+                  Cursor="Hand"
+
+              HorizontalAlignment="Center" Click="btnCancelar_Click"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Page>

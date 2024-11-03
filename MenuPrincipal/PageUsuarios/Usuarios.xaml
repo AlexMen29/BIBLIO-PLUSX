@@ -1,0 +1,77 @@
+﻿<Page x:Class="MenuPrincipal.PageUsuarios.Usuarios"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MenuPrincipal.PageUsuarios"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Usuarios" Background="White">
+
+    <Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" >
+
+
+
+            <!-- Filtro por Tipo de Usuario -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Filtrar por Tipo Usuario" FontWeight="Bold" />
+                <ComboBox x:Name="TipoUsuarioComboBox" Width="150" SelectionChanged="TipoUsuarioComboBox_SelectionChanged"  />
+            </StackPanel>
+
+            <!-- Filtro por Carrera -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Filtrar por Carrera" FontWeight="Bold" />
+                <ComboBox x:Name="CarreraComboBox" Width="150" SelectionChanged="CarreraComboBox_SelectionChanged"  />
+            </StackPanel>
+
+            <!-- Filtro por Fecha de ingreso -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Filtrar por Fecha Ingreso" FontWeight="Bold" />
+                <ComboBox x:Name="FechaComboBox" Width="150" SelectionChanged="FechaComboBox_SelectionChanged"  >
+                    <ComboBoxItem Content="Mas Reciente"/>
+                    <ComboBoxItem Content="Mas Antiguo"/>
+                    <ComboBoxItem Content="Ninguno"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Botón Filtrar -->
+            <Button Name ="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click"  />
+
+
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0" Width="780">
+
+            <!-- Filtro por Carnet -->
+            <StackPanel Margin="10,0">
+                <TextBlock Text="Filtrar por Carnet" FontWeight="Bold" />
+                <TextBox x:Name="CarnetTextBox" Width="150" />
+            </StackPanel>
+
+            <Button Name ="btnBuscar" Content="Buscar" Width="80" Height="25" Margin="10,0,0,0" Click="btnBuscar_Click"  />
+        </StackPanel>
+
+        <!-- DataGrid para mostrar usuario -->
+        <DataGrid x:Name="UsuariosDataGrid" AutoGenerateColumns="False"
+        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,100,0,60" 
+        IsReadOnly="True"  ItemsSource="{Binding}" SelectionChanged="UsuariosDataGrid_SelectionChanged"  >
+
+            <!-- Columnas del DataGrid -->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="IdUsuario" Binding="{Binding UsuarioID}" Width="*" />
+                <DataGridTextColumn Header="Nombres" Binding="{Binding Nombres}" Width="*" />
+                <DataGridTextColumn Header="Apellidos" Binding="{Binding Apellidos}" Width="*" />
+                <DataGridTextColumn Header="Registro" Binding="{Binding FechaRegistro}" Width="*" />
+                <DataGridTextColumn Header="Carnet" Binding="{Binding Carnet}" Width="*" />
+                <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="*" />
+                <DataGridTextColumn Header="TipoUsuario" Binding="{Binding TipoUsuario}" Width="*" />
+                <DataGridTextColumn Header="Carrera" Binding="{Binding Carrera}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,20,0,20">
+            <Label Name="labSeleccion" Content="Elemento Seleccionado: "   Margin="0,10,0,10"/>
+        </StackPanel>
+    </Grid>
+</Page>

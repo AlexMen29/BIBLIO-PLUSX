@@ -1,0 +1,139 @@
+﻿<Page x:Class="MenuPrincipal.CompraDeLibros.CompraLibros"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:MenuPrincipal.CompraDeLibros"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CompraLibros">
+
+    <Grid Background="White">
+
+        <TabControl>
+
+            <TabItem Header="Compra de Libros existentes">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="20,20,57,0">
+                    <StackPanel Background="Transparent" x:Name="datosLibrosPanel">
+
+                        <!-- Título -->
+                        <Label Content="Datos Libro" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5" />
+
+
+                        <StackPanel Margin="0,10">
+                            <TextBlock Text="Edicion" Foreground="#FF2196F3" Opacity="0.75" />
+                            <ComboBox x:Name="SeleccionarEdiccionBox" Margin="5" Foreground="Black" 
+                            Style="{StaticResource MaterialDesignComboBox}" SelectionChanged="SeleccionarEdiccionBox_SelectionChanged"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,10" IsEnabled="False">
+                            <TextBlock Text="LIbro seleccionado" Foreground="#FF2196F3" Opacity="0.75" />
+                            <TextBox x:Name="NombreLibrotxt" Margin="5" Foreground="Black" />
+
+                        </StackPanel>
+
+
+
+                        <StackPanel Margin="0,10">
+                            <TextBlock Text="Proveedor" Foreground="#FF2196F3" Opacity="0.75" />
+                            <ComboBox x:Name="SelecionarProveedorBox" Margin="5" Foreground="Black" 
+                            Style="{StaticResource MaterialDesignComboBox}"/>
+                        </StackPanel>
+
+
+
+                        <TextBox x:Name="cantidadLibrotxt" Margin="5" Foreground="Black" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Cantidad" SelectionChanged="cantidadLibrotxt_SelectionChanged"/>
+
+                        <TextBox x:Name="costoUnidadtxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Costo unidad" SelectionChanged="costoUnidadtxt_SelectionChanged"/>
+                        <StackPanel Margin="0,10">
+                            <TextBlock Text="Fecha Actual" Foreground="#FF2196F3" Opacity="0.75" />
+                            <DatePicker x:Name="DateFecha" HorizontalAlignment="Left" IsEnabled="False"
+                            DisplayDateStart="1900-01-01"
+                            DisplayDateEnd="2100-12-31"
+                            Width="275"
+                            Margin="5,5,5,0"
+                            materialDesign:HintAssist.Hint="Fecha de compra"/>
+                        </StackPanel>
+
+
+                        <TextBox x:Name="costoTotaltxt" Margin="5" Foreground="Black" IsEnabled="False" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Costo Total"/>
+
+                        <!-- Botón de Modificar -->
+                        <Button Name="btnComprar" Content="Comprar" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="btnComprar_Click" />
+                    </StackPanel>
+                </ScrollViewer>
+
+
+            </TabItem>
+
+            <TabItem Header="Compra de Libros Inexistentes">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="20,20,57,0">
+                    <StackPanel Background="Transparent" x:Name="datosLibrosInexistentesPanel">
+
+                        <!-- Título -->
+                        <Label Content="Compra de Nuevos Libros" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5" />
+
+
+                        <StackPanel Margin="0,10">
+                            <TextBlock Text="Proveedor" Foreground="#FF2196F3" Opacity="0.75" />
+                            <ComboBox x:Name="SelecionarProveedorInexistenteBox" Margin="5" Foreground="Black" 
+                            Style="{StaticResource MaterialDesignComboBox}"/>
+                        </StackPanel>
+
+
+
+                        <TextBox x:Name="cantidadLibroInexistentetxt" Margin="5" Foreground="Black" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Cantidad" SelectionChanged="cantidadLibroInexistentetxt_SelectionChanged"/>
+
+                        <TextBox x:Name="costoUnidadInexistentetxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Costo unidad" SelectionChanged="costoUnidadInexistentetxt_SelectionChanged"/>
+                        <StackPanel Margin="0,10">
+                            <TextBlock Text="Fecha Actual" Foreground="#FF2196F3" Opacity="0.75" />
+                            <DatePicker x:Name="DateFechaInexistente" HorizontalAlignment="Left" IsEnabled="False"
+                            DisplayDateStart="1900-01-01"
+                            DisplayDateEnd="2100-12-31"
+                            Width="275"
+                            Margin="5,5,5,0"
+                            materialDesign:HintAssist.Hint="Fecha de compra"/>
+                        </StackPanel>
+
+
+                        <TextBox x:Name="costoTotalInexistentetxt" Margin="5" Foreground="Black" IsEnabled="False" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Costo Total"/>
+
+
+                        <Label Content="Datos de stock" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5" />
+
+
+                        <TextBox x:Name="stockMinimiotxt" Margin="5" Foreground="Black"  
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Stock Minimo"/>
+
+
+                        <TextBox x:Name="stockMaximotxt" Margin="5" Foreground="Black" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Stock Maximo"/>
+
+                        <!-- Botón de Modificar -->
+                        <Button Name="btnComprarInexsitente" Content="Comprar" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="btnComprarInexsitente_Click" />
+                    </StackPanel>
+                </ScrollViewer>
+
+
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+</Page>

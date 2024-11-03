@@ -1,0 +1,236 @@
+﻿<Page x:Class="MenuPrincipal.MenuLibros.PgLibros"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MenuPrincipal.MenuLibros"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PgLibros" Background="White">
+
+    <!-- Agrega un ScrollViewer para la sección de títulos -->
+
+    <StackPanel>
+
+        <TabControl Name="TabControlLibros" Margin="0,0" Height="700">
+
+            <TabItem Header="Últimos libros añadidos">
+
+                <ScrollViewer Grid.Column="1"
+              Margin="10,10"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalAlignment="Center">
+
+                    <!-- Usamos un StackPanel para contener múltiples GroupBox -->
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <!-- Sección de Títulos Recientemente Subidos -->
+                        <GroupBox Header="Títulos recientemente subidos" Margin="0,0">
+                            <ItemsControl x:Name="contentGridRecientes" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <!--orientacion de control-->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="10" Width="150">
+                                            <!-- Imagen -->
+                                            <Button x:Name="btnDetalles" Width="120" Height="180" Click="btnDetalles_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Width="120" Height="180">
+                                                            <Border.Effect>
+                                                                <DropShadowEffect ShadowDepth="4" BlurRadius="8"/>
+                                                            </Border.Effect>
+                                                            <Image Source="{Binding ImageData}" Width="120" Stretch="UniformToFill" >
+                                                                <Image.RenderTransform>
+                                                                    <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
+                                                                </Image.RenderTransform>
+                                                            </Image>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <!-- Nombre -->
+                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
+                                            <!-- Tipo -->
+                                            <TextBlock Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </GroupBox>
+
+
+                        <!-- Nueva Sección para Género de Literatura -->
+                        <GroupBox Header="¡Último en Poesía!" Margin="0,0,0,0">
+                            <ItemsControl x:Name="contentGridPoesia" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <!--orientacion de control-->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="10" Width="120">
+                                            <!-- Imagen -->
+                                            <Button x:Name="btnDetalles" Width="120" Height="180" Click="btnDetalles_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Width="120" Height="180">
+                                                            <Border.Effect>
+                                                                <DropShadowEffect ShadowDepth="4" BlurRadius="8"/>
+                                                            </Border.Effect>
+                                                            <Image Source="{Binding ImageData}" Width="120" Height="180" Stretch="UniformToFill">
+                                                                <Image.RenderTransform>
+                                                                    <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
+                                                                </Image.RenderTransform>
+                                                            </Image>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <!-- Nombre -->
+                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
+                                            <!-- Tipo -->
+                                            <TextBlock Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </GroupBox>
+                    </StackPanel>
+
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Name="tabAllBooks" Header="Libros" Width="80">
+
+                <ScrollViewer Grid.Column="1"
+              Margin="10,10"
+              VerticalScrollBarVisibility="Auto"
+              HorizontalAlignment="Center">
+
+                    <!-- Usamos un StackPanel para contener múltiples GroupBox -->
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <!-- Sección de Títulos Recientemente Subidos -->
+                        <GroupBox x:Name="gpbTodos" Header="Librería" Margin="0,0" Loaded="gpbTodos_Loaded">
+                            <ItemsControl x:Name="contentGridTodos" HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <!--orientacion de control-->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="10" Width="150">
+                                            <!-- Imagen -->
+                                            <Button x:Name="btnDetalles" Width="120" Height="180" Click="btnDetalles_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Width="120" Height="180">
+                                                            <Border.Effect>
+                                                                <DropShadowEffect ShadowDepth="4" BlurRadius="8"/>
+                                                            </Border.Effect>
+                                                            <Image Source="{Binding ImageData}" Width="120" Stretch="UniformToFill" >
+                                                                <Image.RenderTransform>
+                                                                    <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
+                                                                </Image.RenderTransform>
+                                                            </Image>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <!-- Nombre -->
+                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
+                                            <!-- Tipo -->
+                                            <TextBlock Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Name="tabAdministrador" Header="Administrar">
+                <Grid Margin="10">
+
+                    <!-- Filtros -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" >
+
+                        <!-- Filtro por Autor -->
+                        <StackPanel Margin="10,0">
+                            <TextBlock Text="Filtrar por Autor" FontWeight="Bold" />
+                            <ComboBox x:Name="AutorComboBox" Width="150" SelectionChanged="AutorComboBox_SelectionChanged" />
+                        </StackPanel>
+
+                        <!-- Filtro por Editorial -->
+                        <StackPanel Margin="10,0">
+                            <TextBlock Text="Filtrar por Editorial" FontWeight="Bold" />
+                            <ComboBox x:Name="EditorialComboBox" Width="150" SelectionChanged="EditorialComboBox_SelectionChanged" />
+                        </StackPanel>
+
+                        <!-- Filtro por Categoría -->
+                        <StackPanel Margin="10,0">
+                            <TextBlock Text="Filtrar por Categoría" FontWeight="Bold" />
+                            <ComboBox x:Name="CategoriaComboBox" Width="150" SelectionChanged="CategoriaComboBox_SelectionChanged" />
+                        </StackPanel>
+
+                        <!-- Filtro por Especialidad -->
+                        <StackPanel Margin="10,0">
+                            <TextBlock Text="Filtrar por Edicion" FontWeight="Bold" />
+                            <ComboBox x:Name="StockComboBox" Width="150" SelectionChanged="StockComboBox_SelectionChanged" >
+                                <ComboBoxItem Content="Mayor a Menor"/>
+                                <ComboBoxItem Content="Menor a Mayor"/>
+                                <ComboBoxItem Content="Ninguno"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Botón Filtrar -->
+                        <Button Name ="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click" />
+                    </StackPanel>
+
+                    <!-- DataGrid para mostrar libros -->
+                    <DataGrid x:Name="LibrosDataGrid" AutoGenerateColumns="False"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,80,0,60" 
+                  IsReadOnly="True"  ItemsSource="{Binding}" SelectionChanged="LibrosDataGrid_SelectionChanged" >
+
+                        <!-- Columnas del DataGrid -->
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding DetalleID}" Width="*" />
+                            <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*" />
+                            <DataGridTextColumn Header="Autor" Binding="{Binding Autor}" Width="*" />
+                            <DataGridTextColumn Header="Editorial" Binding="{Binding Editorial}" Width="*" />
+                            <DataGridTextColumn Header="Categoría" Binding="{Binding Categoria}" Width="*" />
+                            <DataGridTextColumn Header="Edicion" Binding="{Binding Edicion}" Width="*" />
+                            <DataGridTextColumn Header="Stock" Binding="{Binding StockActual}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Botones de acciones -->
+
+                    <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,20,0,20">
+                        <Label Name="labSeleccion" Content="Elemento Seleccionado: "   Margin="0,20,0,80"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,40">
+
+                        <Button Content="Añadir Libro" Width="125" Margin="10" />
+                        <Button Content="Editar Libro" Width="125" Margin="10" Click="Button_Click_1" />
+                        <Button Content="Eliminar Libro" Width="125" Margin="10" />
+                    </StackPanel>
+
+                </Grid>
+
+            </TabItem>
+
+        </TabControl>
+
+
+    </StackPanel>
+</Page>

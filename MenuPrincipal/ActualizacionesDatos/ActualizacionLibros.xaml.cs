@@ -38,12 +38,6 @@ namespace MenuPrincipal.ActualizacionesDatos
         DatosGlobales datos = new DatosGlobales();
         MetodosCompras MetodosCompras = new MetodosCompras();
 
-
-
-
-
-
-
         public string IsbnEdicion;
         private int ModificarCrear;
 
@@ -77,11 +71,6 @@ namespace MenuPrincipal.ActualizacionesDatos
 
             CargarDatosSeleccionar();
         }
-
-
-
-
-
 
         public void CargarDatosModificar()
         {
@@ -233,7 +222,7 @@ namespace MenuPrincipal.ActualizacionesDatos
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter = "Archivos de imagen (.jpg;.jpeg;.png)|.jpg;.jpeg;.png"
+                Filter = "Archivos de imagen (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
             };
 
             // Mostrar el explorador de archivos
@@ -262,9 +251,6 @@ namespace MenuPrincipal.ActualizacionesDatos
             {
                 IngresarLibro();
             }
-
-
-
         }
 
         private void modifcar()

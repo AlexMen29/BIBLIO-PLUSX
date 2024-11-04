@@ -12,7 +12,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
 using Microsoft.Win32; // Para OpenFileDialog
 using System.IO;       // Para manejar streams
 using System.Windows.Media.Imaging; // Para BitmapImage
@@ -97,53 +96,10 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         }
 
-        public List<object> ObtenerImgDescripcion(string edicion)
-        {
-            // Lista para almacenar la descripción y la imagen
-            List<object> listaDatos = new List<object>();
-
-            try
-            {
-                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
-                {
-                    conDb.Open();
-
-                    using (var cmd = conDb.CreateCommand())
-                    {
-                        cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = "select Imagen, Descripcion from Ediciones where ISBN = @edicion";
-
-                        // Usamos un parámetro para evitar SQL Injection
-                        cmd.Parameters.AddWithValue("@edicion", edicion);
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                byte[] imagen = reader["Imagen"] as byte[];
-
-                                // Obtiene la descripción
-                                string descripcion = reader["Descripcion"].ToString();
-
-                                listaDatos.Add(imagen);
-                                listaDatos.Add(descripcion);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Error inesperado: " + e.Message, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-
-            return listaDatos;  // Devolver la lista con la imagen y la descripción
-        }
-
         private void CargarImgDes()
         {
             // Llamada al método para obtener la imagen y la descripción
-            List<object> ListImgDes = ObtenerImgDescripcion(Libros.Edicion);
+            List<object> ListImgDes = datos.ObtenerImgDescripcion(Libros.Edicion);
 
             // Asegurarse de que haya datos en la lista
             if (ListImgDes.Count >= 2)
@@ -175,8 +131,6 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
 
         }
-
-
 
         //Cargar datos para modificacion de Autor, Editorial y categoria
 
@@ -365,7 +319,7 @@ namespace MenuPrincipal.ActualizacionesDatos
                 //compraLibros.crearRegistroCompra(DatosCrearLibros.ISBN);
 
                 this.Close();
-
+                
             }
 
 

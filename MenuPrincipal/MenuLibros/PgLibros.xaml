@@ -53,9 +53,9 @@
                                                 </Button.Template>
                                             </Button>
                                             <!-- Nombre -->
-                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
+                                            <TextBlock Name="txbTitulo" Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
                                             <!-- Tipo -->
-                                            <TextBlock Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
+                                            <TextBlock Name="txbAutor" Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -93,7 +93,7 @@
                                                 </Button.Template>
                                             </Button>
                                             <!-- Nombre -->
-                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
+                                            <TextBlock Name="txbTitulo" Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
                                             <!-- Tipo -->
                                             <TextBlock Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
                                         </StackPanel>
@@ -145,7 +145,7 @@
                                                 </Button.Template>
                                             </Button>
                                             <!-- Nombre -->
-                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
+                                            <TextBlock Name="txbTitulo" Text="{Binding Titulo}" FontWeight="Bold" HorizontalAlignment="Center" Margin="5,5,5,0" Foreground="Black"/>
                                             <!-- Tipo -->
                                             <TextBlock Text="{Binding NombreAutor}" Foreground="Black" HorizontalAlignment="Center"/>
                                         </StackPanel>

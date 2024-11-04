@@ -112,6 +112,86 @@ namespace MenuPrincipal.DatosGenerales
         }
 
 
+        public List<object> ObtenerImgDescripcion(string edicion)
+        {
+            // Lista para almacenar la descripción y la imagen
+            List<object> listaDatos = new List<object>();
+
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
+
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = "select Imagen, Descripcion from Ediciones where ISBN = @edicion";
+
+                        // Usamos un parámetro para evitar SQL Injection
+                        cmd.Parameters.AddWithValue("@edicion", edicion);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                byte[] imagen = reader["Imagen"] as byte[];
+
+                                // Obtiene la descripción
+                                string descripcion = reader["Descripcion"].ToString();
+
+                                listaDatos.Add(imagen);
+                                listaDatos.Add(descripcion);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado: " + e.Message, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            return listaDatos;  // Devolver la lista con la imagen y la descripción
+        }
+
+        public List<object> ObtenerImgDescripcionPorTitulo(string titulo) // CAMBIO CLAVE
+        {
+            List<object> listaDatos = new List<object>();
+
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
+
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.CommandText = "SELECT Imagen FROM Ediciones WHERE Titulo = @titulo";
+
+                        // Parámetro para evitar SQL Injection
+                        cmd.Parameters.AddWithValue("@titulo", titulo);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                byte[] imagen = reader["Imagen"] as byte[];
+
+                                listaDatos.Add(imagen);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado: " + e.Message, "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            return listaDatos;
+        }
 
 
 

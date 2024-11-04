@@ -213,6 +213,7 @@
     <Compile Include="BD\Models\EditorialesModel.cs" />
     <Compile Include="BD\Models\EstadoModel.cs" />
     <Compile Include="BD\Models\LibrosModel.cs" />
+    <Compile Include="BD\Models\ObtenerVistaCliente.cs" />
     <Compile Include="BD\Models\PagosPrestamosModel.cs" />
     <Compile Include="BD\Models\PenalizacionModel.cs" />
     <Compile Include="BD\Models\PrestamosModel.cs" />

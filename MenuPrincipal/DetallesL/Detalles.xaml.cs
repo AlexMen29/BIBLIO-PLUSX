@@ -23,6 +23,7 @@ using System.Data.Common;
 using MenuPrincipal.BD.Services;
 using MenuPrincipal.MenuLibros;
 using MenuPrincipal.BD.Models;
+using System.Windows.Media.Media3D;
 
 namespace MenuPrincipal.DetallesL
 {
@@ -31,26 +32,117 @@ namespace MenuPrincipal.DetallesL
     /// </summary>
     public partial class Detalles : Window
     {
-        private DetallesLibros Libros;
+        private ObtenerVistaCliente Libros;
         DatosGlobales datos = new DatosGlobales();
-        public Detalles()
+        public string titulo;
+        public Detalles(string titulo)
         {
+            this.titulo = titulo;
             InitializeComponent();
-            //    this.Libros = Libros;
-            //    CargarDatos();
+            LlenarDatos();
+            CargarImgDes();
         }
 
-        //public void CargarDatos()
-        //{
-        //    CargarImgDes();
-        //    lblTitulo.Content = Libros.Titulo;
-        //    txbEdicion.Text = Libros.Edicion;
+        #region METODO
+        public static ObtenerVistaCliente DetallesLibros(string titulo)
+        {
+            ObtenerVistaCliente datosVista = null;
 
-        //    LlenarCajas(datos.consultaAutor, EditAutorComboBox, "NombreAutor", Libros.Autor);
-        //    LlenarCajas(datos.consultaEdiorial, EditEditorialComboBox, "NombreEditorial", Libros.Editorial);
-        //    LlenarCajas(datos.consultaCategoria, EditCategoriaComboBox, "NombreCategoria", Libros.Categoria);
+            try
+            {
+                using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conn.Open();
 
-        //    // Mostrar el panel de edición
-        //}
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "SP_ObtenerVistaCliente"; // Asegúrate de que este sea el nombre correcto
+                        command.Parameters.AddWithValue("@Titulo", titulo);
+
+                        using (DbDataReader dr = command.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                datosVista = new ObtenerVistaCliente
+                                {
+                                    DetalleID = dr.GetInt32(dr.GetOrdinal("DetalleID")),
+                                    Titulo = dr["Titulo"].ToString(),
+                                    Autor = dr["Autor"].ToString(),
+                                    Editorial = dr["Editorial"].ToString(),
+                                    Categoria = dr["Categoria"].ToString(),
+                                    Edicion = dr["Edicion"].ToString(),
+                                    Descripcion = dr["Descripcion"].ToString(), // Asegúrate de que este sea el tipo correcto
+
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ocurrió un error al intentar obtener los libros: " + e.Message, "Validación", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return datosVista;
+        }
+
+        #endregion
+
+        private void CargarImgDes()
+        {
+                List<object> ListImgDes = datos.ObtenerImgDescripcionPorTitulo(Libros.Titulo); //Cambio Correcto
+
+                // Asegurarse de que haya datos en la lista
+                if (ListImgDes != null) //Cambio Correcto
+                {
+
+                    // Manejar la imagen
+                    byte[] imagenBytes = ListImgDes[0] as byte[];
+                    if (imagenBytes != null)
+                    {
+                        // Convertir los bytes a BitmapImage usando el método
+                        BitmapImage imagen = datos.ConvertirABitmapImage(imagenBytes);
+                        var viewModel = new { ImageData = imagen };
+
+                        // Asignar el DataContext de la ventana o del control que contiene la imagen
+                        this.DataContext = viewModel;
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("No se encontró una imagen para esta edición.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("No se encontraron datos para esta edición.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+        }
+
+        private void LlenarDatos() {
+            ObtenerVistaCliente datosVista = DetallesLibros(titulo);
+
+            try
+            {
+                if (datosVista != null)
+                {
+                    lblTitulo.Content = datosVista.Titulo;
+                    txbAutor.Text = datosVista.Autor;
+                    txbCategoria.Text = datosVista.Categoria;
+                    txbDescripcion.Text = datosVista.Descripcion;
+                    txbEdicion.Text = datosVista.Edicion;
+                    txbEditorial.Text = datosVista.Editorial;
+                    Libros = datosVista; //Cambio Correcto
+
+
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Error inesperado ", e.ToString());
+            }
+        }
     }
 }

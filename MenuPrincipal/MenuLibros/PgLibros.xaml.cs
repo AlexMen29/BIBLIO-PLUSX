@@ -55,11 +55,11 @@ namespace MenuPrincipal.MenuLibros
                 tabAllBooks.Visibility = Visibility.Collapsed;
                 TabControlLibros.SelectedIndex = 0;
             }
-            else
-            {
+            //else
+            //{
 
-                TabControlLibros.SelectedIndex = 2;
-            }
+            //    TabControlLibros.SelectedIndex = 2;
+            //}
         }
 
 
@@ -276,14 +276,45 @@ namespace MenuPrincipal.MenuLibros
         {
             if (Nivel != 1)
             {
-                Detalles Ventana = new Detalles();
-                Ventana.ShowDialog();
+                // Asegúrate de que el sender sea de tipo Button
+                if (sender is Button btnDetalles)
+                {
+                    // Obtener el StackPanel (contenedor principal en la plantilla de datos)
+                    var stackPanel = btnDetalles.Parent as StackPanel;
+
+                    if (stackPanel != null)
+                    {
+                        // Buscar el TextBlock txbTitulo dentro de StackPanel
+                        var tituloTextBlock = stackPanel.Children
+                                               .OfType<TextBlock>()
+                                               .FirstOrDefault(tb => tb.Name == "txbTitulo");
+
+                        if (tituloTextBlock != null)
+                        {
+                            // Obtener el texto del título
+                            string titulo = tituloTextBlock.Text;
+
+                            // Pasar el título a la ventana de detalles
+                            Detalles ventana = new Detalles(titulo);
+
+                            // Mostrar la ventana de detalles
+                            ventana.ShowDialog();
+                        }
+                        else
+                        {
+                            // Mensaje si no se encuentra el TextBlock
+                            MessageBox.Show("No se encontró el título del libro.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
             }
             else
             {
                 MessageBox.Show("Por favor inicie sesión para visualizar los detalles del libro", "Inicie Sesión", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
         }
+
+
     }
 }
+

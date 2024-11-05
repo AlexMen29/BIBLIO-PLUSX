@@ -24,6 +24,7 @@ using MenuPrincipal.BD.Services;
 using MenuPrincipal.MenuLibros;
 using MenuPrincipal.BD.Models;
 using System.Windows.Media.Media3D;
+using MenuPrincipal.PageSolicitudes;
 
 namespace MenuPrincipal.DetallesL
 {
@@ -35,6 +36,7 @@ namespace MenuPrincipal.DetallesL
         private ObtenerVistaCliente Libros;
         DatosGlobales datos = new DatosGlobales();
         public string titulo;
+        int varStock;
         public Detalles(string titulo)
         {
             this.titulo = titulo;
@@ -73,7 +75,7 @@ namespace MenuPrincipal.DetallesL
                                     Categoria = dr["Categoria"].ToString(),
                                     Edicion = dr["Edicion"].ToString(),
                                     Descripcion = dr["Descripcion"].ToString(), // Asegúrate de que este sea el tipo correcto
-
+                                    StockActual = dr.GetInt32(dr.GetOrdinal("StockActual"))
                                 };
                             }
                         }
@@ -135,6 +137,8 @@ namespace MenuPrincipal.DetallesL
                     txbEdicion.Text = datosVista.Edicion;
                     txbEditorial.Text = datosVista.Editorial;
                     Libros = datosVista; //Cambio Correcto
+                    lblStock.Content = ("Cantidad en Inventario: " + datosVista.StockActual);
+                    varStock = datosVista.StockActual;
 
 
                 }
@@ -142,6 +146,37 @@ namespace MenuPrincipal.DetallesL
             catch(Exception e)
             {
                 MessageBox.Show("Error inesperado ", e.ToString());
+            }
+        }
+
+        private void bntPrestamo_Click(object sender, RoutedEventArgs e)
+        {
+            int tipoPrestamo;
+
+            if (varStock > 0)
+            {
+                
+                MessageBoxResult boxResult = MessageBox.Show("¿Deseas solicitar el libro: '" + titulo + "' ?", "Solicitud", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (boxResult == MessageBoxResult.Yes)
+                {
+                    tipoPrestamo = 1;
+                    PgSolicitudes pg = new PgSolicitudes();
+                    MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+                    mainWindow.NavegarAContenido(pg);
+                    
+                }
+                this.Close();
+            }
+            else {
+                
+                MessageBoxResult boxResult = MessageBox.Show("¡Libro fuera de Stock! ¿Desea entrar a la cola de espera?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (boxResult == MessageBoxResult.Yes)
+                {
+                    tipoPrestamo = 0;
+                    PgSolicitudes pg = new PgSolicitudes();
+                    MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+                    mainWindow.NavegarAContenido(pg);
+                }
             }
         }
     }

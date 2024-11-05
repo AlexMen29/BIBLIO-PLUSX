@@ -126,11 +126,7 @@ namespace MenuPrincipal
 
         public void NavegarAContenido(Page pagina)
         {
-            
              frContenido.Navigate(pagina);
-            
-          
-            
         }
 
         private void btnComprarLibros_Click(object sender, RoutedEventArgs e)

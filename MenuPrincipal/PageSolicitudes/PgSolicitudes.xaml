@@ -1,0 +1,68 @@
+﻿<Page x:Class="MenuPrincipal.PageSolicitudes.PgSolicitudes"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MenuPrincipal.PageSolicitudes"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PgSolicitudes" Background="White">
+
+    <Grid VerticalAlignment="Center">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="0,0,400,0">
+            <StackPanel>
+                <StackPanel>
+                    <TextBox x:Name="txbCarne" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    materialDesign:HintAssist.Hint="Carnet Estudiantil" Width="361" HorizontalAlignment="Left" Margin="10,20,0,0" Height="47" FontSize="14"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Tipo de Prestamo" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
+                    <ComboBox Name="cmbTipoPrestamo" HorizontalAlignment="Left" Width="345" Margin="10,0,0,0" Text="" Height="44" FontSize="14" VerticalContentAlignment="Bottom">
+                        <ComboBoxItem Content="Interno"/>
+                        <ComboBoxItem Content="Externo"/>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel>
+                    <TextBox x:Name="txbFechaDevolucion" Foreground="Black" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Fecha Devolucion" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,0,0">
+                    <TextBox x:Name="txbFechaPrestamo" Foreground="Black" 
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        materialDesign:HintAssist.Hint="Fecha Prestamo" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,0,0">
+                    <TextBox x:Name="txbFechaSolicitud" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    materialDesign:HintAssist.Hint="Fecha Solicitud" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,0,0">
+                    <TextBox x:Name="txbTiempo" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                    materialDesign:HintAssist.Hint="Tiempo de Entrega" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <Rectangle Stroke="#9e1717" Width="1"  Margin="398,10,398,0"/>
+        <StackPanel Margin="400,0,0,0">
+            <!-- Sección de imagen y botón (columna derecha) -->
+            <!-- Sección de imagen y botón (columna derecha) -->
+            <StackPanel Orientation="Vertical" Height="271">
+                <!-- Imagen de ejemplo -->
+                <Border BorderBrush="Black" BorderThickness="1" Width="150" Height="200" Margin="0,50,0,0" >
+                    <Image x:Name="ImagePreview" Source="{Binding ImageData}" Width="120" Height="180" Stretch="UniformToFill" Margin="10,0,10,0">
+                        <Image.RenderTransform>
+                            <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Border>
+            </StackPanel>
+            <Label x:Name="lblTitulo" Content="Titulo" FontSize="15" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" FontWeight="Bold" Margin="10" />
+            <Label x:Name="lblAutor" Content="Autor" FontSize="12" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" Margin="-15" FontStyle="Italic" />
+            <Button Name="bntPrestamo" Content="Prestamo" Width="125" Margin="10" Background="#9e1717" Foreground="White"/>
+        </StackPanel>
+    </Grid>
+</Page>

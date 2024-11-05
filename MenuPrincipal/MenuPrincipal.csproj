@@ -253,6 +253,9 @@
     <Compile Include="PageReport\Report.xaml.cs">
       <DependentUpon>Report.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PageSolicitudes\PgSolicitudes.xaml.cs">
+      <DependentUpon>PgSolicitudes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PageUsuarios\Models\UsuariosModel.cs" />
     <Compile Include="PageUsuarios\Services\DatoUsuario.cs" />
     <Compile Include="PageUsuarios\Usuarios.xaml.cs">
@@ -339,6 +342,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PageReport\Report.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PageSolicitudes\PgSolicitudes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -15,6 +15,7 @@ namespace MenuPrincipal.BD.Models
         public string Categoria { get; set; }
         public string Edicion { get; set; }
         public string Descripcion { get; set; }
+        public int StockActual { get; set; }
 
     }
 }

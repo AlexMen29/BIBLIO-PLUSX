@@ -128,9 +128,13 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            datosCarrera.NombreCarrera = txtNuevoNombre.Text;
-            ActualizarDato(datosCarrera);
-            CargarDataGrid();
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                datosCarrera.NombreCarrera = txtNuevoNombre.Text;
+                ActualizarDato(datosCarrera);
+                CargarDataGrid();
+            }
         }
     }
 }

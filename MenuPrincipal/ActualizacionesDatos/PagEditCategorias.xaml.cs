@@ -52,9 +52,13 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            datosCategoria.NombreCategoria = txtNuevoNombre.Text;
-            ActualizarDato(datosCategoria);
-            CargarDataGrid();
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                datosCategoria.NombreCategoria = txtNuevoNombre.Text;
+                ActualizarDato(datosCategoria);
+                CargarDataGrid();
+            }
         }
 
 

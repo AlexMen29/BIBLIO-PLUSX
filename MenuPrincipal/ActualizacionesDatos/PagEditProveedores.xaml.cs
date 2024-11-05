@@ -53,13 +53,17 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
-            proveedoresDatos.DUIProveedor = txtDUI.Text;
-            proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
-            proveedoresDatos.DireccionProveedor = txtDireccion.Text;
-            ActualizarDato(proveedoresDatos);
-            Limpiartxt();
-            CargarDataGrid();
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
+                proveedoresDatos.DUIProveedor = txtDUI.Text;
+                proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
+                proveedoresDatos.DireccionProveedor = txtDireccion.Text;
+                ActualizarDato(proveedoresDatos);
+                Limpiartxt();
+                CargarDataGrid();
+            }
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)

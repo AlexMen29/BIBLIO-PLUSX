@@ -48,12 +48,16 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
-            editorialesDatos.DireccionEditorial = txtDireccion.Text;
-            editorialesDatos.TelefonoEditorial = txtTelefono.Text;
-            ActualizarDato(editorialesDatos);
-            Limpiartxt();
-            CargarDataGrid();
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
+                editorialesDatos.DireccionEditorial = txtDireccion.Text;
+                editorialesDatos.TelefonoEditorial = txtTelefono.Text;
+                ActualizarDato(editorialesDatos);
+                Limpiartxt();
+                CargarDataGrid();
+            }
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)

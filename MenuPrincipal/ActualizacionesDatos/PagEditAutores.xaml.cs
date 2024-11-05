@@ -51,13 +51,17 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            autoresDatos.NombreAutor = txtNuevoNombre.Text;
-            autoresDatos.Nacionalidad = txtNacionalidad.Text;
-            autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
-            autoresDatos.Bibliografia = txtBibliografia.Text;
-            ActualizarDato(autoresDatos);
-            Limpiartxt();
-            CargarDataGrid();
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                autoresDatos.NombreAutor = txtNuevoNombre.Text;
+                autoresDatos.Nacionalidad = txtNacionalidad.Text;
+                autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
+                autoresDatos.Bibliografia = txtBibliografia.Text;
+                ActualizarDato(autoresDatos);
+                Limpiartxt();
+                CargarDataGrid();
+            }
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)

@@ -5,12 +5,19 @@ using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using MenuPrincipal.DatosGenerales;
+using MenuPrincipal.BD.Models;
+using MenuPrincipal.BD.Services;
+using System.Collections.Generic;
 
 
 namespace MenuPrincipal.PagePrestamos
 {
     public partial class Prestamos : Page
     {
+
+        DatosGlobales datos= new DatosGlobales();
+
         public Prestamos()
         {
             InitializeComponent();
@@ -30,51 +37,10 @@ namespace MenuPrincipal.PagePrestamos
         }
         private void CargarDatosComboBox()
         {
-            using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
-            {
-                try
-                {
-                    conDB.Open();
-
-                    // Cargar temas
-                    SqlCommand cmdTema = new SqlCommand("SELECT TipoPrestamo FROM Prestamos", conDB);
-                    SqlDataReader readerTema = cmdTema.ExecuteReader();
-                    while (readerTema.Read())
-                    {
-                        comboBoxTipoPrestamo.Items.Add(readerTema["TipoPrestamo"].ToString());
-                    }
-                    readerTema.Close();
-
-                    // Cargar autores
-                    SqlCommand cmdAutor = new SqlCommand("SELECT Estado FROM PagosPrestamos", conDB);
-                    SqlDataReader readerAutor = cmdAutor.ExecuteReader();
-                    while (readerAutor.Read())
-                    {
-                        comboBoxPeriodoPago.Items.Add(readerAutor["Estado"].ToString());
-                    }
-                    readerAutor.Close();
-
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al cargar datos en los ComboBox: " + ex.Message);
-                }
-            }
+            datos.LlenarBoxFiltros(datos.consultaTiposPrestamos, TipoPrestamoComboBox, "TipoPrestamo");
+            datos.LlenarBoxFiltros(datos.consultaEstadoPrestamos, EstadoComboBox, "EstadoPrestamo");
         }
-        private void BtnGenerarClasificacion_Click(object sender, RoutedEventArgs e)
-        {
-            string tipoPrestamo = ((ComboBoxItem)comboBoxTipoPrestamo.SelectedItem)?.Content?.ToString();
-            if (string.IsNullOrEmpty(tipoPrestamo))
-            {
-                MessageBox.Show("Por favor, selecciona un tipo de préstamo.");
-                return;
-            }
-            // Código para filtrar préstamos según el tipo seleccionado
-            var prestamosFiltrados = DatoPrestamo.CargarClasificacionPrestamos()
-                .Where(p => p.TipoPrestamo == tipoPrestamo).ToList();
-            dataGridPrestamos.ItemsSource = prestamosFiltrados;
-        }
+   
 
         private void BtnCalcularPago_Click(object sender, RoutedEventArgs e)
         {
@@ -88,6 +54,88 @@ namespace MenuPrincipal.PagePrestamos
             }
 
             MessageBox.Show($"Pago calculado para el período: {periodoPago}, con un monto de {montoDecimal:C}");
+        }
+
+
+        //Metodo para filtrar
+
+        public void AplicarFiltro()
+        {
+            // Obtenemos la lista completa de libros
+            List<PrestamoModel> librosFiltrados = DatoPrestamo.CargarClasificacionPrestamos();
+
+            // Filtramos por autor si hay un valor seleccionado
+            if (TipoPrestamoComboBox.SelectedItem != null && TipoPrestamoComboBox.SelectedItem.ToString() != "Ninguno")
+            {
+                string TipoPrestamo = TipoPrestamoComboBox.SelectedItem.ToString();
+                librosFiltrados = librosFiltrados
+                    .Where(libro => libro.TipoPrestamo.Equals(TipoPrestamo, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            // Filtramos por editorial si hay un valor seleccionado
+            if (EstadoComboBox.SelectedItem != null && EstadoComboBox.SelectedItem.ToString() != "Ninguno")
+            {
+                string EstadoSeleccionado = EstadoComboBox.SelectedItem.ToString();
+                librosFiltrados = librosFiltrados
+                    .Where(libro => libro.EstadoPrestamo.Equals(EstadoSeleccionado, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            
+
+            if (FechaDevolucionComboBox.SelectedItem != null && ((ComboBoxItem)FechaDevolucionComboBox.SelectedItem).Content.ToString() != "Ninguno")
+            {
+
+
+                string Fecha = ((ComboBoxItem)FechaDevolucionComboBox.SelectedItem).Content.ToString();
+
+                if (Fecha == "Proximo")
+                {
+                    librosFiltrados = librosFiltrados
+                        .OrderByDescending(libro => libro.FechaDevolucion) // Ordenar de mayor a menor
+                        .ToList();
+                }
+                else if (Fecha == "Entregados")
+                {
+                    librosFiltrados = librosFiltrados
+                        .OrderBy(libro => libro.FechaDevolucion) // Ordenar de menor a mayor
+                        .ToList();
+                }
+            }
+
+
+            // Asignamos los libros filtrados al DataGrid
+            dataGridPrestamos.ItemsSource = librosFiltrados;
+
+
+        }
+
+        private void TipoPrestamoComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AplicarFiltro();
+        }
+
+        private void EstadoComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AplicarFiltro();
+        }
+
+        private void FechaDevolucionComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AplicarFiltro();
+        }
+
+        private void btnQuitarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+            LimpiarFiltros();
+        }
+
+        public void LimpiarFiltros()
+        {
+            TipoPrestamoComboBox.SelectedIndex = -1;
+            EstadoComboBox.SelectedIndex = -1;
+            FechaDevolucionComboBox.SelectedIndex = -1;
         }
     }
 }

@@ -32,13 +32,23 @@ namespace MenuPrincipal.PagePrestamos.service
                             {
                                 var prestamo = new PrestamoModel
                                 {
-                                    PrestamoId = reader.GetInt32(0),
-                                    Titulo = reader.GetString(1),
-                                    TipoPrestamo = reader.GetString(2),
-                                    FechaPrestamo = reader.GetDateTime(3),
-                                    FechaDevolucion = reader.GetDateTime(4)
+                                    //Titulo = dr["Titulo"].ToString(),
+                                    PrestamoId = Convert.ToInt32(reader["ID"].ToString()),
+                                    Titulo = reader["Titulo"].ToString(),
+                                    TipoPrestamo = reader["TipoPrestamo"].ToString(),
+                                    FechaPrestamo = Convert.ToDateTime(reader["FechaPrestamo"].ToString()),
+                                    FechaDevolucion = Convert.ToDateTime(reader["FechaDevolucion"].ToString()),
+                                    EstadoPrestamo = reader["EstadoPrestamo"].ToString(),
+                                    TiempoEntrega = Convert.ToInt32(reader["TiempoEntrega"].ToString()),
+                                    Renovaciones = Convert.ToInt32(reader["Renovaciones"].ToString()),
+                                    FechaRenovacion = Convert.ToDateTime(reader["FechaRenovacion"].ToString())
                                 };
                                 listaPrestamos.Add(prestamo);
+
+
+
+
+
                             }
                         }
                     }

@@ -26,6 +26,8 @@ namespace MenuPrincipal.DatosGenerales
         public string consultaCarrera = "select NombreCarrera from Carrera";
         public string consultarEdicion = "select ISBN from Ediciones";
         public string consultarProveedores = "select NombreProveedor from Proveedores";
+        public string consultaTiposPrestamos = "Select DISTINCT TipoPrestamo from Prestamos";
+        public string consultaEstadoPrestamos = "Select DISTINCT EstadoPrestamo from Prestamos";
 
 
         public BitmapImage ConvertirABitmapImage(byte[] imageBytes)

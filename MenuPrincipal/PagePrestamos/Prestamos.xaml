@@ -27,23 +27,48 @@
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
                         <TextBlock Text="Clasificación de Préstamos" FontSize="18" FontWeight="Bold"/>
 
-                        <!-- Selección de tipo de préstamo: Interno o Externo -->
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                            <TextBlock Text="Tipo de Préstamo:" VerticalAlignment="Center" Width="150"/>
-                            <ComboBox x:Name="comboBoxTipoPrestamo" Width="200" Margin="5,0,20,0">
 
-                            </ComboBox>
-                            <Button Content="Generar Clasificación" Width="150" Height="30" Click="BtnGenerarClasificacion_Click"/>
+                        <!-- Filtros -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" >
+
+                            <!-- Filtro por Tipo Prestamo -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Tipo de Prestamo" FontWeight="Bold" />
+                                <ComboBox x:Name="TipoPrestamoComboBox" Width="150" SelectionChanged="TipoPrestamoComboBox_SelectionChanged"  />
+                            </StackPanel>
+
+                            <!-- Filtro por Estado -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Estado" FontWeight="Bold" />
+                                <ComboBox x:Name="EstadoComboBox" Width="150" SelectionChanged="EstadoComboBox_SelectionChanged"  />
+                            </StackPanel>
+
+                          
+                            <!-- Filtro por FechaDevolucion -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Fecha de Devolucion" FontWeight="Bold" />
+                                <ComboBox x:Name="FechaDevolucionComboBox" Width="150" SelectionChanged="FechaDevolucionComboBox_SelectionChanged" >
+                                    <ComboBoxItem Content="Proximo"/>
+                                    <ComboBoxItem Content="Entregados"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Botón Quitar -->
+                            <Button Name ="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click"  />
                         </StackPanel>
 
                         <!-- Tabla de clasificación de préstamos -->
                         <DataGrid x:Name="dataGridPrestamos" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID Préstamo" Binding="{Binding ID}" Width="Auto"/>
+                                <DataGridTextColumn Header="ID Préstamo" Binding="{Binding PrestamoId}" Width="Auto"/>
                                 <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="*"/>
-                                <DataGridTextColumn Header="Tipo de Préstamo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
-                                <DataGridTextColumn Header="Fecha Préstamo" Binding="{Binding FechaPrestamo}" Width="Auto"/>
-                                <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion}" Width="Auto"/>
+                                <DataGridTextColumn Header="Fecha Prestamo" Binding="{Binding FechaPrestamo, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                <DataGridTextColumn Header="Estado" Binding="{Binding EstadoPrestamo}" Width="Auto"/>
+                                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
+                                <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
+                                <DataGridTextColumn Header="Renovaciones" Binding="{Binding Renovaciones}" Width="Auto"/>
+                                <DataGridTextColumn Header="FechaRenovacion" Binding="{Binding FechaRenovacion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

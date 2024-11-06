@@ -32,7 +32,7 @@
         </DataGrid>
 
         <!-- Panel para editar nombre de la carrera -->
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Width="300">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,30" Width="500">
 
             <!-- TextBox para nuevo nombre de la carrera -->
             <TextBox x:Name="txtNuevoNombre"
@@ -61,6 +61,10 @@
             <!-- Botón de actualización -->
             <StackPanel Orientation="Horizontal">
 
+                <Button x:Name="btnAgregar" Content="Agregar" Width="150" Height="30" Margin="10,10"
+                FontWeight="Bold"
+                Cursor="Hand"
+                HorizontalAlignment="Center" Click="btnAgregar_Click"/>
 
                 <Button x:Name="btnActualizar" Content="Actualizar" Width="150" Height="30" Margin="10,10" 
                 FontWeight="Bold"

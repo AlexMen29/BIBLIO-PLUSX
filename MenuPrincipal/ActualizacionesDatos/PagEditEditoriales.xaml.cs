@@ -46,6 +46,21 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                editorialesDatos = new EditorialesModel();
+                editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
+                editorialesDatos.DireccionEditorial = txtDireccion.Text;
+                editorialesDatos.TelefonoEditorial = txtTelefono.Text;
+                AgregarDatos(editorialesDatos);
+                Limpiartxt();
+                CargarDataGrid();
+            }
+        }
+
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -160,10 +175,48 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void AgregarDatos(EditorialesModel datosEditorial)
+        {
+
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
+
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "sp_AgregarEditorial";
+
+
+
+                        cmd.Parameters.AddWithValue("@NombreEditorial", datosEditorial.NombreEditorial);
+                        cmd.Parameters.AddWithValue("@DireccionEditorial", datosEditorial.DireccionEditorial);
+                        cmd.Parameters.AddWithValue("@TelefonoEditorial", datosEditorial.TelefonoEditorial);
+                        
+
+
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Editorial agregado exitosamente", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error inesperado, no se ha podido agregar", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado : " + e.Message);
+            }
+        }
 
 
         #endregion
 
-
+        
     }
 }

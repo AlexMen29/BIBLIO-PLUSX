@@ -51,6 +51,22 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                proveedoresDatos = new ProveedoresModels();
+                proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
+                proveedoresDatos.DUIProveedor = txtDUI.Text;
+                proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
+                proveedoresDatos.DireccionProveedor = txtDireccion.Text;
+                AgregarDatos(proveedoresDatos);
+                Limpiartxt();
+                CargarDataGrid();
+            }
+        }
+
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -167,6 +183,46 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
-        #endregion
+        private void AgregarDatos(ProveedoresModels proveedoresDatos)
+        {
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
+
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "sp_AgregarProveedor";
+
+
+
+                        cmd.Parameters.AddWithValue("@NombreProveedor", proveedoresDatos.NombreProveedor);
+                        cmd.Parameters.AddWithValue("@DuiProveedor", proveedoresDatos.DUIProveedor);
+                        cmd.Parameters.AddWithValue("@TelefonoProveedor", proveedoresDatos.TelefonoProveedor);
+                        cmd.Parameters.AddWithValue("@DireccionProveedor", proveedoresDatos.DireccionProveedor);
+
+
+
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Proveedor agregado exitosamente", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error inesperado, no se ha podido agregar el proveedor", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado" + e.Message);
+            }
+            #endregion
+
+
+        }
     }
 }

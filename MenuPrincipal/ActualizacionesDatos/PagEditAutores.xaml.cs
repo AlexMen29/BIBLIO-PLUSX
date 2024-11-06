@@ -49,6 +49,21 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                autoresDatos = new AutoresModel();
+                autoresDatos.NombreAutor = txtNuevoNombre.Text;
+                autoresDatos.Nacionalidad = txtNacionalidad.Text;
+                autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
+                autoresDatos.Bibliografia = txtBibliografia.Text;
+                AgregarDatos(autoresDatos);
+                Limpiartxt();
+                CargarDataGrid();
+            }
+        }
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -164,7 +179,48 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void AgregarDatos(AutoresModel datosAutores)
+        {
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
 
-        #endregion
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandText = "sp_AgregarAutor";
+
+
+
+                        cmd.Parameters.AddWithValue("@NombreAutor", datosAutores.NombreAutor);
+                        cmd.Parameters.AddWithValue("@Nacionalidad", datosAutores.Nacionalidad);
+                        cmd.Parameters.AddWithValue("@FechaNacimiento", datosAutores.FechaNacimiento);
+                        cmd.Parameters.AddWithValue("@Bibliografia", datosAutores.Bibliografia);
+                        //Dcmd.Parameters.AddWithValue("@AutorID", datosAutores.AutorID);
+
+
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Autor agregado exitosamente", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error inesperado, no se ha podido agregar al autor", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado" + e.Message);
+            }
+
+
+            #endregion
+        }
+
+        
     }
 }

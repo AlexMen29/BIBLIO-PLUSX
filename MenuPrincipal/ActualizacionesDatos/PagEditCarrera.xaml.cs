@@ -123,8 +123,43 @@ namespace MenuPrincipal.ActualizacionesDatos
             {
                 MessageBox.Show("Error inesperado : " + e.Message);
             }
+
+            
         }
 
+        private void AgregarDatos(CarreraModel datosCarrera)
+        {
+            string consulta = "INSERT INTO Carrera (NombreCarrera) VALUES (@NuevoNombre)";
+
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
+
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandText = consulta;
+                        cmd.Parameters.AddWithValue("@NuevoNombre", datosCarrera.NombreCarrera);
+                        
+
+
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Carrera agregada exitosamente", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error inesperado, no se ha podido agregar la carrera", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado : " + e.Message);
+            }
+        }
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
@@ -133,6 +168,18 @@ namespace MenuPrincipal.ActualizacionesDatos
             {
                 datosCarrera.NombreCarrera = txtNuevoNombre.Text;
                 ActualizarDato(datosCarrera);
+                CargarDataGrid();
+            }
+        }
+
+        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (resultado == MessageBoxResult.Yes)
+            {
+                datosCarrera = new CarreraModel();
+                datosCarrera.NombreCarrera = txtNuevoNombre.Text;
+                AgregarDatos(datosCarrera);
                 CargarDataGrid();
             }
         }

@@ -192,9 +192,15 @@ namespace MenuPrincipal.CompraDeLibros
             ventana.ShowDialog();
 
             string isEd = ventana.RecuperarEdicion();
-            MessageBox.Show("Tenia razon el perro" + isEd);
-            crearRegistroCompra(isEd);
+            if (isEd != null)
+            {
+                crearRegistroCompra(isEd);
+            }
+            else
+            {
+                MessageBox.Show("Compra Cancelada", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
 
+            }
 
 
 

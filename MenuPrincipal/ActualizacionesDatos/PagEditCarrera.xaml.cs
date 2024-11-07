@@ -19,6 +19,7 @@ using System.Data.SqlClient;
 using System.Data.Common;
 using MenuPrincipal.BD.Models;
 using MenuPrincipal.PageUsuarios;
+using MenuPrincipal.DatosGenerales;
 
 namespace MenuPrincipal.ActualizacionesDatos
 {
@@ -32,6 +33,9 @@ namespace MenuPrincipal.ActualizacionesDatos
             InitializeComponent();
             CargarDataGrid();
         }
+
+        DatosGlobales datos= new DatosGlobales();
+
         private CarreraModel datosCarrera;
 
         private void CargarDataGrid()
@@ -174,13 +178,30 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+            // Declarar un array de TextBox
+            TextBox[] arr = new TextBox[1];
+
+            // Asignar un TextBox al array
+            arr[0] = txtNuevoNombre;
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
             {
-                datosCarrera = new CarreraModel();
-                datosCarrera.NombreCarrera = txtNuevoNombre.Text;
-                AgregarDatos(datosCarrera);
-                CargarDataGrid();
+
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    datosCarrera = new CarreraModel();
+                    datosCarrera.NombreCarrera = txtNuevoNombre.Text;
+                    AgregarDatos(datosCarrera);
+                    CargarDataGrid();
+                }
+            }
+            else
+            {
+                MessageBoxResult resultado = MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
         }
     }

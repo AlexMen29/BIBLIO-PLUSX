@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:MenuPrincipal.PagePrestamos"
       mc:Ignorable="d" 
       d:DesignHeight="680" d:DesignWidth="820"
@@ -71,6 +72,40 @@
                                 <DataGridTextColumn Header="FechaRenovacion" Binding="{Binding FechaRenovacion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
+
+
+                        <StackPanel>
+                            <Label Content="Cancelar prestamo" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
+
+                            <!-- TextBox para id pago -->
+                            <TextBox x:Name="txtIdPago"
+                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                          materialDesign:HintAssist.Hint="IdPago"
+                          Width="275" Margin="0,0,0,10"/>
+
+                            <TextBox x:Name="txtCosto"
+                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                          materialDesign:HintAssist.Hint="Costo a pagar"
+                          Width="275" Margin="0,0,0,10"/>
+
+
+                            <!-- Botón de actualización -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+
+                                <Button x:Name="btnPagar" Content="Pagar" Width="150" Height="30" Margin="10,10" 
+                             FontWeight="Bold"
+                             Cursor="Hand"                 
+                             HorizontalAlignment="Center"/>
+
+                                <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30" 
+                            FontWeight="Bold"
+                            Cursor="Hand"
+
+                            HorizontalAlignment="Center" />
+                            </StackPanel>
+
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>

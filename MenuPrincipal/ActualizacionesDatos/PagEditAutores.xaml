@@ -12,7 +12,7 @@
 
         <!-- Título de la página -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,10">
-            <TextBlock Text="Editar Datos de Autores" FontSize="20" FontWeight="Bold" 
+            <TextBlock Text=" Datos de Autores" FontSize="20" FontWeight="Bold" 
                Foreground="#333" HorizontalAlignment="Center"/>
             <TextBlock Text="Seleccione un Autor para modificar " 
                FontSize="14" Foreground="#666" HorizontalAlignment="Center"/>

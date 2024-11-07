@@ -13,7 +13,7 @@
 
         <!-- Título de la página -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,10">
-            <TextBlock Text="Editar Categoria" FontSize="20" FontWeight="Bold" 
+            <TextBlock Text="Categoria" FontSize="20" FontWeight="Bold" 
                    Foreground="#333" HorizontalAlignment="Center"/>
             <TextBlock Text="Seleccione una categoria para modificar el nombre" 
                    FontSize="14" Foreground="#666" HorizontalAlignment="Center"/>

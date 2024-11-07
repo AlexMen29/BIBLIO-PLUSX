@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 
 using System.Data;
 using System.Data.SqlClient;
+using MenuPrincipal.DatosGenerales;
 
 namespace MenuPrincipal.ActualizacionesDatos
 {
@@ -30,6 +31,8 @@ namespace MenuPrincipal.ActualizacionesDatos
             InitializeComponent();
             CargarDataGrid();
         }
+
+        DatosGlobales datos= new DatosGlobales();
 
         private EditorialesModel editorialesDatos;
 
@@ -48,17 +51,38 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+
+            // Declarar un array de TextBox
+            TextBox[] arr = new TextBox[3];
+
+            // Asignar un TextBox al array
+            arr[0] = txtNuevoNombre;
+            arr[1] = txtDireccion;
+            arr[2] = txtTelefono;
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
             {
-                editorialesDatos = new EditorialesModel();
-                editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
-                editorialesDatos.DireccionEditorial = txtDireccion.Text;
-                editorialesDatos.TelefonoEditorial = txtTelefono.Text;
-                AgregarDatos(editorialesDatos);
-                Limpiartxt();
-                CargarDataGrid();
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    editorialesDatos = new EditorialesModel();
+                    editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
+                    editorialesDatos.DireccionEditorial = txtDireccion.Text;
+                    editorialesDatos.TelefonoEditorial = txtTelefono.Text;
+                    AgregarDatos(editorialesDatos);
+                    Limpiartxt();
+                    CargarDataGrid();
+                }
             }
+            else
+            {
+                MessageBoxResult resultado = MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
         }
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)

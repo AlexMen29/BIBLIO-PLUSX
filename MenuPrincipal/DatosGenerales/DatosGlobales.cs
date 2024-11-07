@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Documents;
 
 namespace MenuPrincipal.DatosGenerales
 {
@@ -195,6 +196,23 @@ namespace MenuPrincipal.DatosGenerales
             return listaDatos;
         }
 
+        //Metodo Verificar Cajas
+
+
+        public bool VerifcarTextBox(TextBox[] cajas)
+        {
+            bool valido = true;
+            for (int x = 0; x < cajas.Length; x++)
+            {
+                if (string.IsNullOrWhiteSpace(cajas[x].Text))
+                {
+                    valido = false;
+                    break; 
+                }
+            }
+
+            return valido;
+        }
 
 
     }

@@ -7,7 +7,7 @@
 
         xmlns:local="clr-namespace:MenuPrincipal.ActualizacionesDatos"
         mc:Ignorable="d"
-             Title="Menu de Modificaciones" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+             Title="Menu  " Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
 
         <Grid.Background>
@@ -26,9 +26,9 @@
 
         <!-- Header del menú -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0">
-            <TextBlock Text="Menú de Modificaciones" HorizontalAlignment="Center" 
+            <TextBlock Text="Menú" HorizontalAlignment="Center" 
                     FontSize="30" FontWeight="Bold" Margin="0,0,0,10"/>
-            <TextBlock Text="A continuación, seleccione el apartado a modificar" FontSize="20"/>
+            <TextBlock Text="A continuación, seleccione un apartado" FontSize="20"/>
         </StackPanel>
 
         <!-- Botones en un Grid para distribuirlos en dos filas -->

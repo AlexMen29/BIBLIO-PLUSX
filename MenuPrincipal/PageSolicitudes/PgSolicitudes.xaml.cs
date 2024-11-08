@@ -32,6 +32,7 @@ namespace MenuPrincipal.PageSolicitudes
         DatosGlobales datos = new DatosGlobales();
         public string titulo;
         public int tipoPrestamo;
+        private int contador = 0;
         public PgSolicitudes(string titulo, int tipoPrestamo)
         { 
             this.titulo = titulo;
@@ -112,22 +113,15 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionSemanas.Visibility = Visibility.Collapsed;
                 txbFechaPrestamo.Visibility = Visibility.Collapsed;
                 txblFechaPrestamo.Text = "Hora del Prestamo";
-
-                DateTime? horaPrestamo = tmPickerPrestamo.SelectedTime;
-                if (horaPrestamo.HasValue)
+                txblFechaDevolucion.Text = "Hora de Devolución";
+                if (!tmPickerPrestamo.SelectedTime.HasValue)
                 {
-                    DateTime maxHoraDevolucion = horaPrestamo.Value.AddHours(5);
-
-                    // Actualiza la hora máxima permitida cada vez que se cambie la selección
-                    tmPickerDevolucion.SelectedTimeChanged += tmPickerPrestamo_SelectedTimeChanged;
+                    tmPickerPrestamo.SelectedTime = DateTime.Now;
                 }
-
-
             }
             else if (cmbPlazo.SelectedIndex == 1)
             {
                 txbFechaDevolucionDias.Visibility = Visibility.Visible;
-                txblFechaPrestamo.Text = "Fecha del Prestamo";
                 txbFechaPrestamo.Visibility = Visibility.Visible;
                 txbFechaDevolucionSemanas.Visibility = Visibility.Collapsed;
                 tmPickerDevolucion.Visibility = Visibility.Collapsed;
@@ -135,37 +129,24 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionDias.SelectedDate = DateTime.Today;
                 txbFechaDevolucionDias.DisplayDateStart = DateTime.Today;
                 txbFechaDevolucionDias.DisplayDateEnd = txbFechaDevolucionDias.DisplayDateStart.Value.AddDays(5);
+                txblFechaPrestamo.Text = "Fecha del Prestamo";
+                txblFechaDevolucion.Text= "Fecha del Prestamo";
             }
             else
             {
                 txbFechaDevolucionSemanas.Visibility = Visibility.Visible;
-                txblFechaPrestamo.Text = "Fecha del Prestamo";
                 txbFechaPrestamo.Visibility = Visibility.Visible;
                 tmPickerDevolucion.Visibility = Visibility.Collapsed;
                 txbFechaDevolucionDias.Visibility = Visibility.Collapsed;
                 tmPickerPrestamo.Visibility = Visibility.Collapsed;
                 txbFechaDevolucionSemanas.SelectedDate = DateTime.Today;
                 txbFechaDevolucionSemanas.DisplayDateStart = DateTime.Today;
-                txbFechaDevolucionSemanas.DisplayDateEnd = txbFechaDevolucionDias.DisplayDateStart.Value.AddDays(28);
+                txbFechaDevolucionSemanas.DisplayDateEnd = txbFechaDevolucionSemanas.DisplayDateStart.Value.AddDays(28);
+                txblFechaPrestamo.Text = "Fecha del Prestamo";
+                txblFechaDevolucion.Text = "Fecha del Prestamo";
             }
         }
 
-        private void tmPickerPrestamo_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
-        {
-            // Verifica si la hora de préstamo está seleccionada
-            if (tmPickerPrestamo.SelectedTime.HasValue && tmPickerDevolucion.SelectedTime.HasValue)
-            {
-                DateTime maxHoraDevolucion = tmPickerPrestamo.SelectedTime.Value.AddHours(5);
-
-                // Si la hora seleccionada en devolución es mayor que el máximo, restablece al máximo permitido
-                if (tmPickerDevolucion.SelectedTime > maxHoraDevolucion)
-                {
-                    MessageBox.Show("La hora de devolución no puede ser mayor a 5 horas después de la hora de préstamo.",
-                                    "Restricción de Hora", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    tmPickerDevolucion.SelectedTime = DateTime.Now;
-                }
-            }
-        }
 
         private void txbCarne_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -182,6 +163,7 @@ namespace MenuPrincipal.PageSolicitudes
                 e.Handled = true;
             }
         }
+
 
 
         #region METODO
@@ -257,6 +239,53 @@ namespace MenuPrincipal.PageSolicitudes
             }
         }
 
+        private void btnPrestamo_Click(object sender, RoutedEventArgs e)
+        {
+            int minLength = 6;
+            if (txbCarne.Text.Length < minLength)
+            {
+                // Mostrar un mensaje de error o cambiar alguna propiedad visual
+                MessageBox.Show("Debe ingresar un carnet válido",
+                       "Error",
+                       MessageBoxButton.OK,
+                       MessageBoxImage.Warning);
+            }
+        }
 
+        private void tmPickerDevolucion_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
+        {
+            contador += 1;
+
+            if (cmbPlazo.SelectedIndex == 0 && tmPickerPrestamo.SelectedTime.HasValue && tmPickerDevolucion.SelectedTime.HasValue)
+            {
+                DateTime tiempoPrestamo = tmPickerPrestamo.SelectedTime.Value;
+                DateTime tiempoDevolucion = tmPickerDevolucion.SelectedTime.Value;
+
+                // Calcular el tiempo máximo de devolución
+                DateTime tiempoMaximoDevolucion = tiempoPrestamo.AddHours(5);
+                DateTime horaActual = DateTime.Now;
+
+
+                // Verificar si el tiempo seleccionado para la devolución excede el límite
+                if (tiempoDevolucion < horaActual && contador > 1)
+                {
+                    MessageBox.Show("La hora de devolución no puede ser menor a la hora actual.",
+                                    "Hora no válida",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                    tmPickerDevolucion.SelectedTime = DateTime.Now; // Ajustar al mínimo permitido (hora actual)
+                    contador = 0;
+                }
+                else if (tiempoDevolucion > tiempoMaximoDevolucion && contador > 1)
+                {
+                    MessageBox.Show("La hora de devolución no puede ser mayor a 5 horas después de la hora del préstamo.",
+                                    "Hora no válida",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                    tmPickerDevolucion.SelectedTime = DateTime.Now; // Ajustar al tiempo máximo permitido
+                    contador = 0;
+                }
+            }
+        }
     }
 }

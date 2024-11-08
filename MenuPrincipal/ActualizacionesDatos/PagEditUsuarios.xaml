@@ -1,0 +1,111 @@
+﻿<Page x:Class="MenuPrincipal.ActualizacionesDatos.PagEditUsuarios"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:MenuPrincipal.ActualizacionesDatos"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="PagEditUsuarios">
+
+    <Grid Background="White">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="20,20,20,20">
+            <StackPanel Background="Transparent" x:Name="usuarioPanel">
+
+                <!-- Sección de Datos Generales -->
+                <Label Content="Datos Generales" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5" />
+
+                <TextBox x:Name="UsuarioIDtxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="ID del Usuario" IsEnabled="False" />
+
+                <TextBox x:Name="NombresTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Nombres" />
+
+                <TextBox x:Name="ApellidosTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Apellidos" />
+
+                <TextBox x:Name="EstadoCivilTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Estado Civil" />
+
+                <TextBox x:Name="ApellidoCasadaTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Apellido de Casada" />
+
+                <TextBox x:Name="CarnetTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Carnet" />
+
+                <TextBox x:Name="EstadoTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Estado" />
+
+                <TextBox x:Name="TipoUsuarioTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Tipo de Usuario" />
+
+                <TextBox x:Name="CarreraTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Carrera" />
+
+                <!-- Sección de Contacto -->
+                <Label Content="Contacto" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5,20,5,5" />
+
+                <TextBox x:Name="Correo1Txt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Correo 1" />
+
+                <TextBox x:Name="Correo2Txt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Correo 2" />
+
+                <TextBox x:Name="Telefono1Txt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Teléfono 1" />
+
+                <TextBox x:Name="Telefono2Txt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Teléfono 2" />
+
+                <TextBox x:Name="TelefonoFijoTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Teléfono Fijo" />
+
+                <!-- Sección de Dirección -->
+                <Label Content="Dirección" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5,20,5,5" />
+
+                <TextBox x:Name="ColoniaTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Colonia" />
+
+                <TextBox x:Name="CalleTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Calle" />
+
+                <TextBox x:Name="CasaTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Casa" />
+
+                <TextBox x:Name="MunicipioTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Municipio" />
+
+                <TextBox x:Name="DepartamentoTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Departamento" />
+
+                <TextBox x:Name="CPTxt" Margin="5" Foreground="Black" 
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                         materialDesign:HintAssist.Hint="Código Postal" />
+
+                <!-- Botón Guardar -->
+                <Button Name="btnGuardarUsuario" Content="Guardar" Width="125" Margin="10" Background="#9e1717" Foreground="White" />
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

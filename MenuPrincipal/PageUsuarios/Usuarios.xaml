@@ -54,7 +54,7 @@
         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0" Width="780">
 
             <!-- Filtro por Carnet -->
-            <StackPanel Margin="105,30">
+            <StackPanel Margin="10,30">
                 <TextBlock Text="Filtrar por Carnet" FontWeight="Bold" />
                 <TextBox x:Name="CarnetTextBox" Width="150" />
             </StackPanel>
@@ -81,39 +81,11 @@
         </DataGrid>
 
 
-        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
-            <Label Content="Detalles Usuario" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
-
-            <!-- TextBox para id pago -->
-            <TextBox x:Name="txtIdPago"
-                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                          materialDesign:HintAssist.Hint="IdPago"
-                          Width="275" Margin="0,0,0,10"/>
-
-            <TextBox x:Name="txtCosto" IsEnabled="False"
-                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                          materialDesign:HintAssist.Hint="Costo a pagar"
-                          Width="275" Margin="0,0,0,10"/>
-
-
-            <!-- Botón de actualización -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-
-
-                <Button x:Name="btnPagar" Content="Pagar" Width="150" Height="30" Margin="10,10" 
-                             FontWeight="Bold"
-                             Cursor="Hand"                 
-                             HorizontalAlignment="Center"/>
-
-                <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30" 
-                            FontWeight="Bold"
-                            Cursor="Hand"
-
-                            HorizontalAlignment="Center" />
-            </StackPanel>
-
         </StackPanel>
-        </StackPanel>
+
+        <Frame VerticalAlignment="Top" Margin="18,250,22,10" x:Name="frContenidoUsuarios" NavigationUIVisibility="Hidden" />
+
+
 
 
         <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,20,0,20">

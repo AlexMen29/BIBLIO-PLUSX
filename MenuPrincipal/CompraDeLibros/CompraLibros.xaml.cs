@@ -121,9 +121,9 @@ namespace MenuPrincipal.CompraDeLibros
                     else
                     {
                         MessageBox.Show("Hubo un problema al registrar la compra", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                       LimpiarCajas();
+                        LimpiarCajas();
                     }
-                }           
+                }
             }
             else
             {
@@ -131,6 +131,58 @@ namespace MenuPrincipal.CompraDeLibros
 
             }
 
+        }
+
+        //Compras para libros que no estan en sistema
+        private void btnComprarInexsitente_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox[] arrCajas = new TextBox[4];
+            ComboBox[] arrCombo = new ComboBox[1];
+
+            // Asignar un TextBox al array
+            arrCajas[0] = cantidadLibroInexistentetxt;
+            arrCajas[1] = costoUnidadInexistentetxt;
+            arrCajas[2] = stockMinimiotxt;
+            arrCajas[3] = stockMaximotxt;
+
+            //asignar ComboBox a array
+            arrCombo[0] = SelecionarProveedorInexistenteBox;
+
+            bool validacionCajas = datos.VerifcarTextBox(arrCajas);
+            bool validacionCombo = datos.VerifcarComboBox(arrCombo);
+
+            if (validacionCajas == true && validacionCombo == true)
+            {
+
+                MessageBoxResult resultado = MessageBox.Show("Esta apunto de realizar una compra ¿Desea continuar?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    CrearDatoLibroModel datoLibroModel = new CrearDatoLibroModel();
+
+                    datoLibroModel.StockMinimo = Convert.ToInt32(stockMinimiotxt.Text);
+                    datoLibroModel.StockMaximo = Convert.ToInt32(stockMaximotxt.Text);
+
+                    ActualizacionLibros ventana = new ActualizacionLibros(datoLibroModel, 1);
+                    ventana.ShowDialog();
+
+                    string isEd = ventana.RecuperarEdicion();
+                    if (isEd != null)
+                    {
+                        crearRegistroCompra(isEd);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Compra Cancelada", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
         }
 
 
@@ -193,6 +245,17 @@ namespace MenuPrincipal.CompraDeLibros
             costoTotaltxt.Text = null;
         }
 
+        private void LimpiarCajasInexistentes()
+        {
+            cantidadLibroInexistentetxt.Text = null;
+            costoUnidadInexistentetxt.Text = null;
+            stockMinimiotxt.Text = null;
+            stockMaximotxt.Text = null;
+            costoTotalInexistentetxt.Text = null;
+            SelecionarProveedorInexistenteBox.SelectedIndex = -1;
+        }
+
+
         private void SeleccionarEdiccionBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -215,39 +278,6 @@ namespace MenuPrincipal.CompraDeLibros
 
         #region Libros inexistentes
 
-
-        private void btnComprarInexsitente_Click(object sender, RoutedEventArgs e)
-        {
-
-
-            CrearDatoLibroModel datoLibroModel = new CrearDatoLibroModel();
-
-            datoLibroModel.StockMinimo = Convert.ToInt32(stockMinimiotxt.Text);
-            datoLibroModel.StockMaximo = Convert.ToInt32(stockMaximotxt.Text);
-
-            MessageBox.Show($"Datos: {Convert.ToInt32(cantidadLibroInexistentetxt.Text)}");
-
-
-            ActualizacionLibros ventana = new ActualizacionLibros(datoLibroModel, 1);
-            ventana.ShowDialog();
-
-            string isEd = ventana.RecuperarEdicion();
-            if (isEd != null)
-            {
-                crearRegistroCompra(isEd);
-            }
-            else
-            {
-                MessageBox.Show("Compra Cancelada", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            }
-
-
-
-
-        }
-
-
         public void crearRegistroCompra(string idEd)
         {
             //Datos para crear registro de compra
@@ -261,11 +291,7 @@ namespace MenuPrincipal.CompraDeLibros
 
             ComprasModel datosCompraI = new ComprasModel();
 
-            //El programa se detiene cuando lee estos valores de las cajas de texto
-
-            MessageBox.Show($"Datos: {Convert.ToInt32(cantidadLibroInexistentetxt.Text)}");
-
-            //El error comienza aqui 
+        
 
             datosCompraI.Cantidad = Convert.ToInt32(cantidadLibroInexistentetxt.Text);
             datosCompraI.CostoUnidad = Convert.ToDecimal(costoUnidadInexistentetxt.Text);
@@ -280,11 +306,12 @@ namespace MenuPrincipal.CompraDeLibros
             if (res == 0)
             {
                 MessageBox.Show("Compra registrada exitosamente: ", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-
+                LimpiarCajasInexistentes();
             }
             else
             {
                 MessageBox.Show("Hubo un problema al registrar la compra", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                LimpiarCajasInexistentes();
             }
         }
 

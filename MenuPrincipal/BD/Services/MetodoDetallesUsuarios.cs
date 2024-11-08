@@ -15,7 +15,7 @@ namespace MenuPrincipal.BD.Services
 {
     public class MetodoDetallesUsuarios
     {
-        public static List<DetallesUsuarios> MostrarUsuarios()
+        public static List<DetallesUsuarios> MostrarUsuarios( )
         {
             List<DetallesUsuarios> lstUsuarios = new List<DetallesUsuarios>();
             try
@@ -27,7 +27,7 @@ namespace MenuPrincipal.BD.Services
                     using (var command = conn.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "SP_ObtenerDetallesUsuarios"; // Asegúrate de que este sea el nombre correcto
+                        command.CommandText = "SP_ObtenerDetallesUsuarios";
 
                         using (DbDataReader dr = command.ExecuteReader())
                         {

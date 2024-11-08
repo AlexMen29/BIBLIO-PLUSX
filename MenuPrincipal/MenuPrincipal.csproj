@@ -195,6 +195,9 @@
     <Compile Include="ActualizacionesDatos\PagEditProveedores.xaml.cs">
       <DependentUpon>PagEditProveedores.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ActualizacionesDatos\PagEditUsuarios.xaml.cs">
+      <DependentUpon>PagEditUsuarios.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -207,6 +210,7 @@
     <Compile Include="BD\Models\ComprasModel.cs" />
     <Compile Include="BD\Models\CrearDatoLibroModel.cs" />
     <Compile Include="BD\Models\CredencialesModel.cs" />
+    <Compile Include="BD\Models\DatosUsuariosModel.cs" />
     <Compile Include="BD\Models\DetallesLibros.cs" />
     <Compile Include="BD\Models\DetallesUsuarios.cs" />
     <Compile Include="BD\Models\EdicionesModel.cs" />
@@ -222,6 +226,7 @@
     <Compile Include="BD\Models\StockModel.cs" />
     <Compile Include="BD\Models\TipoUsuarioModel.cs" />
     <Compile Include="BD\Models\UsuariosModel.cs" />
+    <Compile Include="BD\Services\DatosUsuariosMetodos.cs" />
     <Compile Include="BD\Services\MetodoDetallesUsuarios.cs" />
     <Compile Include="BD\Services\MetodosCompras.cs" />
     <Compile Include="BD\Services\MetodosCredenciales.cs" />
@@ -314,6 +319,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ActualizacionesDatos\PagEditProveedores.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ActualizacionesDatos\PagEditUsuarios.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

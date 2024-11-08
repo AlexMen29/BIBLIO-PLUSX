@@ -19,6 +19,7 @@ using MenuPrincipal.MenuLibros;
 using MenuPrincipal.BD.Services;
 using MenuPrincipal.DatosGenerales;
 using System.Collections;
+using MenuPrincipal.ActualizacionesDatos;
 
 namespace MenuPrincipal.PageUsuarios
 {
@@ -31,6 +32,7 @@ namespace MenuPrincipal.PageUsuarios
         DatosGlobales datos = new DatosGlobales();
 
         public List<DetallesUsuarios> ListaDataGrid;
+        int idActual;
         DetallesUsuarios UsuariosData;
 
         public Usuarios()
@@ -165,13 +167,14 @@ namespace MenuPrincipal.PageUsuarios
         {
             labSeleccion.Content = null;
             UsuariosData = (DetallesUsuarios)UsuariosDataGrid.SelectedItem;
-
+            
             if (UsuariosData == null)
             {
                 return;
             }
 
             labSeleccion.Content += $"Elemento Seleccionado: {UsuariosData.Nombres}";
+            idActual = UsuariosData.UsuarioID;
             CarnetTextBox.Text = UsuariosData.Carnet;
         }
 
@@ -220,6 +223,16 @@ namespace MenuPrincipal.PageUsuarios
             {
 
                 UsuariosDataGrid.ItemsSource = usuariosFiltrados;
+
+                //Id de usuario encontrado
+                //DetallesUsuarios obtenerID = (DetallesUsuarios)UsuariosDataGrid.SelectedItem;
+                //idActual=obtenerID.UsuarioID;
+                idActual = Convert.ToInt32(usuariosFiltrados[0].UsuarioID);
+
+                PagEditUsuarios page = new PagEditUsuarios(idActual);
+
+                frContenidoUsuarios.NavigationService.Navigate(page);
+                //ImgLogo.Visibility = Visibility.Hidden;
             }
         }
 
@@ -239,6 +252,7 @@ namespace MenuPrincipal.PageUsuarios
             if (validacion == true)
             {
                 BuscarUsuarios();
+               
             }
             else
 
@@ -252,9 +266,11 @@ namespace MenuPrincipal.PageUsuarios
 
         private void btnQuitarFiltros_Click(object sender, RoutedEventArgs e)
         {
-
+            // Quitar la página del Frame +
+            frContenidoUsuarios.Content = null;
             LimpiarCajas();
             CargarDatos();
+
 
         }
 

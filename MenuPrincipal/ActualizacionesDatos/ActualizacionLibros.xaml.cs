@@ -206,7 +206,7 @@ namespace MenuPrincipal.ActualizacionesDatos
 
 
             bool validacion = datos.VerifcarTextBox(arr);
-            if (validacion == true)
+            if (validacion == true && ImagePreview.Source!=null)
             {
 
                 if (MessageBox.Show("Esta apunto de modificar ¿Desea contiuar?",
@@ -231,13 +231,6 @@ namespace MenuPrincipal.ActualizacionesDatos
                 MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
-
-
-
-
-
-
-
         }
 
         private void modifcar()
@@ -346,18 +339,9 @@ namespace MenuPrincipal.ActualizacionesDatos
             if (res == 0)
             {
                 MessageBox.Show("Creacion realizada exitosamente ", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
-                //Actualizacion de data grid con los nuevos datos
-
-                //CompraLibros compraLibros = new CompraLibros();
-                //compraLibros.crearRegistroCompra(DatosCrearLibros.ISBN);
-
                 this.Close();
                 
             }
-
-
-
-
         }
 
         public string RecuperarEdicion()

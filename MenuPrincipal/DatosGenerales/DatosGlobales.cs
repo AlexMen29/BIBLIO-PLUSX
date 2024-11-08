@@ -29,6 +29,8 @@ namespace MenuPrincipal.DatosGenerales
         public string consultarProveedores = "select NombreProveedor from Proveedores";
         public string consultaTiposPrestamos = "Select DISTINCT TipoPrestamo from Prestamos";
         public string consultaEstadoPrestamos = "Select DISTINCT EstadoPrestamo from Prestamos";
+        public string consultaEstado = "select Estado  from Estado";
+
 
 
         public BitmapImage ConvertirABitmapImage(byte[] imageBytes)
@@ -203,8 +205,6 @@ namespace MenuPrincipal.DatosGenerales
         {
             try
             {
-
-
                 for (int x = 0; x < cajas.Length; x++)
                 {
                     if (string.IsNullOrWhiteSpace(cajas[x].Text))
@@ -212,12 +212,30 @@ namespace MenuPrincipal.DatosGenerales
                         return false; // Retorna false tan pronto como encuentre un TextBox vacío.
                     }
                 }
-
                 return true; // Si no se encontró ningún TextBox vacío, retorna true.
             }
             catch (Exception e)
             {
                 return false; 
+            }
+        }
+
+        public bool VerifcarComboBox(ComboBox[] combo)
+        {
+            try
+            {
+                for (int x = 0; x < combo.Length; x++)
+                {
+                    if (string.IsNullOrWhiteSpace(combo[x].Text))
+                    {
+                        return false; // Retorna false tan pronto como encuentre un TextBox vacío.
+                    }
+                }
+                return true; // Si no se encontró ningún TextBox vacío, retorna true.
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
 

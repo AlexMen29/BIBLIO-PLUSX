@@ -41,6 +41,7 @@ namespace MenuPrincipal.PageUsuarios
 
             LlenarBoxFiltros(datos.consultaTipoUsuario, TipoUsuarioComboBox, "Tipo");
             LlenarBoxFiltros(datos.consultaCarrera, CarreraComboBox, "NombreCarrera");
+            LlenarBoxFiltros(datos.consultaEstado, estadoComboBox, "Estado");
         }
 
 
@@ -109,6 +110,15 @@ namespace MenuPrincipal.PageUsuarios
                     .ToList();
             }
 
+            // Filtramos por estado si hay un valor seleccionado
+            if (estadoComboBox.SelectedItem != null && estadoComboBox.SelectedItem.ToString() != "Ninguno")
+            {
+                string estadoSeleccionado = estadoComboBox.SelectedItem.ToString();
+                usuariosFiltrados = usuariosFiltrados
+                    .Where(usuario => usuario.Estado.Equals(estadoSeleccionado, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
             if (FechaComboBox.SelectedItem != null && ((ComboBoxItem)FechaComboBox.SelectedItem).Content.ToString() != "Ninguno")
             {
 
@@ -162,6 +172,7 @@ namespace MenuPrincipal.PageUsuarios
             }
 
             labSeleccion.Content += $"Elemento Seleccionado: {UsuariosData.Nombres}";
+            CarnetTextBox.Text = UsuariosData.Carnet;
         }
 
         private void TipoUsuarioComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -175,6 +186,10 @@ namespace MenuPrincipal.PageUsuarios
         }
 
         private void FechaComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AplicarFiltro();
+        }
+        private void estadoComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             AplicarFiltro();
         }
@@ -249,12 +264,10 @@ namespace MenuPrincipal.PageUsuarios
             TipoUsuarioComboBox.SelectedItem = null;
             CarreraComboBox.SelectedItem = null;
             FechaComboBox.SelectedItem = null;
+            estadoComboBox.SelectedItem = null;
             CarnetTextBox.Text = null;
         }
 
-
-
-
-
+      
     }
 }

@@ -48,7 +48,6 @@ namespace MenuPrincipal.BD.Services
             {
                 MessageBox.Show("Ocurrió un error: " + e.Message, "Error de consulta", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            MessageBox.Show("Id de respuesta: "+compraIDGenerado);
             return compraIDGenerado;
 
         

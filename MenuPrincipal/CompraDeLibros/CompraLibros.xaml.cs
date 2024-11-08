@@ -72,39 +72,65 @@ namespace MenuPrincipal.CompraDeLibros
 
         private void btnComprar_Click(object sender, RoutedEventArgs e)
         {
-            //id 0:Edicion ; id 1:Proveerdor; id 2: detalleLibro;
-            int[] id = IdProveedorEdicionDetalle(SeleccionarEdiccionBox, SelecionarProveedorBox);
+            TextBox[] arrCajas = new TextBox[2];
+            ComboBox[] arrCombo = new ComboBox[2];
 
-            ComprasModel datosCompra = new ComprasModel();
+            // Asignar un TextBox al array
+            arrCajas[0] = cantidadLibrotxt;
+            arrCajas[1] = costoUnidadtxt;
 
-            //datosCompra.Cantidad=
-
-            datosCompra.Cantidad = Convert.ToInt32(cantidadLibrotxt.Text);
-            datosCompra.CostoUnidad = Convert.ToDecimal(costoUnidadtxt.Text);
-            datosCompra.FechaCompra = DateFecha.SelectedDate.Value;
-            datosCompra.CostoTotal = costoTotal;
-            datosCompra.EdicionID = id[0];
-            datosCompra.ProveedorID = id[1];
-            datosCompra.DetallesID = id[2];
+            //asignar ComboBox a array
+            arrCombo[0] = SeleccionarEdiccionBox;
+            arrCombo[1] = SelecionarProveedorBox;
 
 
-            int res = MetodosCompras.RegistrarCompraCompleta(datosCompra);
 
-            if (res == 0)
+
+            bool validacionCajas = datos.VerifcarTextBox(arrCajas);
+            bool validacionCombo = datos.VerifcarComboBox(arrCombo);
+
+            if (validacionCajas == true && validacionCombo == true)
             {
-                MessageBox.Show("Compra registrada exitosamente con ID: " + res, "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                MessageBoxResult resultado = MessageBox.Show("Esta apunto de realizar una compra ¿Desea continuar?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    //id 0:Edicion ; id 1:Proveerdor; id 2: detalleLibro;
+                    int[] id = IdProveedorEdicionDetalle(SeleccionarEdiccionBox, SelecionarProveedorBox);
+
+                    ComprasModel datosCompra = new ComprasModel();
+
+                    //datosCompra.Cantidad=
+
+                    datosCompra.Cantidad = Convert.ToInt32(cantidadLibrotxt.Text);
+                    datosCompra.CostoUnidad = Convert.ToDecimal(costoUnidadtxt.Text);
+                    datosCompra.FechaCompra = DateFecha.SelectedDate.Value;
+                    datosCompra.CostoTotal = costoTotal;
+                    datosCompra.EdicionID = id[0];
+                    datosCompra.ProveedorID = id[1];
+                    datosCompra.DetallesID = id[2];
+
+
+                    int res = MetodosCompras.RegistrarCompraCompleta(datosCompra);
+
+                    if (res == 0)
+                    {
+                        MessageBox.Show("Compra registrada exitosamente ", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                        LimpiarCajas();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hubo un problema al registrar la compra", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                       LimpiarCajas();
+                    }
+                }           
             }
             else
             {
-                MessageBox.Show("Hubo un problema al registrar la compra", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
 
-
-
-
-
-            MessageBox.Show($"id Edicion {id[0]} Proveedor {id[1]}Detalle{id[2]}");
         }
 
 
@@ -157,16 +183,30 @@ namespace MenuPrincipal.CompraDeLibros
             }
         }
 
+        private void LimpiarCajas()
+        {
+            cantidadLibrotxt.Text = null;
+            costoUnidadtxt.Text = null;
+            SeleccionarEdiccionBox.SelectedIndex = -1;
+            SelecionarProveedorBox.SelectedIndex = -1;
+            NombreLibrotxt.Text = null;
+            costoTotaltxt.Text = null;
+        }
+
         private void SeleccionarEdiccionBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
                 string consulta = "select Titulo from Ediciones where ISBN=@Edicion";
-                datos.AsignarValorTextBox(consulta, SeleccionarEdiccionBox.SelectedItem.ToString(), NombreLibrotxt, "@Edicion");
+                if (SeleccionarEdiccionBox.SelectedItem != null)
+                {
+                    datos.AsignarValorTextBox(consulta, SeleccionarEdiccionBox.SelectedItem.ToString(), NombreLibrotxt, "@Edicion");
+
+                }
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 NombreLibrotxt.Text = "...";
             }

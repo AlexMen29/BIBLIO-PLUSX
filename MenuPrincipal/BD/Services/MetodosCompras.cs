@@ -83,7 +83,6 @@ namespace MenuPrincipal.BD.Services
 
                         // Ejecutar el comando y obtener el resultado
                         resultado = Convert.ToInt32(command.ExecuteScalar());
-                        MessageBox.Show("Exito en metodo "+resultado);
                     }
                 }
             }

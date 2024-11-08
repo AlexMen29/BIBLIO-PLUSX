@@ -30,7 +30,7 @@
                         materialDesign:HintAssist.Hint="Fecha de Prestamo" Width="286" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
                     </DatePicker>
                     <materialDesign:TimePicker Name="tmPickerPrestamo" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed" IsEnabled="False"
-                        materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280" SelectedTimeChanged="tmPickerPrestamo_SelectedTimeChanged"/>
+                        materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Plazo de Prestamo" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
@@ -54,7 +54,7 @@
                         <DatePicker x:Name="txbFechaDevolucionSemanas" Foreground="Black"  SelectedDateFormat="Long" Visibility="Collapsed"
                         materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5">
                         </DatePicker>
-                        <materialDesign:TimePicker Name="tmPickerDevolucion" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed" 
+                        <materialDesign:TimePicker Name="tmPickerDevolucion" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed"  SelectedTimeChanged="tmPickerDevolucion_SelectedTimeChanged" 
                         materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280"/>
                         </StackPanel>
                 </StackPanel>
@@ -81,7 +81,7 @@
             </StackPanel>
             <Label x:Name="lblTitulo" Content="Titulo" FontSize="15" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" FontWeight="Bold" Margin="-10" />
             <Label x:Name="lblAutor" Content="Autor" FontSize="12" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" Margin="0" FontStyle="Italic" />
-            <Button x:Name="btnPrestamo" Content="Prestamo" Width="125" Margin="10" Background="#9e1717" Foreground="White"/>
+            <Button x:Name="btnPrestamo" Content="Prestamo" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="btnPrestamo_Click"/>
         </StackPanel>
     </Grid>
 </Page>

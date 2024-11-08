@@ -77,9 +77,9 @@ namespace MenuPrincipal.ActualizacionesDatos
             EditTituloTextBox.Text = Libros.Titulo;
             EditEdicionTextBox.Text = Libros.Edicion;
 
-            LlenarCajas(datos.consultaAutor, EditAutorComboBox, "NombreAutor", Libros.Autor);
-            LlenarCajas(datos.consultaEdiorial, EditEditorialComboBox, "NombreEditorial", Libros.Editorial);
-            LlenarCajas(datos.consultaCategoria, EditCategoriaComboBox, "NombreCategoria", Libros.Categoria);
+            datos.LlenarCajasVDefecto(datos.consultaAutor, EditAutorComboBox, "NombreAutor", Libros.Autor);
+            datos.LlenarCajasVDefecto(datos.consultaEdiorial, EditEditorialComboBox, "NombreEditorial", Libros.Editorial);
+            datos.LlenarCajasVDefecto(datos.consultaCategoria, EditCategoriaComboBox, "NombreCategoria", Libros.Categoria);
 
 
 
@@ -134,43 +134,7 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         //Cargar datos para modificacion de Autor, Editorial y categoria
 
-        public void LlenarCajas(string consulta, ComboBox elementoBox, string columna, string valorPorDefecto)
-        {
-            try
-            {
-                // Lista con valores correspondientes a ComboBox
-                List<string> Lista = new List<string>();
-                using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
-                {
-                    conn.Open();
-
-                    using (var command = new SqlCommand(consulta, conn))
-                    {
-                        using (DbDataReader dr = command.ExecuteReader())
-                        {
-                            while (dr.Read())
-                            {
-                                Lista.Add(dr[columna].ToString());
-                            }
-                        }
-                    }
-                }
-
-                // Asigna la lista de valores al ComboBox
-                elementoBox.ItemsSource = Lista;
-
-                // Establece el valor por defecto que ya está registrado en la base de datos
-                if (!string.IsNullOrEmpty(valorPorDefecto) && Lista.Contains(valorPorDefecto))
-                {
-                    elementoBox.SelectedItem = valorPorDefecto;
-                }
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Error inesperado: {e.Message}");
-            }
-        }
+        
 
         private void btnCargarImagen_Click(object sender, RoutedEventArgs e)
         {
@@ -206,7 +170,7 @@ namespace MenuPrincipal.ActualizacionesDatos
 
 
             bool validacion = datos.VerifcarTextBox(arr);
-            if (validacion == true)
+            if (validacion == true && ImagePreview.Source!=null)
             {
 
                 if (MessageBox.Show("Esta apunto de modificar ¿Desea contiuar?",
@@ -231,13 +195,6 @@ namespace MenuPrincipal.ActualizacionesDatos
                 MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
-
-
-
-
-
-
-
         }
 
         private void modifcar()
@@ -294,9 +251,6 @@ namespace MenuPrincipal.ActualizacionesDatos
 
             return id;
 
-
-
-
         }
 
         public static byte[] ConvertImageToByteArray(Image imageControl)
@@ -346,18 +300,9 @@ namespace MenuPrincipal.ActualizacionesDatos
             if (res == 0)
             {
                 MessageBox.Show("Creacion realizada exitosamente ", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
-                //Actualizacion de data grid con los nuevos datos
-
-                //CompraLibros compraLibros = new CompraLibros();
-                //compraLibros.crearRegistroCompra(DatosCrearLibros.ISBN);
-
                 this.Close();
                 
             }
-
-
-
-
         }
 
         public string RecuperarEdicion()

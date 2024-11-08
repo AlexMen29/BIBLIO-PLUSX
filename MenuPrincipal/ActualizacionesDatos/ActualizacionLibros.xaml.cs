@@ -251,9 +251,6 @@ namespace MenuPrincipal.ActualizacionesDatos
 
             return id;
 
-
-
-
         }
 
         public static byte[] ConvertImageToByteArray(Image imageControl)

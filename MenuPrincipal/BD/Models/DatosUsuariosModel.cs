@@ -21,8 +21,10 @@ namespace MenuPrincipal.BD.Models
         public string TelefonoFijo { get; set; }
         public string Carnet { get; set; }
         public string Estado { get; set; }
+        public int EstadoID { get; set; }
         public string TipoUsuario { get; set; }
         public string Carrera { get; set; }
+        public string CarreraID { get; set; }
         public string Colonia { get; set; }
         public string Calle { get; set; }
         public string Casa { get; set; }

@@ -160,7 +160,7 @@ namespace MenuPrincipal.DetallesL
                 if (boxResult == MessageBoxResult.Yes)
                 {
                     tipoPrestamo = 1;
-                    PgSolicitudes pg = new PgSolicitudes();
+                    PgSolicitudes pg = new PgSolicitudes(titulo, tipoPrestamo);
                     MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
                     mainWindow.NavegarAContenido(pg);
                     
@@ -172,11 +172,12 @@ namespace MenuPrincipal.DetallesL
                 MessageBoxResult boxResult = MessageBox.Show("¡Libro fuera de Stock! ¿Desea entrar a la cola de espera?", "Advertencia", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (boxResult == MessageBoxResult.Yes)
                 {
-                    tipoPrestamo = 0;
-                    PgSolicitudes pg = new PgSolicitudes();
+                    tipoPrestamo = 2;
+                    PgSolicitudes pg = new PgSolicitudes(titulo, tipoPrestamo);
                     MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
                     mainWindow.NavegarAContenido(pg);
                 }
+                this.Close();
             }
         }
     }

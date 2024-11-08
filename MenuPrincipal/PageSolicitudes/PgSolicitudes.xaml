@@ -7,48 +7,67 @@
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="PgSolicitudes" Background="White">
+      Title="PgSolicitudes" Background="White" Loaded="Page_Loaded">
 
     <Grid VerticalAlignment="Center">
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="0,0,400,0">
             <StackPanel>
                 <StackPanel>
-                    <TextBox x:Name="txbCarne" Foreground="Black" 
+                    <TextBox x:Name="txbCarne" Foreground="Black"  
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    materialDesign:HintAssist.Hint="Carnet Estudiantil" Width="361" HorizontalAlignment="Left" Margin="10,20,0,0" Height="47" FontSize="14"/>
+                    materialDesign:HintAssist.Hint="Carnet Estudiantil" Width="295" HorizontalAlignment="Left" Margin="10,20,0,0" Height="47" FontSize="14" PreviewTextInput="txbCarne_PreviewTextInput" PreviewKeyDown="txbCarne_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Tipo de Prestamo" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
-                    <ComboBox Name="cmbTipoPrestamo" HorizontalAlignment="Left" Width="345" Margin="10,0,0,0" Text="" Height="44" FontSize="14" VerticalContentAlignment="Bottom">
+                    <ComboBox Name="cmbTipoPrestamo" HorizontalAlignment="Left" Width="291" Margin="10,0,0,0" Text="" Height="44" FontSize="14" VerticalContentAlignment="Bottom" SelectionChanged="cmbTipoPrestamo_SelectionChanged">
                         <ComboBoxItem Content="Interno"/>
                         <ComboBoxItem Content="Externo"/>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel>
-                    <TextBox x:Name="txbFechaDevolucion" Foreground="Black" 
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                        materialDesign:HintAssist.Hint="Fecha Devolucion" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                    <TextBlock x:Name="txblFechaPrestamo" Text="Fecha de Prestamo" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
+                    <DatePicker x:Name="txbFechaPrestamo" Foreground="Black" SelectedDateFormat="Long" 
+                        materialDesign:HintAssist.Hint="Fecha de Prestamo" Width="286" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                    </DatePicker>
+                    <materialDesign:TimePicker Name="tmPickerPrestamo" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed" IsEnabled="False"
+                        materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280" SelectedTimeChanged="tmPickerPrestamo_SelectedTimeChanged"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Plazo de Prestamo" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
+                    <ComboBox Name="cmbPlazo" HorizontalAlignment="Left" Width="291" Margin="10,0,0,0" Text="" Height="44" FontSize="14" VerticalContentAlignment="Bottom" SelectionChanged="cmbPlazo_SelectionChanged">
+                        <ComboBoxItem Content="Horas"/>
+                        <ComboBoxItem Content="Días"/>
+                        <ComboBoxItem Content="Semanas"/>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Margin="0,0,0,0">
-                    <TextBox x:Name="txbFechaPrestamo" Foreground="Black" 
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                        materialDesign:HintAssist.Hint="Fecha Prestamo" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                    <TextBlock Name="txblFechaSolicitud" Text="Fecha de Solicitud" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
+                    <DatePicker x:Name="txbFechaSolicitud" Foreground="Black"  SelectedDateFormat="Long"
+                        materialDesign:HintAssist.Hint="Fecha de Solicitud" Width="286" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+                    </DatePicker>
+  
+                    <StackPanel Margin="0,0,0,0">
+                        <TextBlock x:Name="txblFechaDevolucion" Text="Fecha de Devolucion" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
+                        <DatePicker x:Name="txbFechaDevolucionDias" Foreground="Black"  SelectedDateFormat="Long" Visibility="Collapsed"
+                        materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5">
+                        </DatePicker>
+                        <DatePicker x:Name="txbFechaDevolucionSemanas" Foreground="Black"  SelectedDateFormat="Long" Visibility="Collapsed"
+                        materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5">
+                        </DatePicker>
+                        <materialDesign:TimePicker Name="tmPickerDevolucion" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed" 
+                        materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280"/>
+                        </StackPanel>
                 </StackPanel>
                 <StackPanel Margin="0,0,0,0">
-                    <TextBox x:Name="txbFechaSolicitud" Foreground="Black" 
-                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    materialDesign:HintAssist.Hint="Fecha Solicitud" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
-                </StackPanel>
-                <StackPanel Margin="0,0,0,0">
+                    <TextBlock Name="txblTiempo" Text="Tiempo de Entrega" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
                     <TextBox x:Name="txbTiempo" Foreground="Black" 
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                    materialDesign:HintAssist.Hint="Tiempo de Entrega" Width="286" HorizontalAlignment="Left" Margin="10,20,0,0" FontSize="14"/>
+                    materialDesign:HintAssist.Hint="Tiempo de Entrega" Width="286" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
         <Rectangle Stroke="#9e1717" Width="1"  Margin="398,10,398,0"/>
         <StackPanel Margin="400,0,0,0">
-            <!-- Sección de imagen y botón (columna derecha) -->
             <!-- Sección de imagen y botón (columna derecha) -->
             <StackPanel Orientation="Vertical" Height="271">
                 <!-- Imagen de ejemplo -->
@@ -60,9 +79,9 @@
                     </Image>
                 </Border>
             </StackPanel>
-            <Label x:Name="lblTitulo" Content="Titulo" FontSize="15" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" FontWeight="Bold" Margin="10" />
-            <Label x:Name="lblAutor" Content="Autor" FontSize="12" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" Margin="-15" FontStyle="Italic" />
-            <Button Name="bntPrestamo" Content="Prestamo" Width="125" Margin="10" Background="#9e1717" Foreground="White"/>
+            <Label x:Name="lblTitulo" Content="Titulo" FontSize="15" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" FontWeight="Bold" Margin="-10" />
+            <Label x:Name="lblAutor" Content="Autor" FontSize="12" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" Margin="0" FontStyle="Italic" />
+            <Button x:Name="btnPrestamo" Content="Prestamo" Width="125" Margin="10" Background="#9e1717" Foreground="White"/>
         </StackPanel>
     </Grid>
 </Page>

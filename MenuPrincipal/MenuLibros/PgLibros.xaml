@@ -182,9 +182,9 @@
                             <ComboBox x:Name="CategoriaComboBox" Width="150" SelectionChanged="CategoriaComboBox_SelectionChanged" />
                         </StackPanel>
 
-                        <!-- Filtro por Especialidad -->
+                        <!-- Filtro por Stock -->
                         <StackPanel Margin="10,0">
-                            <TextBlock Text="Filtrar por Edicion" FontWeight="Bold" />
+                            <TextBlock Text="Filtrar por Stock" FontWeight="Bold" />
                             <ComboBox x:Name="StockComboBox" Width="150" SelectionChanged="StockComboBox_SelectionChanged" >
                                 <ComboBoxItem Content="Mayor a Menor"/>
                                 <ComboBoxItem Content="Menor a Mayor"/>
@@ -221,9 +221,7 @@
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,40">
 
-                        <Button Content="Añadir Libro" Width="125" Margin="10" />
                         <Button Content="Editar Libro" Width="125" Margin="10" Click="Button_Click_1" />
-                        <Button Content="Eliminar Libro" Width="125" Margin="10" />
                     </StackPanel>
 
                 </Grid>

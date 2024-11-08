@@ -200,7 +200,17 @@ namespace MenuPrincipal.MenuLibros
 
 
             // Asignamos los libros filtrados al DataGrid
-            LibrosDataGrid.ItemsSource = librosFiltrados;
+            if (librosFiltrados.Count == 0)
+            {
+                MessageBox.Show("No se encontraron libros que coincidan con los criterios de búsqueda.");
+                CargarDatos();
+                LimpiarFiltros();
+            }
+            else
+            {
+                LibrosDataGrid.ItemsSource = librosFiltrados;
+            }
+            
 
 
         }
@@ -243,6 +253,7 @@ namespace MenuPrincipal.MenuLibros
             EditorialComboBox.SelectedIndex = -1;
             CategoriaComboBox.SelectedIndex = -1;
             StockComboBox.SelectedIndex = -1;
+
         }
 
         private void LibrosDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -263,8 +274,20 @@ namespace MenuPrincipal.MenuLibros
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ActualizacionLibros VentanaActualizacion = new ActualizacionLibros(Libros, 0);
-            VentanaActualizacion.ShowDialog();
+
+            if (Libros != null)
+            {
+
+                ActualizacionLibros VentanaActualizacion = new ActualizacionLibros(Libros, 0);
+                VentanaActualizacion.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Por favor, Seleccione un elemento", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
         }
 
         private void gpbTodos_Loaded(object sender, RoutedEventArgs e)

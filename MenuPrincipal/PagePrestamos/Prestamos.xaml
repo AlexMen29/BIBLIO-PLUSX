@@ -83,7 +83,7 @@
                           materialDesign:HintAssist.Hint="IdPago"
                           Width="275" Margin="0,0,0,10"/>
 
-                            <TextBox x:Name="txtCosto"
+                            <TextBox x:Name="txtCosto" IsEnabled="False"
                           Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                           materialDesign:HintAssist.Hint="Costo a pagar"
                           Width="275" Margin="0,0,0,10"/>
@@ -96,7 +96,7 @@
                                 <Button x:Name="btnPagar" Content="Pagar" Width="150" Height="30" Margin="10,10" 
                              FontWeight="Bold"
                              Cursor="Hand"                 
-                             HorizontalAlignment="Center"/>
+                             HorizontalAlignment="Center" Click="btnPagar_Click_1"/>
 
                                 <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30" 
                             FontWeight="Bold"

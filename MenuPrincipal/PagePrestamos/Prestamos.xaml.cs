@@ -137,5 +137,31 @@ namespace MenuPrincipal.PagePrestamos
             EstadoComboBox.SelectedIndex = -1;
             FechaDevolucionComboBox.SelectedIndex = -1;
         }
+
+
+        private void btnPagar_Click_1(object sender, RoutedEventArgs e)
+        {
+            TextBox[] arr = new TextBox[1];
+
+            // Asignar un TextBox al array
+            arr[0] = txtIdPago;
+
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
+            {
+                MessageBoxResult resultado = MessageBox.Show("¿Desea continuar con la finalizacion del prestanmo?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    
+                }
+            }
+            else
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
     }
 }

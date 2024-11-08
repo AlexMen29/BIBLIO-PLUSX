@@ -23,7 +23,7 @@ namespace MenuPrincipal.DatosGenerales
         public string consultaAutor = "select NombreAutor from Autores";
         public string consultaCategoria = "select NombreCategoria from Categorias";
         public string consultaEdiorial = "select NombreEditorial from Editoriales";
-        public string consultaTipoUsuario = "select Tipo from TipoUsuario";
+        public string consultaTipoUsuario = "select DISTINCT Tipo from TipoUsuario";
         public string consultaCarrera = "select NombreCarrera from Carrera";
         public string consultarEdicion = "select ISBN from Ediciones";
         public string consultarProveedores = "select NombreProveedor from Proveedores";
@@ -201,18 +201,26 @@ namespace MenuPrincipal.DatosGenerales
 
         public bool VerifcarTextBox(TextBox[] cajas)
         {
-            bool valido = true;
-            for (int x = 0; x < cajas.Length; x++)
+            try
             {
-                if (string.IsNullOrWhiteSpace(cajas[x].Text))
-                {
-                    valido = false;
-                    break; 
-                }
-            }
 
-            return valido;
+
+                for (int x = 0; x < cajas.Length; x++)
+                {
+                    if (string.IsNullOrWhiteSpace(cajas[x].Text))
+                    {
+                        return false; // Retorna false tan pronto como encuentre un TextBox vacío.
+                    }
+                }
+
+                return true; // Si no se encontró ningún TextBox vacío, retorna true.
+            }
+            catch (Exception e)
+            {
+                return false; 
+            }
         }
+
 
 
     }

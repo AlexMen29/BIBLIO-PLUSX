@@ -69,7 +69,6 @@ namespace MenuPrincipal.PageUsuarios
                             {
                                 Lista.Add(dr[columna].ToString());
                             }
-                            Lista.Add("Ninguno");
                         }
                     }
                 }
@@ -130,9 +129,23 @@ namespace MenuPrincipal.PageUsuarios
                 }
             }
 
+            // Asignamos los libros filtrados al DataGrid
+            if (usuariosFiltrados.Count == 0)
+            {
+                MessageBox.Show("No se encontraron usuarios que coincidan con los criterios de búsqueda.");
+                CargarDatos();
+                LimpiarCajas();
+                
+            }
+            else
+            {
+                UsuariosDataGrid.ItemsSource = usuariosFiltrados;
+            }
 
 
-            UsuariosDataGrid.ItemsSource = usuariosFiltrados;
+
+
+            
 
         }
 
@@ -168,148 +181,79 @@ namespace MenuPrincipal.PageUsuarios
 
         private void BuscarUsuarios()
         {
+            // Obtenemos la lista completa de usuarios
+            List<DetallesUsuarios> usuariosFiltrados = MetodoDetallesUsuarios.MostrarUsuarios();
+
+            // Filtramos la lista por el carnet ingresado en el TextBox
             string carnet = CarnetTextBox.Text;
-
-            using (SqlConnection con = new SqlConnection(Properties.Settings.Default.conexionDB))
+            if (!string.IsNullOrEmpty(carnet))
             {
-                try
-                {
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
+                usuariosFiltrados = usuariosFiltrados
+                    .Where(usuario => usuario.Carnet.IndexOf(carnet, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+            }
 
-                    // Consulta SQL dinámica
-                    string query = "SELECT * FROM Usuarios WHERE 1=1"; // 1=1 para no tener que revisar si es el primer filtro
+            // Asignamos los usuarios filtrados al DataGrid
+            if (usuariosFiltrados.Count == 0)
+            {
+                MessageBox.Show("No se encontraron usuarios que coincidan con el criterio de búsqueda.");
+                LimpiarCajas();
+                UsuariosDataGrid.ItemsSource = MetodoDetallesUsuarios.MostrarUsuarios();
 
-                    if (!string.IsNullOrEmpty(carnet))
-                    {
-                        query += " AND Carnet LIKE @Carnet";
-                        cmd.Parameters.AddWithValue("@Carnet", "%" + carnet + "%");
-                    }
+            }
+            else
+            {
 
-                    cmd.CommandText = query;
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-                    UsuariosDataGrid.ItemsSource = dt.DefaultView;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al buscar usuarios: " + ex.Message);
-                }
-
+                UsuariosDataGrid.ItemsSource = usuariosFiltrados;
             }
         }
 
+
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
-            BuscarUsuarios();
+
+            // Declarar un array de TextBox
+            TextBox[] arr = new TextBox[1];
+
+            // Asignar un TextBox al array
+            arr[0] = CarnetTextBox;
+          
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
+            {
+                BuscarUsuarios();
+            }
+            else
+
+            {
+                MessageBoxResult resultado = MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
         }
 
         private void btnQuitarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+
+            LimpiarCajas();
+            CargarDatos();
+
+        }
+
+        private void LimpiarCajas()
         {
             // Limpiar las selecciones de los ComboBox
             TipoUsuarioComboBox.SelectedItem = null;
             CarreraComboBox.SelectedItem = null;
             FechaComboBox.SelectedItem = null;
-
-            CargarDatos();
-
+            CarnetTextBox.Text = null;
         }
 
 
 
-
-        //    public Usuarios()
-        //    {
-        //        InitializeComponent();
-        //    }
-        //    //CONEXION  A LA BASE DE DATOS 
-        //    SqlConnection condb = new SqlConnection(Properties.Settings.Default.conexionDB);
-
-        //    //Variable consulata sql 
-        //    String consultaSQL = null;
-
-        //    void MostrarUsuario()
-        //    {
-        //        //consulta sql 
-        //        consultaSQL = null;
-        //        consultaSQL = "SELECT Carnet,NombreCompleto,Carrera,Correo,Telefono,FechaRegistro FROM USUARIOS";
-        //        condb.Open();
-        //        //creando elemento sqladapter
-        //        SqlDataAdapter da = new SqlDataAdapter(consultaSQL, condb);
-        //        // crear data table
-        //        DataTable dt = new DataTable();
-        //        // llenar table 
-        //        da.Fill(dt);
-        //        // proceder a llenado de datagrid
-        //        dataGridUsuarios.ItemsSource = dt.DefaultView;
-        //        //cerrar 
-        //        condb.Close();
-
-        //    }
-
-        //    private void BuscarUsuarios()
-        //    {
-        //        string carnet = txtCarnet.Text;
-        //        string nombreCompleto = txtNombre.Text;
-        //        string carrera = txbCarrera.Text;
-        //        string correo = txtCorreo.Text;
-
-        //        using (SqlConnection con = new SqlConnection(Properties.Settings.Default.conexionDB))
-        //        {
-        //            try
-        //            {
-        //                con.Open();
-        //                SqlCommand cmd = new SqlCommand();
-        //                cmd.Connection = con;
-
-        //                // Consulta SQL dinámica
-        //                string query = "SELECT * FROM USUARIOS WHERE 1=1"; // 1=1 para no tener que revisar si es el primer filtro
-
-        //                if (!string.IsNullOrEmpty(carnet))
-        //                {
-        //                    query += " AND Carnet LIKE @Carnet";
-        //                    cmd.Parameters.AddWithValue("@Carnet", "%" + carnet + "%");
-        //                }
-        //                if (!string.IsNullOrEmpty(nombreCompleto))
-        //                {
-        //                    query += " AND NombreCompleto LIKE @NombreCompleto";
-        //                    cmd.Parameters.AddWithValue("@NombreCompleto", "%" + nombreCompleto + "%");
-        //                }
-        //                if (!string.IsNullOrEmpty(carrera))
-        //                {
-        //                    query += " AND Carrera LIKE @Carrera";
-        //                    cmd.Parameters.AddWithValue("@Carrera", "%" + carrera + "%");
-        //                }
-        //                if (!string.IsNullOrEmpty(correo))
-        //                {
-        //                    query += " AND Correo LIKE @Correo";
-        //                    cmd.Parameters.AddWithValue("@Correo", "%" + correo + "%");
-        //                }
-
-        //                cmd.CommandText = query;
-        //                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-        //                DataTable dt = new DataTable();
-        //                adapter.Fill(dt);
-        //                dataGridUsuarios.ItemsSource = dt.DefaultView; // Mostrar resultados en el DataGrid
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show("Error al buscar usuarios: " + ex.Message);
-        //            }
-        //        }
-        //    }
-        //    private void Window_Loaded(object sender, RoutedEventArgs e)
-        //    {
-        //        MostrarUsuario();
-        //    }
-
-        //    private void btnFiltrar_Click(object sender, RoutedEventArgs e)
-        //    {
-        //        BuscarUsuarios();
-        //    }
-        //}
 
 
     }

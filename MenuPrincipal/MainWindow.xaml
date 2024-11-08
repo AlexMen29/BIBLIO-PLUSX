@@ -49,7 +49,6 @@
                                     <TextBlock Text="Inicio" VerticalAlignment="Center" />
                                 </StackPanel>
                             </Button>
-                            <Button HorizontalAlignment="Stretch" Margin="10" Content="Mi estante" Width="139" Cursor="Hand"/>
                             <Button HorizontalAlignment="Stretch" Margin="10" Content="Libros" Width="139" Click="Button_Click"/>
                             <Button x:Name="btnPrestamo" Content="Prestamos" Width="140" Height="30" Margin="0,12,0,0" Cursor="Hand" Click="btnPrestamo_Click"/>
                             <Button x:Name="btnUsuarios" Content="Usuarios" Width="140" Height="30" Margin="0,12,0,0" Cursor="Hand" Click="btnUsuarios_Click"/>

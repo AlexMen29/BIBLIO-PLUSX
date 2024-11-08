@@ -85,6 +85,8 @@ namespace MenuPrincipal.ActualizacionesDatos
             if (datosCarrera != null)
             {
                 txtNuevoNombre.Text = datosCarrera.NombreCarrera.ToString();
+                btnAgregar.IsEnabled = false;
+
                 txtNuevoNombre.Focus();
             }
         }
@@ -92,6 +94,8 @@ namespace MenuPrincipal.ActualizacionesDatos
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
         {
             txtNuevoNombre.Clear();
+            btnAgregar.IsEnabled = true;
+
         }
 
         private void ActualizarDato(CarreraModel datosCarrera)
@@ -167,13 +171,31 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+            TextBox[] arr = new TextBox[1];
+
+            // Asignar un TextBox al array
+            arr[0] = txtNuevoNombre;
+        
+
+
+            bool validacion = datos.VerifcarTextBox(arr);
+            if (validacion == true)
             {
-                datosCarrera.NombreCarrera = txtNuevoNombre.Text;
-                ActualizarDato(datosCarrera);
-                CargarDataGrid();
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    datosCarrera.NombreCarrera = txtNuevoNombre.Text;
+                    ActualizarDato(datosCarrera);
+                    CargarDataGrid();
+                }
             }
+            else 
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
         }
 
         private void btnAgregar_Click(object sender, RoutedEventArgs e)
@@ -194,6 +216,8 @@ namespace MenuPrincipal.ActualizacionesDatos
                 {
                     datosCarrera = new CarreraModel();
                     datosCarrera.NombreCarrera = txtNuevoNombre.Text;
+                    btnAgregar.IsEnabled = true;
+
                     AgregarDatos(datosCarrera);
                     CargarDataGrid();
                 }

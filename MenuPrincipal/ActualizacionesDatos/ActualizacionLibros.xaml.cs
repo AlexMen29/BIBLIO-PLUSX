@@ -197,14 +197,47 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void bntModificar_Click(object sender, RoutedEventArgs e)
         {
-            if (ModificarCrear == 0)
+            TextBox[] arr = new TextBox[3];
+
+            // Asignar un TextBox al array
+            arr[0] = EditTituloTextBox;
+            arr[1]=EditDescripcionTextBox;
+            arr[2]=EditEdicionTextBox;
+
+
+            bool validacion = datos.VerifcarTextBox(arr);
+            if (validacion == true)
             {
-                modifcar();
+
+                if (MessageBox.Show("Esta apunto de modificar ¿Desea contiuar?",
+                     "Informacion",
+                     MessageBoxButton.YesNo,
+                     MessageBoxImage.Information) == MessageBoxResult.Yes)
+                {
+
+                    if (ModificarCrear == 0)
+                    {
+                        modifcar();
+                    }
+                    else
+                    {
+                        IngresarLibro();
+                    }
+                }
+
             }
             else
             {
-                IngresarLibro();
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
+
+
+
+
+
+
+
         }
 
         private void modifcar()

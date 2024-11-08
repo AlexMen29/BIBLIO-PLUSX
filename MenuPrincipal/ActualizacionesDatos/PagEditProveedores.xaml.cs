@@ -20,6 +20,7 @@ using System.Data;
 using System.Data.SqlClient;
 using MenuPrincipal.BD.Models;
 using System.Data.Common;
+using MenuPrincipal.DatosGenerales;
 
 namespace MenuPrincipal.ActualizacionesDatos
 {
@@ -36,6 +37,7 @@ namespace MenuPrincipal.ActualizacionesDatos
         }
 
         private ProveedoresModels proveedoresDatos;
+        DatosGlobales datos=new DatosGlobales();
 
         private void ProveedoresDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -48,38 +50,84 @@ namespace MenuPrincipal.ActualizacionesDatos
                 txtTelefono.Text = proveedoresDatos.TelefonoProveedor.ToString();
                 txtDireccion.Text = proveedoresDatos.DireccionProveedor.ToString();
                 txtNuevoNombre.Focus();
+
+                btnAgregar.IsEnabled = false;
             }
         }
 
         private void btnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+            TextBox[] arr = new TextBox[4];
+
+            // Asignar un TextBox al array
+            arr[0] = txtNuevoNombre;
+            arr[1] = txtDireccion;
+            arr[2] = txtDUI;
+            arr[3] = txtTelefono;
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
             {
-                proveedoresDatos = new ProveedoresModels();
-                proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
-                proveedoresDatos.DUIProveedor = txtDUI.Text;
-                proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
-                proveedoresDatos.DireccionProveedor = txtDireccion.Text;
-                AgregarDatos(proveedoresDatos);
-                Limpiartxt();
-                CargarDataGrid();
+
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    proveedoresDatos = new ProveedoresModels();
+                    proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
+                    proveedoresDatos.DUIProveedor = txtDUI.Text;
+                    proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
+                    proveedoresDatos.DireccionProveedor = txtDireccion.Text;
+                    AgregarDatos(proveedoresDatos);
+                    Limpiartxt();
+                    CargarDataGrid();
+                }
             }
+            else
+
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
         }
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+
+            TextBox[] arr = new TextBox[4];
+
+            // Asignar un TextBox al array
+            arr[0] = txtNuevoNombre;
+            arr[1] = txtDireccion;
+            arr[2] = txtDUI;
+            arr[3] = txtTelefono;
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
             {
-                proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
-                proveedoresDatos.DUIProveedor = txtDUI.Text;
-                proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
-                proveedoresDatos.DireccionProveedor = txtDireccion.Text;
-                ActualizarDato(proveedoresDatos);
-                Limpiartxt();
-                CargarDataGrid();
+
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    proveedoresDatos.NombreProveedor = txtNuevoNombre.Text;
+                    proveedoresDatos.DUIProveedor = txtDUI.Text;
+                    proveedoresDatos.TelefonoProveedor = txtTelefono.Text;
+                    proveedoresDatos.DireccionProveedor = txtDireccion.Text;
+                    ActualizarDato(proveedoresDatos);
+                    Limpiartxt();
+                    CargarDataGrid();
+                }
             }
+
+            else
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
@@ -93,6 +141,7 @@ namespace MenuPrincipal.ActualizacionesDatos
             txtDUI.Clear();
             txtTelefono.Clear();
             txtDireccion.Clear();
+            btnAgregar.IsEnabled = true;
 
         }
 

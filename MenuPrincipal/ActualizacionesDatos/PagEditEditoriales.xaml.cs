@@ -45,6 +45,8 @@ namespace MenuPrincipal.ActualizacionesDatos
                 txtNuevoNombre.Text = editorialesDatos.NombreEditorial.ToString();
                 txtDireccion.Text = editorialesDatos.DireccionEditorial.ToString();
                 txtTelefono.Text = editorialesDatos.TelefonoEditorial.ToString();
+                btnAgregar.IsEnabled = false;
+
                 txtNuevoNombre.Focus();
             }
         }
@@ -78,7 +80,7 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
             else
             {
-                MessageBoxResult resultado = MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
 
@@ -87,16 +89,38 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+
+            // Declarar un array de TextBox
+            TextBox[] arr = new TextBox[3];
+
+            // Asignar un TextBox al array
+            arr[0] = txtNuevoNombre;
+            arr[1] = txtDireccion;
+            arr[2] = txtTelefono;
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
             {
-                editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
-                editorialesDatos.DireccionEditorial = txtDireccion.Text;
-                editorialesDatos.TelefonoEditorial = txtTelefono.Text;
-                ActualizarDato(editorialesDatos);
-                Limpiartxt();
-                CargarDataGrid();
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    editorialesDatos.NombreEditorial = txtNuevoNombre.Text;
+                    editorialesDatos.DireccionEditorial = txtDireccion.Text;
+                    editorialesDatos.TelefonoEditorial = txtTelefono.Text;
+                    ActualizarDato(editorialesDatos);
+                    Limpiartxt();
+                    CargarDataGrid();
+                }
             }
+            else
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
+
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
@@ -110,6 +134,8 @@ namespace MenuPrincipal.ActualizacionesDatos
             txtNuevoNombre.Clear();
             txtDireccion.Clear();
             txtTelefono.Clear();
+            btnAgregar.IsEnabled = true;
+
 
         }
 

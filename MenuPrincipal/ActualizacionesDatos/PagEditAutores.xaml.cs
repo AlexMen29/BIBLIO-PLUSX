@@ -17,6 +17,7 @@ using System.Data;
 using System.Data.SqlClient;
 using MenuPrincipal.BD.Models;
 using System.Data.Common;
+using MenuPrincipal.DatosGenerales;
 
 namespace MenuPrincipal.ActualizacionesDatos
 {
@@ -32,6 +33,7 @@ namespace MenuPrincipal.ActualizacionesDatos
         }
 
         private AutoresModel autoresDatos;
+        DatosGlobales datos= new DatosGlobales();
 
 
 
@@ -45,38 +47,80 @@ namespace MenuPrincipal.ActualizacionesDatos
                 txtNacionalidad.Text = autoresDatos.Nacionalidad.ToString();
                 DateFecha.SelectedDate = (DateTime?)autoresDatos.FechaNacimiento;
                 txtBibliografia.Text = autoresDatos.Bibliografia.ToString();
+                btnAgregar.IsEnabled = false;
                 txtNuevoNombre.Focus();
             }
         }
 
         private void btnAgregar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+
+            TextBox[] arr = new TextBox[3];
+
+            // Asignar un TextBox al array
+            arr[0] = txtBibliografia;
+            arr[1] = txtNacionalidad;
+            arr[2] = txtNuevoNombre;
+
+
+            bool validacion = datos.VerifcarTextBox(arr);
+            if (validacion == true)
             {
-                autoresDatos = new AutoresModel();
-                autoresDatos.NombreAutor = txtNuevoNombre.Text;
-                autoresDatos.Nacionalidad = txtNacionalidad.Text;
-                autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
-                autoresDatos.Bibliografia = txtBibliografia.Text;
-                AgregarDatos(autoresDatos);
-                Limpiartxt();
-                CargarDataGrid();
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    autoresDatos = new AutoresModel();
+                    autoresDatos.NombreAutor = txtNuevoNombre.Text;
+                    autoresDatos.Nacionalidad = txtNacionalidad.Text;
+                    autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
+                    autoresDatos.Bibliografia = txtBibliografia.Text;
+                    AgregarDatos(autoresDatos);
+                    Limpiartxt();
+                    CargarDataGrid();
+                }
             }
+            else
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
         }
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (resultado == MessageBoxResult.Yes)
+
+            TextBox[] arr = new TextBox[3];
+
+            // Asignar un TextBox al array
+            arr[0] = txtBibliografia;
+            arr[1] = txtNacionalidad;
+            arr[2] = txtNuevoNombre;
+
+
+            bool validacion = datos.VerifcarTextBox(arr);
+            if (validacion == true)
             {
-                autoresDatos.NombreAutor = txtNuevoNombre.Text;
-                autoresDatos.Nacionalidad = txtNacionalidad.Text;
-                autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
-                autoresDatos.Bibliografia = txtBibliografia.Text;
-                ActualizarDato(autoresDatos);
-                Limpiartxt();
-                CargarDataGrid();
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas modificar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    autoresDatos.NombreAutor = txtNuevoNombre.Text;
+                    autoresDatos.Nacionalidad = txtNacionalidad.Text;
+                    autoresDatos.FechaNacimiento = DateFecha.SelectedDate.Value;
+                    autoresDatos.Bibliografia = txtBibliografia.Text;
+                    ActualizarDato(autoresDatos);
+                    Limpiartxt();
+                    CargarDataGrid();
+                }
             }
+            else
+            {
+                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+
+
+
         }
 
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
@@ -90,6 +134,8 @@ namespace MenuPrincipal.ActualizacionesDatos
             txtNacionalidad.Clear();
             DateFecha.SelectedDate = null;
             txtBibliografia.Clear();
+            btnAgregar.IsEnabled = false;
+
 
         }
 

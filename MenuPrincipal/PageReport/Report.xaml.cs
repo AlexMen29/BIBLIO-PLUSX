@@ -21,17 +21,17 @@ namespace MenuPrincipal.PageReport
             CargarDatosComboBox();
             CargarLibros();
             CargarDatosCompras();
+            CargarDatosLibrosMasPrestados();
+            CargarDatosProveedoresEmpleados();
         }
 
         #region carga de datos y filtros
         private void CargarDatosCompras()
         {
-            string consultaSQL = "SELECT c.CompraID AS ID, l.Titulo AS Articulo, c.FechaCompra, c.Cantidad, c.TotalCompra AS PrecioTotal " +
-                     "FROM Compras c " +
-                     "INNER JOIN Libros l ON c.LibroID = l.LibroID ";// Relacionar con la tabla Libros
-
-
-
+            string consultaSQL = "SELECT c.CompraID AS ID, e.Titulo AS Articulo, c.FechaCompra, c.Cantidad, c.CostoTotal AS PrecioTotal " +
+                                 "FROM Compras c " +
+                                 "INNER JOIN Provisiones p ON c.CompraID = p.CompraID " +
+                                 "INNER JOIN Ediciones e ON p.EdicionID = e.EdicionID";
 
             using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
             {
@@ -41,7 +41,7 @@ namespace MenuPrincipal.PageReport
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     comprasTable = new DataTable();
                     adapter.Fill(comprasTable);
-                    dataGridCompras.ItemsSource = comprasTable.DefaultView; // Cargar datos en el DataGrid
+                    dataGridCompras.ItemsSource = comprasTable.DefaultView;
 
                     // Agregar periodos al ComboBox
                     comboBoxPeriodoCompras.Items.Add("3 Meses");
@@ -54,6 +54,60 @@ namespace MenuPrincipal.PageReport
                 }
             }
         }
+        private void CargarDatosProveedoresEmpleados()
+        {
+            string consultaSQL = "SELECT ProveedorID AS ID, NombreProveedor AS Nombre, 'Proveedor' AS Tipo " +
+                         "FROM Proveedores " +
+                         "UNION " +
+                         "SELECT u.UsuarioID AS ID, u.Nombres AS Nombre, 'Profesor' AS Tipo " +
+                         "FROM Usuarios u " +
+                         "INNER JOIN InfoUsuarios iu ON u.InfoID = iu.InfoID " +
+                         "INNER JOIN TipoUsuario tu ON iu.TipoUsuarioID = tu.TipoUsuarioID " +
+                         "WHERE tu.Tipo = 'Profesor'";
+
+            using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(consultaSQL, conDB);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable proveedoresEmpleadosTable = new DataTable();
+                    adapter.Fill(proveedoresEmpleadosTable);
+                    dataGridProveedoresEmpleados.ItemsSource = proveedoresEmpleadosTable.DefaultView;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar los datos de Proveedores y Empleados: " + ex.Message);
+                }
+            }
+        }
+
+
+        private void CargarDatosLibrosMasPrestados()
+        {
+            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Tema, a.NombreAutor AS Autor " +
+                                 "FROM Ediciones e " +
+                                 "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
+                                 "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
+                                 "INNER JOIN Autores a ON d.AutorID = a.AutorID";
+
+            using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand(consultaSQL, conDB);
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable librosMasPrestadosTable = new DataTable();
+                    adapter.Fill(librosMasPrestadosTable);
+                    dataGridLibrosMasPrestados.ItemsSource = librosMasPrestadosTable.DefaultView;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar los datos de Libros Más Prestados: " + ex.Message);
+                }
+            }
+        }
+
 
         private void FiltrarComprasPorPeriodo(object sender, RoutedEventArgs e)
         {
@@ -79,12 +133,12 @@ namespace MenuPrincipal.PageReport
                 {
                     conDB.Open();
 
-                    // Cargar temas
+                    // Cargar temas (categorías)
                     SqlCommand cmdTema = new SqlCommand("SELECT NombreCategoria FROM Categorias", conDB);
                     SqlDataReader readerTema = cmdTema.ExecuteReader();
                     while (readerTema.Read())
                     {
-                        comboBoxTema.Items.Add(readerTema["NombreCategoria"].ToString());
+                       // comboBoxTema.Items.Add(readerTema["NombreCategoria"].ToString());
                     }
                     readerTema.Close();
 
@@ -97,15 +151,6 @@ namespace MenuPrincipal.PageReport
                     }
                     readerAutor.Close();
 
-                    // Cargar especialidades
-                    SqlCommand cmdEspecialidad = new SqlCommand("SELECT NombreEspecialidad FROM Especialidades", conDB);
-                    SqlDataReader readerEspecialidad = cmdEspecialidad.ExecuteReader();
-                    while (readerEspecialidad.Read())
-                    {
-                        comboBoxEspecialidad.Items.Add(readerEspecialidad["NombreEspecialidad"].ToString());
-                    }
-                    readerEspecialidad.Close();
-
                     // Cargar proveedores
                     SqlCommand cmdProveedor = new SqlCommand("SELECT NombreProveedor FROM Proveedores", conDB);
                     SqlDataReader readerProveedor = cmdProveedor.ExecuteReader();
@@ -114,15 +159,6 @@ namespace MenuPrincipal.PageReport
                         comboBoxProveedores.Items.Add(readerProveedor["NombreProveedor"].ToString());
                     }
                     readerProveedor.Close();
-
-                    // Cargar empleados
-                    SqlCommand cmdEmpleado = new SqlCommand("SELECT NombreCompleto FROM Empleados", conDB);
-                    SqlDataReader readerEmpleado = cmdEmpleado.ExecuteReader();
-                    while (readerEmpleado.Read())
-                    {
-                        comboBoxEmpleados.Items.Add(readerEmpleado["NombreCompleto"].ToString());
-                    }
-                    readerEmpleado.Close();
                 }
                 catch (Exception ex)
                 {
@@ -131,13 +167,15 @@ namespace MenuPrincipal.PageReport
             }
         }
 
+
         // Método para cargar todos los libros al iniciar
         private void CargarLibros()
         {
-            string consultaSQL = "SELECT l.LibroID AS ID, l.Titulo, c.NombreCategoria AS Tema, l.Autor, e.NombreEspecialidad AS Especialidad " +
-                                 "FROM Libros l " +
-                                 "INNER JOIN Categorias c ON l.CategoriaID = c.CategoriaID " +
-                                 "INNER JOIN Especialidades e ON l.EspecialidadID = e.EspecialidadID";
+            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Tema, a.NombreAutor AS Autor " +
+                                 "FROM Ediciones e " +
+                                 "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
+                                 "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
+                                 "INNER JOIN Autores a ON d.AutorID = a.AutorID";
 
             using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
             {
@@ -147,7 +185,7 @@ namespace MenuPrincipal.PageReport
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     librosTable = new DataTable();
                     adapter.Fill(librosTable);
-                    dataGridLibros.ItemsSource = librosTable.DefaultView; // Cargar los datos en el DataGrid
+                    dataGridLibros.ItemsSource = librosTable.DefaultView;
                 }
                 catch (Exception ex)
                 {
@@ -156,34 +194,30 @@ namespace MenuPrincipal.PageReport
             }
         }
 
+
         // Método para aplicar filtros a los libros
         private void FiltrarLibros()
         {
-            string tema = comboBoxTema.SelectedItem?.ToString();
+           // string tema = comboBoxTema.SelectedItem?.ToString();
             string autor = comboBoxAutor.SelectedItem?.ToString();
-            string especialidad = comboBoxEspecialidad.SelectedItem?.ToString();
 
             DataView dv = new DataView(librosTable);
             string filter = "";
 
-            if (!string.IsNullOrEmpty(tema))
+           /* if (!string.IsNullOrEmpty(tema))
             {
                 filter += $"Tema = '{tema}'";
-            }
+            }*/
             if (!string.IsNullOrEmpty(autor))
             {
                 if (!string.IsNullOrEmpty(filter)) filter += " AND ";
                 filter += $"Autor = '{autor}'";
             }
-            if (!string.IsNullOrEmpty(especialidad))
-            {
-                if (!string.IsNullOrEmpty(filter)) filter += " AND ";
-                filter += $"Especialidad = '{especialidad}'";
-            }
 
             dv.RowFilter = filter;
-            dataGridLibros.ItemsSource = dv; // Aplicar el filtro en el DataGrid
+            dataGridLibros.ItemsSource = dv;
         }
+
         #endregion
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -196,14 +230,14 @@ namespace MenuPrincipal.PageReport
         private void GenerarReporteLibros(object sender, RoutedEventArgs e)
         {
             // Verificar si los elementos seleccionados son nulos
-            if (comboBoxTema.SelectedItem == null || comboBoxAutor.SelectedItem == null || comboBoxEspecialidad.SelectedItem == null)
+            if (/*comboBoxTema.SelectedItem == null ||*/ comboBoxAutor.SelectedItem == null || comboBoxEspecialidad.SelectedItem == null)
             {
                 MessageBox.Show("Por favor, selecciona un tema, autor y especialidad.");
                 return;
             }
 
             // Asumiendo que los ComboBox contienen strings en lugar de ComboBoxItem
-            string tema = comboBoxTema.SelectedItem.ToString();
+            //string tema = comboBoxTema.SelectedItem.ToString();
             string autor = comboBoxAutor.SelectedItem.ToString();
             string especialidad = comboBoxEspecialidad.SelectedItem.ToString();
 
@@ -220,7 +254,7 @@ namespace MenuPrincipal.PageReport
                 try
                 {
                     SqlCommand cmd = new SqlCommand(consultaSQL, conDB);
-                    cmd.Parameters.AddWithValue("@Tema", tema);
+                    //cmd.Parameters.AddWithValue("@Tema", tema);
                     cmd.Parameters.AddWithValue("@Autor", autor);
                     cmd.Parameters.AddWithValue("@Especialidad", especialidad);
 
@@ -280,7 +314,7 @@ namespace MenuPrincipal.PageReport
         private void btnLimpiar_Click(object sender, RoutedEventArgs e)
         {
             // Limpiar las selecciones de los ComboBox
-            comboBoxTema.SelectedItem = null;
+           // comboBoxTema.SelectedItem = null;
             comboBoxAutor.SelectedItem = null;
             comboBoxEspecialidad.SelectedItem = null;
             comboBoxProveedores.SelectedItem = null;

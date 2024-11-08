@@ -17,9 +17,9 @@ namespace MenuPrincipal.BD.Services
     {
 
 
-        public  DatosUsuariosModel MostrarUsuarios(int id)
+        public DatosUsuariosModel MostrarUsuarios(int id)
         {
-            DatosUsuariosModel Datos=null;
+            DatosUsuariosModel Datos = null;
             try
             {
                 using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
@@ -71,6 +71,59 @@ namespace MenuPrincipal.BD.Services
                 MessageBox.Show("Ocurrió un error al intentar obtener los Usuarios: " + e.Message, "Validación", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return Datos;
+        }
+
+        //Metodo de modificar usuario:
+
+        public bool ModificarUsuario(DatosUsuariosModel usuario)
+        {
+            bool resultado = false;
+
+            try
+            {
+                using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "sp_ModificarUsuario";
+
+                        // Agregar parámetros al comando usando el objeto de tipo DatosUsuariosModel
+                        command.Parameters.AddWithValue("@UsuarioID", usuario.UsuarioID);
+                        command.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                        command.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
+                        command.Parameters.AddWithValue("@EstadoCivil", usuario.EstadoCivil);
+                        command.Parameters.AddWithValue("@ApellidoCasada", usuario.ApellidoCasada);
+                        command.Parameters.AddWithValue("@Correo1", usuario.Correo1);
+                        command.Parameters.AddWithValue("@Correo2", usuario.Correo2);
+                        command.Parameters.AddWithValue("@Telefono1", usuario.Telefono1);
+                        command.Parameters.AddWithValue("@Telefono2", usuario.Telefono2);
+                        command.Parameters.AddWithValue("@TelefonoFijo", usuario.TelefonoFijo);
+                        command.Parameters.AddWithValue("@Carnet", usuario.Carnet);
+                        command.Parameters.AddWithValue("@EstadoID", usuario.EstadoID);
+                        command.Parameters.AddWithValue("@TipoUsuarioID", usuario.TipoUsuarioId);
+                        command.Parameters.AddWithValue("@CarreraID", usuario.CarreraID);
+                        command.Parameters.AddWithValue("@Colonia", usuario.Colonia);
+                        command.Parameters.AddWithValue("@Calle", usuario.Calle);
+                        command.Parameters.AddWithValue("@Casa", usuario.Casa);
+                        command.Parameters.AddWithValue("@Municipio", usuario.Municipio);
+                        command.Parameters.AddWithValue("@Departamento", usuario.Departamento);
+                        command.Parameters.AddWithValue("@CP", usuario.CP);
+
+                        // Ejecutar el comando y verificar el resultado
+                        int filasAfectadas = command.ExecuteNonQuery();
+                        resultado = true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ocurrió un error: " + e.Message, "Error de consulta", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return resultado;
         }
 
 

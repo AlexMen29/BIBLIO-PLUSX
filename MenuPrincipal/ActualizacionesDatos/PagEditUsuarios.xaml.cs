@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data.SqlClient;
+using System.Drawing;
 
 
 namespace MenuPrincipal.ActualizacionesDatos
@@ -29,7 +30,7 @@ namespace MenuPrincipal.ActualizacionesDatos
     {
         private int id;
         DatosGlobales datos = new DatosGlobales();
-        DatosUsuariosModel datosUsuario=null;
+        DatosUsuariosModel datosUsuario = null;
 
         public PagEditUsuarios(int usuarioId)
         {
@@ -155,22 +156,21 @@ namespace MenuPrincipal.ActualizacionesDatos
             // Verificar si todos los TextBox tienen texto
             bool validacion = datos.VerifcarTextBox(arr);
 
-            if (validacion==true)
+            if (validacion == true)
             {
                 MessageBoxResult resultado = MessageBox.Show("¿Esa seguro que desea modficar?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (resultado == MessageBoxResult.Yes)
                 {
-
-                    if (TipoUsuarioBox.SelectedItem.ToString() == "Estudiante")
+                    DatosUsuariosMetodos metodos = new DatosUsuariosMetodos();
+                    if (metodos.ModificarUsuario(datosEnviar()) == true)
                     {
-                        int idC = ObtenerID("select CarreraID from Carrera where NombreCarrera=@Valor", CarreraBox.SelectedItem.ToString());
-                        int idE = ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
+                        MessageBox.Show("Modificacion exitosa", "Confirmación", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        int idE = ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
-
+                        MessageBox.Show("Error inesperado, no se ha podido modficar", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
+
 
 
 
@@ -185,7 +185,7 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void CargarDatos()
         {
-            datos.LlenarCajasVDefecto(datos.consultaEstadoCivil, EstadoCivilBox, "EstadoCivil",datosUsuario.EstadoCivil );
+            datos.LlenarCajasVDefecto(datos.consultaEstadoCivil, EstadoCivilBox, "EstadoCivil", datosUsuario.EstadoCivil);
             datos.LlenarCajasVDefecto(datos.consultaEstado, EstadoBox, "Estado", datosUsuario.Estado);
             datos.LlenarCajasVDefecto(datos.consultaTipoUsuario, TipoUsuarioBox, "Tipo", datosUsuario.TipoUsuario);
             datos.LlenarCajasVDefecto(datos.consultaCarrera, CarreraBox, "NombreCarrera", datosUsuario.Carrera);
@@ -245,50 +245,44 @@ namespace MenuPrincipal.ActualizacionesDatos
         private DatosUsuariosModel datosEnviar()
 
         {
-            DatosUsuariosModel datos=null;
+            DatosUsuariosModel datos = new DatosUsuariosModel();
 
             datos.UsuarioID = datosUsuario.UsuarioID;
-            datos.Nombres=NombresTxt.Text;
-            datos.Apellidos= ApellidosTxt.Text;
+            datos.Nombres = NombresTxt.Text;
+            datos.Apellidos = ApellidosTxt.Text;
             datos.EstadoCivil = EstadoCivilBox.SelectedItem.ToString();
             datos.ApellidoCasada = ApellidoCasadaTxt.Text;
             datos.Correo1 = Correo1Txt.Text;
             datos.Correo2 = Correo2Txt.Text;
-            datos.Telefono1=Telefono1Txt.Text;
-            datos.Telefono2=Telefono2Txt.Text;
-            datos.TelefonoFijo= TelefonoFijoTxt.Text;
+            datos.Telefono1 = Telefono1Txt.Text;
+            datos.Telefono2 = Telefono2Txt.Text;
+            datos.TelefonoFijo = TelefonoFijoTxt.Text;
             datos.Carnet = CarnetTxt.Text;
-            datos.EstadoID = ObtenerID("select CarreraID from Carrera where NombreCarrera=@Valor", CarreraBox.SelectedItem.ToString());
+            datos.EstadoID = ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
+            datos.TipoUsuarioId = ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString());
+            //MessageBox.Show($"dato id {ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString())}");
 
+            if (TipoUsuarioBox.SelectedItem.ToString() == "Estudiante" || TipoUsuarioBox.SelectedItem == null)
+            {
+                datos.CarreraID = ObtenerID("select CarreraID from Carrera where NombreCarrera=@Valor", CarreraBox.SelectedItem.ToString());
 
+            }
+            else
+            {
+                datos.CarreraID = 0;
 
-            //int idEstado = ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
+            }
+            datos.Colonia = ColoniaTxt.Text;
+            datos.Calle = CalleTxt.Text;
+            datos.Casa = CasaTxt.Text;
+            datos.Municipio = MunicipioTxt.Text;
+            datos.Departamento = DepartamentoTxt.Text;
+            datos.CP = CPTxt.Text;
 
-
-
-
-
-
-
-
-
-
-
-
-
-            //public string Estado { get; set; }
-            //public string TipoUsuario { get; set; }
-            //public string Carrera { get; set; }
-            //public string Colonia { get; set; }
-            //public string Calle { get; set; }
-            //public string Casa { get; set; }
-            //public string Municipio { get; set; }
-            //public string Departamento { get; set; }
-            //public string CP { get; set; }
-
+            MessageBox.Show($"EstadoID: {datos.EstadoID}, TipoUsuarioId: {datos.TipoUsuarioId}, CarreraID: {datos.CarreraID}");
 
             return datos;
-            
+
         }
 
     }

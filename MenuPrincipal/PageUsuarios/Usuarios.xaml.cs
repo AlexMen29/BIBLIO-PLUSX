@@ -264,13 +264,10 @@ namespace MenuPrincipal.PageUsuarios
 
         }
 
-        private void btnQuitarFiltros_Click(object sender, RoutedEventArgs e)
+        public void btnQuitarFiltros_Click(object sender, RoutedEventArgs e)
         {
-            // Quitar la página del Frame +
-            frContenidoUsuarios.Content = null;
-            LimpiarCajas();
-            CargarDatos();
 
+            CargarDatosLimpiarframe();
 
         }
 
@@ -283,6 +280,15 @@ namespace MenuPrincipal.PageUsuarios
             estadoComboBox.SelectedItem = null;
             CarnetTextBox.Text = null;
         }
+
+        public void CargarDatosLimpiarframe()
+        {
+            // Quitar la página del Frame +
+            frContenidoUsuarios.Content = null;
+            LimpiarCajas();
+            CargarDatos();
+        }
+
 
       
     }

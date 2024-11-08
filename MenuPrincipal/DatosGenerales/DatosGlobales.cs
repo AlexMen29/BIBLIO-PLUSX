@@ -30,6 +30,8 @@ namespace MenuPrincipal.DatosGenerales
         public string consultaTiposPrestamos = "Select DISTINCT TipoPrestamo from Prestamos";
         public string consultaEstadoPrestamos = "Select DISTINCT EstadoPrestamo from Prestamos";
         public string consultaEstado = "select Estado  from Estado";
+        public string consultaEstadoCivil = "select distinct EstadoCivil from Usuarios";
+
 
 
 
@@ -43,6 +45,43 @@ namespace MenuPrincipal.DatosGenerales
                 image.StreamSource = ms;
                 image.EndInit();
                 return image;
+            }
+        }
+        public void LlenarCajasVDefecto(string consulta, ComboBox elementoBox, string columna, string valorPorDefecto)
+        {
+            try
+            {
+                // Lista con valores correspondientes a ComboBox
+                List<string> Lista = new List<string>();
+                using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conn.Open();
+
+                    using (var command = new SqlCommand(consulta, conn))
+                    {
+                        using (DbDataReader dr = command.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                Lista.Add(dr[columna].ToString());
+                            }
+                        }
+                    }
+                }
+
+                // Asigna la lista de valores al ComboBox
+                elementoBox.ItemsSource = Lista;
+
+                // Establece el valor por defecto que ya está registrado en la base de datos
+                if (!string.IsNullOrEmpty(valorPorDefecto) && Lista.Contains(valorPorDefecto))
+                {
+                    elementoBox.SelectedItem = valorPorDefecto;
+                }
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error inesperado: {e.Message}");
             }
         }
 

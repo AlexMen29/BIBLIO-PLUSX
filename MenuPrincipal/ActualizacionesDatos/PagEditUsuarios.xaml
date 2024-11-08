@@ -13,6 +13,14 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="20,20,20,20">
             <StackPanel Background="Transparent" x:Name="usuarioPanel">
 
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <Button Name ="btnEditar" Content="Editar" Width="80" Height="25" Margin="10,0,0,0" Click="btnEditar_Click" />
+                    <Button Name ="btnCancelar" Content="Cancelar" Width="90" Height="25" Margin="10,0,0,0" Click="btnCancelar_Click" />
+
+                </StackPanel>
+
                 <!-- Sección de Datos Generales -->
                 <Label Content="Datos Generales" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5" />
 
@@ -28,9 +36,11 @@
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          materialDesign:HintAssist.Hint="Apellidos" />
 
-                <TextBox x:Name="EstadoCivilTxt" Margin="5" Foreground="Black" 
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         materialDesign:HintAssist.Hint="Estado Civil" />
+                <StackPanel Margin="0,10">
+                    <TextBlock Text="Estado Civil" Foreground="#FF2196F3" Opacity="0.75" />
+                    <ComboBox x:Name="EstadoCivilBox" Margin="5" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignComboBox}"/>
+                </StackPanel>
 
                 <TextBox x:Name="ApellidoCasadaTxt" Margin="5" Foreground="Black" 
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
@@ -40,17 +50,23 @@
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          materialDesign:HintAssist.Hint="Carnet" />
 
-                <TextBox x:Name="EstadoTxt" Margin="5" Foreground="Black" 
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         materialDesign:HintAssist.Hint="Estado" />
+                <StackPanel Margin="0,10">
+                    <TextBlock Text="Estado" Foreground="#FF2196F3" Opacity="0.75" />
+                    <ComboBox x:Name="EstadoBox" Margin="5" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignComboBox}"/>
+                </StackPanel>
 
-                <TextBox x:Name="TipoUsuarioTxt" Margin="5" Foreground="Black" 
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         materialDesign:HintAssist.Hint="Tipo de Usuario" />
+                <StackPanel Margin="0,10">
+                    <TextBlock Text="Tipo Usuario" Foreground="#FF2196F3" Opacity="0.75" />
+                    <ComboBox x:Name="TipoUsuarioBox" Margin="5" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignComboBox}"/>
+                </StackPanel>
 
-                <TextBox x:Name="CarreraTxt" Margin="5" Foreground="Black" 
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
-                         materialDesign:HintAssist.Hint="Carrera" />
+                <StackPanel Margin="0,10">
+                    <TextBlock Text="Carrera" Foreground="#FF2196F3" Opacity="0.75" />
+                    <ComboBox x:Name="CarreraBox" Margin="5" Foreground="Black" 
+                    Style="{StaticResource MaterialDesignComboBox}"/>
+                </StackPanel>
 
                 <!-- Sección de Contacto -->
                 <Label Content="Contacto" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5,20,5,5" />
@@ -103,7 +119,7 @@
                          materialDesign:HintAssist.Hint="Código Postal" />
 
                 <!-- Botón Guardar -->
-                <Button Name="btnGuardarUsuario" Content="Guardar" Width="125" Margin="10" Background="#9e1717" Foreground="White" />
+                <Button Name="btnGuardarUsuario" Content="Guardar" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="btnGuardarUsuario_Click" />
 
             </StackPanel>
         </ScrollViewer>

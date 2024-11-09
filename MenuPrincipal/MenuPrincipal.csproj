@@ -283,6 +283,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reportLibros.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageSolicitudes\PgSolicitudes.xaml.cs">
       <DependentUpon>PgSolicitudes.xaml</DependentUpon>

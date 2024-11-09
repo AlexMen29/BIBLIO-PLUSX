@@ -72,8 +72,9 @@ namespace MenuPrincipal.Ingreso
                 DatosGlobales.NivelUsuario = datos.ObtenerID(datos.consultaTipoUsuarioPorCarnet, txtCorreo.Text);
 
 
-                MainWindow ventanaPrincipal = new MainWindow();
-                ventanaPrincipal.Show();
+                MainWindow mainWindow = new MainWindow();
+                Application.Current.MainWindow = mainWindow; // Asignar como la ventana principal
+                mainWindow.Show();
 
 
                 this.Close();

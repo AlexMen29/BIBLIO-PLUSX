@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using Microsoft.Win32;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using MenuPrincipal.PageReport.visualReports;
+using MenuPrincipal.PageReport.subpagereport;
 
 namespace MenuPrincipal.PageReport
 {
@@ -14,6 +16,8 @@ namespace MenuPrincipal.PageReport
     {
         private DataTable comprasTable;
         private DataTable librosTable;
+        private DataTable proveedoresEmpleadosTable;
+        private DataTable librosMasPrestadosTable;
 
         public Report()
         {
@@ -22,10 +26,11 @@ namespace MenuPrincipal.PageReport
             CargarLibros();
             CargarDatosCompras();
             CargarDatosLibrosMasPrestados();
+
             CargarDatosProveedoresEmpleados();
         }
 
-        #region carga de datos y filtros
+        #region carga de datos 
         private void CargarDatosCompras()
         {
             string consultaSQL = "SELECT c.CompraID AS ID, e.Titulo AS Articulo, c.FechaCompra, c.Cantidad, c.CostoTotal AS PrecioTotal " +
@@ -82,14 +87,19 @@ namespace MenuPrincipal.PageReport
             }
         }
 
-
         private void CargarDatosLibrosMasPrestados()
         {
-            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Tema, a.NombreAutor AS Autor " +
-                                 "FROM Ediciones e " +
-                                 "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
-                                 "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
-                                 "INNER JOIN Autores a ON d.AutorID = a.AutorID";
+            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Tema, a.NombreAutor AS Autor, " +
+                     "COUNT(p.PrestamoID) AS CantidadPrestamos " +
+                     "FROM Ediciones e " +
+                     "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
+                     "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
+                     "INNER JOIN Autores a ON d.AutorID = a.AutorID " +
+                     "LEFT JOIN RefSolicitudes rs ON d.DetallesID = rs.LibroID " +
+                     "LEFT JOIN Prestamos p ON rs.ReferenciaID = p.SolicitudID " +
+                     "GROUP BY e.EdicionID, e.Titulo, c.NombreCategoria, a.NombreAutor " +
+                     "ORDER BY CantidadPrestamos DESC";
+
 
             using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
             {
@@ -108,23 +118,6 @@ namespace MenuPrincipal.PageReport
             }
         }
 
-
-        private void FiltrarComprasPorPeriodo(object sender, RoutedEventArgs e)
-        {
-            if (comboBoxPeriodoCompras.SelectedItem == null)
-            {
-                MessageBox.Show("Por favor, selecciona un periodo.");
-                return;
-            }
-
-            string periodo = ((ComboBoxItem)comboBoxPeriodoCompras.SelectedItem).Content.ToString();
-            int meses = periodo.Contains("3 Meses") ? 3 : periodo.Contains("6 Meses") ? 6 : 12;
-
-            // Filtrar los datos del DataTable en función del periodo seleccionado
-            DataView view = new DataView(comprasTable);
-            view.RowFilter = $"DATEDIFF(MONTH, FechaCompra, GETDATE()) <= {meses}";
-            dataGridCompras.ItemsSource = view; // Actualizar los datos en el DataGrid
-        }
         private void CargarDatosComboBox()
         {
             using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
@@ -138,7 +131,7 @@ namespace MenuPrincipal.PageReport
                     SqlDataReader readerTema = cmdTema.ExecuteReader();
                     while (readerTema.Read())
                     {
-                       // comboBoxTema.Items.Add(readerTema["NombreCategoria"].ToString());
+                        comboBoxCategoria.Items.Add(readerTema["NombreCategoria"].ToString());
                     }
                     readerTema.Close();
 
@@ -167,15 +160,16 @@ namespace MenuPrincipal.PageReport
             }
         }
 
-
         // Método para cargar todos los libros al iniciar
         private void CargarLibros()
         {
-            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Tema, a.NombreAutor AS Autor " +
-                                 "FROM Ediciones e " +
-                                 "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
-                                 "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
-                                 "INNER JOIN Autores a ON d.AutorID = a.AutorID";
+            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Categoria, a.NombreAutor AS Autor, s.StockActual AS Stock " +
+                      "FROM Ediciones e " +
+                      "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
+                      "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
+                      "INNER JOIN Autores a ON d.AutorID = a.AutorID " +
+                      "INNER JOIN Stock s ON e.EdicionID = s.EdicionID";
+
 
             using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
             {
@@ -192,22 +186,91 @@ namespace MenuPrincipal.PageReport
                     MessageBox.Show("Error al cargar libros: " + ex.Message);
                 }
             }
-        }
-
-
+        } 
+        #endregion
+        #region filtros
         // Método para aplicar filtros a los libros
         private void FiltrarLibros()
         {
-           // string tema = comboBoxTema.SelectedItem?.ToString();
+            string categoria = comboBoxCategoria.SelectedItem?.ToString();
             string autor = comboBoxAutor.SelectedItem?.ToString();
+            string especialidad = comboBoxEspecialidad.SelectedItem?.ToString();
 
             DataView dv = new DataView(librosTable);
             string filter = "";
 
-           /* if (!string.IsNullOrEmpty(tema))
+            if (!string.IsNullOrEmpty(categoria))
+            {
+                filter += $"Categoria = '{categoria}'";
+            }
+            if (!string.IsNullOrEmpty(autor))
+            {
+                if (!string.IsNullOrEmpty(filter)) filter += " AND ";
+                filter += $"Autor = '{autor}'";
+            }
+            if (!string.IsNullOrEmpty(especialidad))
+            {
+                if (!string.IsNullOrEmpty(filter)) filter += " AND ";
+                filter += $"Especialidad = '{especialidad}'";
+            }
+
+            dv.RowFilter = filter;
+            dataGridLibros.ItemsSource = dv;
+        }
+
+        // Método para aplicar filtros a proveedores y empleados
+        private void FiltrarProveedoresEmpleados()
+        {
+            string proveedor = comboBoxProveedores.SelectedItem?.ToString();
+            string empleado = comboBoxEmpleados.SelectedItem?.ToString();
+
+            DataView dv = new DataView(proveedoresEmpleadosTable);
+            string filter = "";
+
+            if (!string.IsNullOrEmpty(proveedor))
+            {
+                filter += $"Proveedor = '{proveedor}'";
+            }
+            if (!string.IsNullOrEmpty(empleado))
+            {
+                if (!string.IsNullOrEmpty(filter)) filter += " AND ";
+                filter += $"Empleado = '{empleado}'";
+            }
+
+            dv.RowFilter = filter;
+            dataGridProveedoresEmpleados.ItemsSource = dv;
+        }
+
+        // Método para aplicar filtros a análisis de compras
+        private void FiltrarComprasPorPeriodo()
+        {
+            if (comboBoxPeriodoCompras.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor, selecciona un periodo.");
+                return;
+            }
+
+            string periodo = ((ComboBoxItem)comboBoxPeriodoCompras.SelectedItem).Content.ToString();
+            int meses = periodo.Contains("3 Meses") ? 3 : periodo.Contains("6 Meses") ? 6 : 12;
+
+            DataView view = new DataView(comprasTable);
+            view.RowFilter = $"DATEDIFF(MONTH, FechaCompra, GETDATE()) <= {meses}";
+            dataGridCompras.ItemsSource = view;
+        }
+
+        // Método para aplicar filtros a libros más prestados
+        private void FiltrarLibrosMasPrestados()
+        {
+            string tema = comboBoxCategoria.SelectedItem?.ToString(); // Asumiendo que Tema está en comboBoxCategoria
+            string autor = comboBoxAutor.SelectedItem?.ToString();
+
+            DataView dv = new DataView(librosMasPrestadosTable);
+            string filter = "";
+
+            if (!string.IsNullOrEmpty(tema))
             {
                 filter += $"Tema = '{tema}'";
-            }*/
+            }
             if (!string.IsNullOrEmpty(autor))
             {
                 if (!string.IsNullOrEmpty(filter)) filter += " AND ";
@@ -215,60 +278,140 @@ namespace MenuPrincipal.PageReport
             }
 
             dv.RowFilter = filter;
-            dataGridLibros.ItemsSource = dv;
+            dataGridLibrosMasPrestados.ItemsSource = dv;
         }
-
         #endregion
+
+        // Evento para actualizar los filtros en cada ComboBox
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Llamar a FiltrarLibros cada vez que se cambie un ComboBox
-            FiltrarLibros();
+            // Identificar el ComboBox que activó el evento
+            if (sender == comboBoxCategoria || sender == comboBoxAutor || sender == comboBoxEspecialidad)
+            {
+                FiltrarLibros();
+                
+            }
+            else if (sender == comboBoxProveedores || sender == comboBoxEmpleados)
+            {
+                FiltrarProveedoresEmpleados();
+            }
+            else if (sender == comboBoxPeriodoCompras)
+            {
+                FiltrarComprasPorPeriodo();
+            }
         }
 
 
         // Método para generar reporte de libros
         private void GenerarReporteLibros(object sender, RoutedEventArgs e)
         {
-            // Verificar si los elementos seleccionados son nulos
-            if (/*comboBoxTema.SelectedItem == null ||*/ comboBoxAutor.SelectedItem == null || comboBoxEspecialidad.SelectedItem == null)
+            // Verificar si el DataGrid tiene datos
+            if (dataGridLibros.ItemsSource == null)
             {
-                MessageBox.Show("Por favor, selecciona un tema, autor y especialidad.");
+                MessageBox.Show("No hay datos para generar el reporte.");
                 return;
             }
 
-            // Asumiendo que los ComboBox contienen strings en lugar de ComboBoxItem
-            //string tema = comboBoxTema.SelectedItem.ToString();
-            string autor = comboBoxAutor.SelectedItem.ToString();
-            string especialidad = comboBoxEspecialidad.SelectedItem.ToString();
+            // Instanciar el reporte de Crystal Report
+            reportLibros rpt = new reportLibros();
 
-            // Consulta SQL corregida, usando la columna 'Autor' en lugar de 'AutorID'
-            string consultaSQL = "SELECT l.LibroID AS ID, l.Titulo, c.NombreCategoria AS Tema, l.Autor, e.NombreEspecialidad AS Especialidad " +
-                                 "FROM Libros l " +
-                                 "INNER JOIN Categorias c ON l.CategoriaID = c.CategoriaID " +
-                                 "INNER JOIN Especialidades e ON l.EspecialidadID = e.EspecialidadID " +
-                                 "WHERE c.NombreCategoria = @Tema AND l.Autor = @Autor AND e.NombreEspecialidad = @Especialidad";
+            // Crear instancia del DataSet 'libros' y su DataTable
+            libros dsLibros = new libros();
+            DataTable dataTableLibros = dsLibros.Tables["DataTable1"]; // Usar el nombre correcto de la tabla
 
-            // Conexión a la base de datos
-            using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
+            // Verificar que la tabla no sea nula
+            if (dataTableLibros == null)
             {
-                try
-                {
-                    SqlCommand cmd = new SqlCommand(consultaSQL, conDB);
-                    //cmd.Parameters.AddWithValue("@Tema", tema);
-                    cmd.Parameters.AddWithValue("@Autor", autor);
-                    cmd.Parameters.AddWithValue("@Especialidad", especialidad);
+                MessageBox.Show("La tabla 'DataTable1' no existe en el DataSet.");
+                return;
+            }
 
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable librosTable = new DataTable();
-                    adapter.Fill(librosTable);
-                    dataGridLibros.ItemsSource = librosTable.DefaultView;
-                }
-                catch (Exception ex)
+            // Obtener los valores seleccionados en los ComboBox (si hay alguno seleccionado)
+            string categoria = comboBoxCategoria.SelectedItem?.ToString();
+            string autor = comboBoxAutor.SelectedItem?.ToString();
+            string especialidad = comboBoxEspecialidad.SelectedItem?.ToString();
+
+            // Limpiar el DataTable en el DataSet
+            dataTableLibros.Clear();
+
+            // Verificar si hay algún filtro activo
+            bool filtroActivo = !string.IsNullOrEmpty(categoria) || !string.IsNullOrEmpty(autor) || !string.IsNullOrEmpty(especialidad);
+
+            // Contador para verificar si se agregan filas al DataTable
+            int contadorFilas = 0;
+
+            // Llenar el DataTable con los datos del DataGrid, aplicando filtros si están activos
+            foreach (DataRowView rowView in dataGridLibros.ItemsSource)
+            {
+                DataRow row = rowView.Row;
+
+                // Verificar si la fila coincide con los filtros seleccionados
+                if (!filtroActivo ||
+                    ((string.IsNullOrEmpty(categoria) || row["Categoria"].ToString() == categoria) &&
+                     (string.IsNullOrEmpty(autor) || row["Autor"].ToString() == autor) &&
+                     (string.IsNullOrEmpty(especialidad) || row["Especialidad"].ToString() == especialidad)))
                 {
-                    MessageBox.Show("Error al generar el reporte de libros: " + ex.Message);
+                    // Crear una nueva fila en el DataTable con las columnas ajustadas
+                    DataRow newRow = dataTableLibros.NewRow();
+                    newRow["Columna1"] = row["Titulo"];
+                    newRow["Columna2"] = row["Categoria"];
+                    newRow["Columna3"] = row["Autor"];
+                    newRow["Columna4"] = row["Stock"];
+
+                    // Agregar la fila al DataTable del DataSet
+                    dataTableLibros.Rows.Add(newRow);
+                    contadorFilas++;
                 }
             }
+
+            // Verificar si se agregaron filas al DataTable
+            if (contadorFilas == 0)
+            {
+                MessageBox.Show("No se encontraron datos para el reporte con los filtros seleccionados.");
+                return;
+            }
+
+            // Establecer el DataSet como la fuente de datos del reporte
+            rpt.SetDataSource(dsLibros);
+
+            // Instanciar el formulario de visor de reporte
+            Window1 visor = new Window1();
+
+            // Verificar si el visor y su CrystalReportViewer están correctamente inicializados
+            if (visor == null)
+            {
+                MessageBox.Show("El visor no se pudo inicializar.");
+                return;
+            }
+
+            // Verificar si el 'reportelibros' está correctamente configurado en el visor
+            if (visor.reportelibros == null)
+            {
+                MessageBox.Show("El 'reportelibros' no está inicializado.");
+                return;
+            }
+
+            // Verificar si el 'ViewerCore' está correctamente inicializado en el CrystalReportViewer
+            if (visor.reportelibros.ViewerCore == null)
+            {
+                MessageBox.Show("El 'ViewerCore' del reporte no está inicializado.");
+                return;
+            }
+
+            // Configurar el CrystalReportViewer con el reporte
+            visor.reportelibros.ViewerCore.ReportSource = rpt;
+
+           
+
+            // Mostrar el visor del reporte
+            visor.ShowDialog();
         }
+
+
+
+
+
+
 
 
 
@@ -328,170 +471,16 @@ namespace MenuPrincipal.PageReport
         // Método para generar reporte de análisis de compras
         private void GenerarReporteCompras(object sender, RoutedEventArgs e)
         {
-            //SaveFileDialog saveFileDialog = new SaveFileDialog();
-            //saveFileDialog.Filter = "PDF Document (.pdf)|.pdf";
-            //saveFileDialog.FileName = "ReporteCompras.pdf";
-
-            //if (saveFileDialog.ShowDialog() == true)
-            //{
-            //    // Obtener la ruta donde se guardará el archivo PDF
-            //    string rutaArchivoPDF = saveFileDialog.FileName;
-
-            //    // Crear un documento PDF
-            //    iTextSharp.text.Document documento = new iTextSharp.text.Document();
-            //    PdfWriter writer = PdfWriter.GetInstance(documento, new FileStream(rutaArchivoPDF, FileMode.Create));
-            //    documento.Open();
-
-            //    // Agregar título
-            //    documento.Add(new iTextSharp.text.Paragraph("Reporte de Compras"));
-            //    documento.Add(new iTextSharp.text.Paragraph("Fecha: " + DateTime.Now.ToString("dd/MM/yyyy")));
-            //    documento.Add(new iTextSharp.text.Paragraph("\n"));
-
-            //    // Crear una tabla para agregar los datos del DataGrid
-            //    PdfPTable tablaPDF = new PdfPTable(dataGridCompras.Columns.Count);
-
-            //    // Agregar los encabezados de las columnas
-            //    foreach (DataGridColumn column in dataGridCompras.Columns)
-            //    {
-            //        tablaPDF.AddCell(new Phrase(column.Header.ToString()));
-            //    }
-
-            //    // Agregar las filas de datos
-            //    foreach (DataRowView row in dataGridCompras.ItemsSource as DataView)
-            //    {
-            //        foreach (var item in row.Row.ItemArray)
-            //        {
-            //            tablaPDF.AddCell(new Phrase(item.ToString()));
-            //        }
-            //    }
-
-            //    // Agregar la tabla al documento
-            //    documento.Add(tablaPDF);
-
-            //    // Cerrar el documento PDF
-            //    documento.Close();
-            //    writer.Close();
-
-            //    MessageBox.Show("Reporte generado exitosamente en: " + rutaArchivoPDF);
-            //}
+           
         }
         private void btnGenerarReporte_Click(object sender, RoutedEventArgs e)
         {
-            //SaveFileDialog saveFileDialog = new SaveFileDialog();
-            //saveFileDialog.Filter = "PDF Document (.pdf)|.pdf";
-            //saveFileDialog.FileName = "ReporteBiblioteca.pdf";
-
-            //if (saveFileDialog.ShowDialog() == true)
-            //{
-            //    string rutaArchivoPDF = saveFileDialog.FileName;
-
-            //    iTextSharp.text.Document documento = new iTextSharp.text.Document();
-            //    try
-            //    {
-            //        PdfWriter writer = PdfWriter.GetInstance(documento, new FileStream(rutaArchivoPDF, FileMode.Create));
-            //        documento.Open();
-
-            //        documento.Add(new iTextSharp.text.Paragraph("Reporte de Biblioteca"));
-            //        documento.Add(new iTextSharp.text.Paragraph("Fecha: " + DateTime.Now.ToString("dd/MM/yyyy")));
-            //        documento.Add(new iTextSharp.text.Paragraph("\n"));
-
-            //        // Agregar reporte de Proveedores y Empleados
-            //        foreach (DataRowView row in dataGridProveedoresEmpleados.Items)
-            //        {
-            //            string id = row["ID"].ToString();
-            //            string nombre = row["Nombre"].ToString();
-            //            string tipo = row["Tipo"].ToString();
-
-            //            documento.Add(new iTextSharp.text.Paragraph("ID: " + id));
-            //            documento.Add(new iTextSharp.text.Paragraph("Nombre: " + nombre));
-            //            documento.Add(new iTextSharp.text.Paragraph("Tipo: " + tipo));
-            //            documento.Add(new iTextSharp.text.Paragraph("\n"));
-            //        }
-
-            //        documento.Add(new iTextSharp.text.Paragraph("Reporte de Compras:"));
-            //        documento.Add(new iTextSharp.text.Paragraph("\n"));
-
-            //        foreach (DataRowView row in dataGridCompras.Items)
-            //        {
-            //            string idCompra = row["ID"].ToString();
-            //            string articulo = row["Articulo"].ToString();
-            //            string fecha = row["FechaCompra"].ToString();
-            //            string cantidad = row["Cantidad"].ToString();
-            //            string precioTotal = row["PrecioTotal"].ToString();
-
-            //            documento.Add(new iTextSharp.text.Paragraph("ID Compra: " + idCompra));
-            //            documento.Add(new iTextSharp.text.Paragraph("Artículo: " + articulo));
-            //            documento.Add(new iTextSharp.text.Paragraph("Fecha de Compra: " + fecha));
-            //            documento.Add(new iTextSharp.text.Paragraph("Cantidad: " + cantidad));
-            //            documento.Add(new iTextSharp.text.Paragraph("Precio Total: $" + precioTotal));
-            //            documento.Add(new iTextSharp.text.Paragraph("\n"));
-            //        }
-
-            //        MessageBox.Show("Reporte generado exitosamente en: " + rutaArchivoPDF);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("Error al generar el reporte: " + ex.Message);
-            //    }
-            //    finally
-            //    {
-            //        if (documento.IsOpen()) documento.Close();
-            //    }
-            //}
+           
         }
         // Método para generar reporte de libros más prestados
         private void GenerarReporteLibrosMasPrestados(object sender, RoutedEventArgs e)
         {
-            //// Mostrar el diálogo para que el usuario elija dónde guardar el archivo PDF
-            //SaveFileDialog saveFileDialog = new SaveFileDialog();
-            //saveFileDialog.Filter = "PDF Document (.pdf)|.pdf";
-            //saveFileDialog.FileName = "ReporteLibrosMasPrestados.pdf";
-
-            //if (saveFileDialog.ShowDialog() == true)
-            //{
-            //    string rutaArchivoPDF = saveFileDialog.FileName;
-
-            //    try
-            //    {
-            //        // Crear un documento PDF
-            //        iTextSharp.text.Document documento = new iTextSharp.text.Document();
-            //        PdfWriter writer = PdfWriter.GetInstance(documento, new FileStream(rutaArchivoPDF, FileMode.Create));
-            //        documento.Open();
-
-            //        // Agregar título al PDF
-            //        documento.Add(new iTextSharp.text.Paragraph("Reporte de Libros Más Prestados"));
-            //        documento.Add(new iTextSharp.text.Paragraph("Fecha: " + DateTime.Now.ToString("dd/MM/yyyy")));
-            //        documento.Add(new iTextSharp.text.Paragraph("\n"));
-
-            //        // Crear una tabla PDF con 3 columnas (ID, Título, Cantidad de Préstamos)
-            //        PdfPTable tablaPDF = new PdfPTable(3);
-            //        tablaPDF.AddCell("ID Libro");
-            //        tablaPDF.AddCell("Título");
-            //        tablaPDF.AddCell("Cantidad de Préstamos");
-
-            //        // Recorrer los datos del DataGrid y agregar a la tabla
-            //        foreach (DataRowView row in dataGridLibrosMasPrestados.Items)
-            //        {
-            //            tablaPDF.AddCell(row["ID"].ToString());
-            //            tablaPDF.AddCell(row["Titulo"].ToString());
-            //            tablaPDF.AddCell(row["CantidadPrestamos"].ToString());
-            //        }
-
-            //        // Agregar la tabla al documento PDF
-            //        documento.Add(tablaPDF);
-
-            //        // Cerrar el documento PDF
-            //        documento.Close();
-            //        writer.Close();
-
-            //        // Notificar al usuario que el reporte se generó exitosamente
-            //        MessageBox.Show("Reporte generado exitosamente en: " + rutaArchivoPDF);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("Error al generar el reporte PDF: " + ex.Message);
-            //    }
-            //}
+           
         }
 
         // Método para generar la designación del lector y libro del mes
@@ -551,5 +540,7 @@ namespace MenuPrincipal.PageReport
         {
             GenerarReporteProveedoresEmpleados();
         }
+
+  
     }
 }

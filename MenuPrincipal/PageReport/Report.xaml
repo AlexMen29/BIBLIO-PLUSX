@@ -28,26 +28,24 @@
                         <!-- Filtros de Libros: Clasificación por Categoría, Autor, Especialidad -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBlock Text="Categoría:" VerticalAlignment="Center" Width="70"/>
-                            <ComboBox x:Name="comboBoxCategoria" Width="140" Margin="5,0,5,0"/>
+                            <ComboBox x:Name="comboBoxCategoria" Width="140" Margin="5,0,5,0" Height="27" SelectionChanged="ComboBox_SelectionChanged"/>
 
                             <TextBlock Text="Autor:" VerticalAlignment="Center" Width="50"/>
-                            <ComboBox x:Name="comboBoxAutor" Width="132" Margin="5,0,5,0"/>
+                            <ComboBox x:Name="comboBoxAutor" Width="132" Margin="5,0,5,0" Height="24" SelectionChanged="ComboBox_SelectionChanged"/>
 
-                            <TextBlock Text="Especialidad:" VerticalAlignment="Center" Width="90"/>
-                            <ComboBox x:Name="comboBoxEspecialidad" Width="130" Margin="5,0,5,0"/>
+                            <TextBlock Text="Stock:" VerticalAlignment="Center" Width="45"/>
+                            <ComboBox x:Name="comboBoxEspecialidad" Width="66" Margin="5,0,5,0" Height="30" SelectionChanged="ComboBox_SelectionChanged"/>
 
-                            <Button Content="Generar Reporte" Width="141" Height="30" Margin="10,0,0,0" Click="GenerarReporteLibros"/>
-                            <Button Name="btnLimpiar" Content="Limpiar Filtros" Click="btnLimpiar_Click" Width="120" Height="30" Margin="10"/>
+                            <Button Content="Generar Reporte" Width="66" Height="30" Margin="10,0,0,0" Click="GenerarReporteLibros"/>
+                            <Button Name="btnLimpiar" Content="Limpiar Filtros" Click="btnLimpiar_Click" Width="77" Height="30" Margin="10"/>
                         </StackPanel>
 
                         <!-- Tabla de resultados de libros -->
-                        <DataGrid x:Name="dataGridLibros" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid x:Name="dataGridLibros" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding LibroID}" Width="Auto"/>
-                                <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*"/>
+                                <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="auto"/>
                                 <DataGridTextColumn Header="Categoría" Binding="{Binding Categoria}" Width="Auto"/>
                                 <DataGridTextColumn Header="Autor" Binding="{Binding Autor}" Width="Auto"/>
-                                <DataGridTextColumn Header="Especialidad" Binding="{Binding Especialidad}" Width="Auto"/>
                                 <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -75,7 +73,6 @@
                         <!-- Tabla de resultados de proveedores y empleados -->
                         <DataGrid x:Name="dataGridProveedoresEmpleados" AutoGenerateColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="Auto"/>
                                 <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="auto"/>
                                 <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="Auto"/>
                             </DataGrid.Columns>
@@ -99,10 +96,9 @@
                         </StackPanel>
 
                         <!-- Tabla de análisis de compras -->
-                        <DataGrid x:Name="dataGridCompras" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid x:Name="dataGridCompras" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Visible">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding CompraID}" Width="Auto"/>
-                                <DataGridTextColumn Header="Artículo" Binding="{Binding Articulo}" Width="*"/>
+                                <DataGridTextColumn Header="Artículo" Binding="{Binding Articulo}" Width="auto"/>
                                 <DataGridTextColumn Header="Fecha de Compra" Binding="{Binding FechaCompra}" Width="Auto"/>
                                 <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="Auto"/>
                                 <DataGridTextColumn Header="Precio Total" Binding="{Binding totalcompra}" Width="Auto"/>
@@ -120,10 +116,12 @@
                         <Button Content="Generar Reporte" Width="142" Height="30" Margin="0,10,0,0" Click="GenerarReporteLibrosMasPrestados"/>
 
                         <!-- Tabla de libros más prestados -->
-                        <DataGrid x:Name="dataGridLibrosMasPrestados" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid x:Name="dataGridLibrosMasPrestados" AutoGenerateColumns="False" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding LibroID}" Width="Auto"/>
-                                <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*"/>
+                                <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="Auto"/>
+                                <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="Auto"/>
+                                <DataGridTextColumn Header="Tema" Binding="{Binding Tema}" Width="Auto"/>
+                                <DataGridTextColumn Header="Autor" Binding="{Binding Autor}" Width="Auto"/>
                                 <DataGridTextColumn Header="Cantidad de Préstamos" Binding="{Binding CantidadPrestamos}" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>

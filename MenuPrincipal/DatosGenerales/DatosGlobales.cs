@@ -19,7 +19,10 @@ namespace MenuPrincipal.DatosGenerales
 
         public DatosGlobales() { }
 
+        public static int NivelUsuario { get; set; }
 
+
+        public string consultaTipoUsuarioPorCarnet = "SELECT iu.TipoUsuarioID FROM Usuarios u JOIN InfoUsuarios iu ON u.InfoID = iu.InfoID WHERE u.Carnet = @Valor";
         public string consultaAutor = "select NombreAutor from Autores";
         public string consultaCategoria = "select NombreCategoria from Categorias";
         public string consultaEdiorial = "select NombreEditorial from Editoriales";
@@ -276,6 +279,39 @@ namespace MenuPrincipal.DatosGenerales
             {
                 return false;
             }
+        }
+
+        public int ObtenerID(string consultaSQL, string valor)
+        {
+            int id = -1; // Valor inicial del ID, en caso de que no se encuentre
+
+            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.conexionDB))
+            {
+                try
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(consultaSQL, connection))
+                    {
+                        // Agregar el parámetro @valor con el valor proporcionado
+                        command.Parameters.AddWithValue("@valor", valor);
+
+                        // Ejecutar la consulta y obtener el resultado
+                        object result = command.ExecuteScalar();
+
+                        // Si el resultado no es nulo, lo convertimos a entero
+                        if (result != null && int.TryParse(result.ToString(), out int parsedID))
+                        {
+                            id = parsedID;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener el ID: " + ex.Message);
+                }
+            }
+
+            return id;
         }
 
 

@@ -29,7 +29,7 @@ namespace MenuPrincipal.ActualizacionesDatos
     public partial class PagEditUsuarios : Page
     {
         private int id;
-        DatosGlobales datos = new DatosGlobales();
+        DatosGlobales datosG = new DatosGlobales();
         DatosUsuariosModel datosUsuario = null;
 
         public PagEditUsuarios(int usuarioId)
@@ -154,7 +154,7 @@ namespace MenuPrincipal.ActualizacionesDatos
             };
 
             // Verificar si todos los TextBox tienen texto
-            bool validacion = datos.VerifcarTextBox(arr);
+            bool validacion = datosG.VerifcarTextBox(arr);
 
             if (validacion == true)
             {
@@ -185,10 +185,10 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void CargarDatos()
         {
-            datos.LlenarCajasVDefecto(datos.consultaEstadoCivil, EstadoCivilBox, "EstadoCivil", datosUsuario.EstadoCivil);
-            datos.LlenarCajasVDefecto(datos.consultaEstado, EstadoBox, "Estado", datosUsuario.Estado);
-            datos.LlenarCajasVDefecto(datos.consultaTipoUsuario, TipoUsuarioBox, "Tipo", datosUsuario.TipoUsuario);
-            datos.LlenarCajasVDefecto(datos.consultaCarrera, CarreraBox, "NombreCarrera", datosUsuario.Carrera);
+            datosG.LlenarCajasVDefecto(datosG.consultaEstadoCivil, EstadoCivilBox, "EstadoCivil", datosUsuario.EstadoCivil);
+            datosG.LlenarCajasVDefecto(datosG.consultaEstado, EstadoBox, "Estado", datosUsuario.Estado);
+            datosG.LlenarCajasVDefecto(datosG.consultaTipoUsuario, TipoUsuarioBox, "Tipo", datosUsuario.TipoUsuario);
+            datosG.LlenarCajasVDefecto(datosG.consultaCarrera, CarreraBox, "NombreCarrera", datosUsuario.Carrera);
         }
 
         private void OcultarCarrera()
@@ -208,38 +208,7 @@ namespace MenuPrincipal.ActualizacionesDatos
             OcultarCarrera();
         }
 
-        public int ObtenerID(string consultaSQL, string valor)
-        {
-            int id = -1; // Valor inicial del ID, en caso de que no se encuentre
-
-            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.conexionDB))
-            {
-                try
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(consultaSQL, connection))
-                    {
-                        // Agregar el parámetro @valor con el valor proporcionado
-                        command.Parameters.AddWithValue("@valor", valor);
-
-                        // Ejecutar la consulta y obtener el resultado
-                        object result = command.ExecuteScalar();
-
-                        // Si el resultado no es nulo, lo convertimos a entero
-                        if (result != null && int.TryParse(result.ToString(), out int parsedID))
-                        {
-                            id = parsedID;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al obtener el ID: " + ex.Message);
-                }
-            }
-
-            return id;
-        }
+       
 
 
         private DatosUsuariosModel datosEnviar()
@@ -258,13 +227,13 @@ namespace MenuPrincipal.ActualizacionesDatos
             datos.Telefono2 = Telefono2Txt.Text;
             datos.TelefonoFijo = TelefonoFijoTxt.Text;
             datos.Carnet = CarnetTxt.Text;
-            datos.EstadoID = ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
-            datos.TipoUsuarioId = ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString());
+            datos.EstadoID = datosG.ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
+            datos.TipoUsuarioId = datosG.ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString());
             //MessageBox.Show($"dato id {ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString())}");
 
             if (TipoUsuarioBox.SelectedItem.ToString() == "Estudiante" || TipoUsuarioBox.SelectedItem == null)
             {
-                datos.CarreraID = ObtenerID("select CarreraID from Carrera where NombreCarrera=@Valor", CarreraBox.SelectedItem.ToString());
+                datos.CarreraID = datosG.ObtenerID("select CarreraID from Carrera where NombreCarrera=@Valor", CarreraBox.SelectedItem.ToString());
 
             }
             else

@@ -29,8 +29,8 @@
                     <DatePicker x:Name="txbFechaPrestamo" Foreground="Black" SelectedDateFormat="Long" 
                         materialDesign:HintAssist.Hint="Fecha de Prestamo" Width="286" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
                     </DatePicker>
-                    <materialDesign:TimePicker Name="tmPickerPrestamo" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed" IsEnabled="False"
-                        materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280"/>
+                    <materialDesign:TimePicker Name="tmPickerPrestamo" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed" IsEnabled="False" Is24Hours="True"
+                        materialDesign:HintAssist.Hint="Hora de Prestamo" Margin="10,0,0,0" FontSize="14" Height="48" Width="280"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Plazo de Prestamo" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
@@ -49,12 +49,12 @@
                     <StackPanel Margin="0,0,0,0">
                         <TextBlock x:Name="txblFechaDevolucion" Text="Fecha de Devolucion" Foreground="#9e1717" Opacity="0.75" Margin="10,20,0,0" FontSize="14" />
                         <DatePicker x:Name="txbFechaDevolucionDias" Foreground="Black"  SelectedDateFormat="Long" Visibility="Collapsed"
-                        materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5">
+                        materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="txbFechaDevolucionDias_SelectedDateChanged">
                         </DatePicker>
                         <DatePicker x:Name="txbFechaDevolucionSemanas" Foreground="Black"  SelectedDateFormat="Long" Visibility="Collapsed"
-                        materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5">
+                        materialDesign:HintAssist.Hint="Fecha de Devolución" Width="282" HorizontalAlignment="Left" Margin="10,0,0,0" FontSize="14" Height="48" RenderTransformOrigin="0.5,0.5" SelectedDateChanged="txbFechaDevolucionSemanas_SelectedDateChanged">
                         </DatePicker>
-                        <materialDesign:TimePicker Name="tmPickerDevolucion" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed"  SelectedTimeChanged="tmPickerDevolucion_SelectedTimeChanged" 
+                        <materialDesign:TimePicker Name="tmPickerDevolucion" Foreground="Black" HorizontalAlignment="Left" Visibility="Collapsed"  SelectedTimeChanged="tmPickerDevolucion_SelectedTimeChanged" Is24Hours="True"
                         materialDesign:HintAssist.Hint="Hora de Devolución" Margin="10,0,0,0" FontSize="14" Height="48" Width="280"/>
                         </StackPanel>
                 </StackPanel>

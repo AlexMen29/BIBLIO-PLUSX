@@ -21,7 +21,7 @@ namespace MenuPrincipal.BD.Services
                     using (var command = conn.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "IngresoPrestamoProcedure";
+                        command.CommandText = "SP_NuevoPrestamo";
 
                         // Agregar parámetros al comando usando el objeto de tipo IngresoPrestamoModel
                         command.Parameters.AddWithValue("@UsuarioID", prestamo.UsuarioId);
@@ -29,13 +29,13 @@ namespace MenuPrincipal.BD.Services
                         command.Parameters.AddWithValue("@FechaSolicitud", prestamo.FechaSolicitud);
                         command.Parameters.AddWithValue("@EstadoSolicitud", prestamo.EstadoSolicitud);
                         command.Parameters.AddWithValue("@TiempoEspera", prestamo.TiempoEspera);
-                        command.Parameters.AddWithValue("@FechaPrestamo", prestamo.FechaPrestamo);
-                        command.Parameters.AddWithValue("@FechaDevolucion", prestamo.FechaDevolucion);
+                        command.Parameters.AddWithValue("@FechaPrestamo", prestamo.FechaPrestamo ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@FechaDevolucion", prestamo.FechaDevolucion ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@EstadoPrestamo", prestamo.EstadoPrestamo);
                         command.Parameters.AddWithValue("@TipoPrestamo", prestamo.TipoPrestamo);
                         command.Parameters.AddWithValue("@TiempoEntrega", prestamo.TiempoEntrega);
                         command.Parameters.AddWithValue("@Renovaciones", prestamo.Renovaciones);
-                        command.Parameters.AddWithValue("@FechaRenovacion", prestamo.FechaRenovacion);
+                        command.Parameters.AddWithValue("@FechaRenovacion", prestamo.FechaRenovacion ?? (object)DBNull.Value);
 
                         // Ejecutar el comando y obtener el resultado
                         resultado = command.ExecuteNonQuery();

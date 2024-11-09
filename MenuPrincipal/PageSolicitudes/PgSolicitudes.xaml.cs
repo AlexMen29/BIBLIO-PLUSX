@@ -22,6 +22,7 @@ using System.Windows.Media.Animation;
 using System.Text.RegularExpressions;
 using MenuPrincipal.PageUsuarios;
 using MenuPrincipal.BD.Services;
+using MenuPrincipal.MenuLibros;
 
 namespace MenuPrincipal.PageSolicitudes
 {
@@ -37,8 +38,8 @@ namespace MenuPrincipal.PageSolicitudes
         public string titulo;
         public int tipoPrestamo;
         private int contador = 0;
-        public DateTime devolucion;
-        public DateTime prestamo;
+        public DateTime? devolucion;
+        public DateTime? prestamo;
         double costo = 0.0;
         public PgSolicitudes(string titulo, int tipoPrestamo)
         {
@@ -55,19 +56,21 @@ namespace MenuPrincipal.PageSolicitudes
             txbTiempo.Visibility = Visibility.Collapsed;
             txblTiempo.Visibility = Visibility.Collapsed;
             txbTiempo.IsEnabled = false;
-            txbFechaPrestamo.SelectedDate = DateTime.Today;
-            txbFechaSolicitud.SelectedDate = DateTime.Today;
+            txbFechaPrestamo.SelectedDate = DateTime.Now;
+            txbFechaSolicitud.SelectedDate = DateTime.Now;
             tmPickerPrestamo.SelectedTime = DateTime.Now;
             tmPickerDevolucion.SelectedTime = DateTime.Now;
             cmbPlazo.SelectedIndex = 0;
             cmbTipoPrestamo.SelectedIndex = 0;
             cmbPlazo.SelectedIndex = 0;
-            txbTiempo.Text = "1-3 días aprox";
+            txbTiempo.Text = "Inmediata";
+            devolucion = tmPickerDevolucion.SelectedTime.Value;
 
             if (tipoPrestamo == 1)
             {
                 txbFechaSolicitud.Visibility = Visibility.Collapsed;
                 txblFechaSolicitud.Visibility = Visibility.Collapsed;
+                
             }
             else
             {
@@ -75,6 +78,7 @@ namespace MenuPrincipal.PageSolicitudes
                 txblFechaPrestamo.Visibility = Visibility.Collapsed;
                 tmPickerPrestamo.Visibility = Visibility.Collapsed;
                 btnPrestamo.Content = "Solicitar";
+                
             }
 
         }
@@ -84,11 +88,14 @@ namespace MenuPrincipal.PageSolicitudes
             {
                 txblTiempo.Visibility = Visibility.Visible;
                 txbTiempo.Visibility = Visibility.Visible;
+                txbTiempo.Text = "1 - 3 días aprox";
+                
             }
             else
             {
                 txbTiempo.Visibility = Visibility.Collapsed;
                 txblTiempo.Visibility = Visibility.Collapsed;
+                txbTiempo.Text = "Inmediata";
             }
         }
 
@@ -116,23 +123,43 @@ namespace MenuPrincipal.PageSolicitudes
             if (cmbPlazo.SelectedIndex == 0)
             {
                 tmPickerDevolucion.Visibility = Visibility.Visible;
-                tmPickerPrestamo.Visibility = Visibility.Visible;
+                txbFechaPrestamo.Visibility = Visibility.Collapsed;
+
+                // Aquí se asegura que estos elementos permanezcan ocultos si tipoPrestamo != 1
+                if (tipoPrestamo == 1)
+                {
+                    tmPickerPrestamo.Visibility = Visibility.Visible;
+                    tmPickerPrestamo.SelectedTime = DateTime.Now;
+                    prestamo = tmPickerPrestamo.SelectedTime.Value;
+                }
+                else
+                {
+                    tmPickerPrestamo.Visibility = Visibility.Collapsed;
+                    prestamo = null;
+                }
+
                 txbFechaDevolucionDias.Visibility = Visibility.Collapsed;
                 txbFechaDevolucionSemanas.Visibility = Visibility.Collapsed;
-                txbFechaPrestamo.Visibility = Visibility.Collapsed;
                 txblFechaPrestamo.Text = "Hora del Prestamo";
                 txblFechaDevolucion.Text = "Hora de Devolución";
-                if (!tmPickerPrestamo.SelectedTime.HasValue)
-                {
-                    tmPickerPrestamo.SelectedTime = DateTime.Now;
-                }
-                devolucion = tmPickerDevolucion.SelectedTime.Value;
-                prestamo = tmPickerPrestamo.SelectedTime.Value;
+
             }
             else if (cmbPlazo.SelectedIndex == 1)
             {
                 txbFechaDevolucionDias.Visibility = Visibility.Visible;
-                txbFechaPrestamo.Visibility = Visibility.Visible;
+
+                // Misma lógica para que permanezcan colapsados si tipoPrestamo != 1
+                if (tipoPrestamo == 1)
+                {
+                    txbFechaPrestamo.Visibility = Visibility.Visible;
+                    prestamo = txbFechaPrestamo.SelectedDate.Value;
+                }
+                else
+                {
+                    txbFechaPrestamo.Visibility = Visibility.Collapsed;
+                    prestamo = null;
+                }
+
                 txbFechaDevolucionSemanas.Visibility = Visibility.Collapsed;
                 tmPickerDevolucion.Visibility = Visibility.Collapsed;
                 tmPickerPrestamo.Visibility = Visibility.Collapsed;
@@ -141,13 +168,24 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionDias.DisplayDateEnd = txbFechaDevolucionDias.DisplayDateStart.Value.AddDays(5);
                 txblFechaPrestamo.Text = "Fecha del Prestamo";
                 txblFechaDevolucion.Text = "Fecha de Devolución";
-                devolucion = txbFechaDevolucionDias.SelectedDate.Value;
-                prestamo = txbFechaPrestamo.SelectedDate.Value;
+
             }
             else
             {
                 txbFechaDevolucionSemanas.Visibility = Visibility.Visible;
-                txbFechaPrestamo.Visibility = Visibility.Visible;
+
+                // Misma lógica aquí para asegurar colapso si tipoPrestamo != 1
+                if (tipoPrestamo == 1)
+                {
+                    txbFechaPrestamo.Visibility = Visibility.Visible;
+                    prestamo = txbFechaPrestamo.SelectedDate.Value;
+                }
+                else
+                {
+                    txbFechaPrestamo.Visibility = Visibility.Collapsed;
+                    prestamo = null;
+                }
+
                 tmPickerDevolucion.Visibility = Visibility.Collapsed;
                 txbFechaDevolucionDias.Visibility = Visibility.Collapsed;
                 tmPickerPrestamo.Visibility = Visibility.Collapsed;
@@ -156,8 +194,7 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionSemanas.DisplayDateEnd = txbFechaDevolucionSemanas.DisplayDateStart.Value.AddDays(28);
                 txblFechaPrestamo.Text = "Fecha del Prestamo";
                 txblFechaDevolucion.Text = "Fecha de Devolución";
-                devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
-                prestamo = txbFechaPrestamo.SelectedDate.Value;
+
             }
         }
 
@@ -177,8 +214,6 @@ namespace MenuPrincipal.PageSolicitudes
                 e.Handled = true;
             }
         }
-
-
 
         #region METODO
         public static ObtenerVistaCliente DetallesLibros(string titulo)
@@ -332,71 +367,73 @@ namespace MenuPrincipal.PageSolicitudes
             else
             {
                 CalcularCosto();
-                MessageBox.Show("El costo del préstamo es: $" + costo.ToString("F2"), "Costo del Préstamo", MessageBoxButton.OK, MessageBoxImage.Information);
-                if (metodos.RegistrarPrestamoCompleto(LlenarDatosBD()) == 0) {
+                if (costo > 0)
+                {
+                    MessageBoxResult boxResult = MessageBox.Show($"El costo del préstamo es: ${costo.ToString("F2")}\n¿Desea Continuar?", "Costo del Préstamo", MessageBoxButton.YesNo, MessageBoxImage.Information);
 
-                    MessageBox.Show("Exito papi");
+                    if (boxResult == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            if (cmbPlazo.SelectedIndex == 0)
+                            {
+                                devolucion = tmPickerDevolucion.SelectedTime.Value;
+                            }
+                            else if (cmbPlazo.SelectedIndex == 1)
+                            {
+                                devolucion = txbFechaDevolucionDias.SelectedDate.Value;
+                            }
+                            else
+                            {
+                                devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
+                            }
+
+                            metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
+                            MessageBox.Show($"prestamo: {prestamo}\ndevolucion: {devolucion}");
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("ERROR INESPERADO: " + ex);
+                        }
+                    }
+                    PgLibros Page1 = new PgLibros(0);
+                    MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+                    mainWindow.NavegarAContenido(Page1);
                 }
-                else {
-                    MessageBox.Show("Malo pue");
-                }
-                //MessageBox.Show("Id: " + ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text) );
             }
 
         }
 
         private void tmPickerDevolucion_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {
-            contador += 1;
-
-            if (cmbPlazo.SelectedIndex == 0 && tmPickerPrestamo.SelectedTime.HasValue && tmPickerDevolucion.SelectedTime.HasValue)
+            try
             {
-                DateTime tiempoPrestamo = tmPickerPrestamo.SelectedTime.Value;
-                DateTime tiempoDevolucion = tmPickerDevolucion.SelectedTime.Value;
-
-                // Calcular el tiempo máximo de devolución
-                DateTime tiempoMaximoDevolucion = tiempoPrestamo.AddHours(6);
-                DateTime horaActual = DateTime.Now;
-
-
-                // Verificar si el tiempo seleccionado para la devolución excede el límite
-                if (tiempoDevolucion < horaActual && contador > 1)
-                {
-                    MessageBox.Show("La hora de devolución no puede ser menor a la hora actual.",
-                                    "Hora no válida",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Warning);
-                    tmPickerDevolucion.SelectedTime = DateTime.Now; // Ajustar al mínimo permitido (hora actual)
-                    contador = 0;
-                }
-                else if (tiempoDevolucion > tiempoMaximoDevolucion && contador > 1)
-                {
-                    MessageBox.Show("La hora de devolución no puede ser mayor a 5 horas después de la hora del préstamo.",
-                                    "Hora no válida",
-                                    MessageBoxButton.OK,
-                                    MessageBoxImage.Warning);
-                    tmPickerDevolucion.SelectedTime = DateTime.Now; // Ajustar al tiempo máximo permitido
-                    contador = 0;
-                }
+                devolucion = tmPickerDevolucion.SelectedTime.Value;
             }
+            catch (Exception error)
+            {
+                //MessageBox.Show("Tu error " + error);
+
+            }
+        
         }
 
         private IngresoPrestamo LlenarDatosBD()
         {
-            IngresoPrestamo datos = null;
+            IngresoPrestamo datos = new IngresoPrestamo();
 
-            int UsuarioID = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
-            int LibroID = ObtenerID("SELECT TOP 1 Libros.LibroID FROM Ediciones JOIN DetallesLibros ON Ediciones.EdicionID = DetallesLibros.EdicionID JOIN Libros ON DetallesLibros.DetallesID = Libros.DetallesID WHERE Ediciones.Titulo = @Titulo;", "Cien años de Soledad");
-            DateTime FechaSolicitud = txbFechaSolicitud.SelectedDate.Value;
-            string EstadoSolicitud = "Aprobada";
-            string TiempoEspera = txbTiempo.Text;
-            DateTime FechaPrestamo = prestamo;
-            DateTime FechaDevolucion = devolucion;
-            string EstadoPrestamo = "Pendiente";
-            string TipoPrestamo = cmbTipoPrestamo.Text;
-            string TiempoEntrega = txbTiempo.Text;
-            int Renovaciones = 0;
-            DateTime FechaRenovacion = DateTime.Today;
+            datos.UsuarioId = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
+            datos.LibroId = ObtenerID("SELECT TOP 1 Libros.LibroID FROM Ediciones JOIN DetallesLibros ON Ediciones.EdicionID = DetallesLibros.EdicionID JOIN Libros ON DetallesLibros.DetallesID = Libros.DetallesID WHERE Ediciones.Titulo = @Valor;", titulo);
+            datos.FechaSolicitud = txbFechaSolicitud.SelectedDate.Value;
+            datos.EstadoSolicitud = "Aprobada";
+            datos.TiempoEspera = txbTiempo.Text;
+            datos.FechaPrestamo = prestamo;
+            datos.FechaDevolucion = devolucion;
+            datos.EstadoPrestamo = "Activo";
+            datos.TipoPrestamo = cmbTipoPrestamo.Text;
+            datos.TiempoEntrega = txbTiempo.Text;
+            datos.Renovaciones = 0;
+            datos.FechaRenovacion = null;
 
             return datos;
         }
@@ -432,6 +469,18 @@ namespace MenuPrincipal.PageSolicitudes
             }
 
             return id;
+        }
+
+        
+
+        private void txbFechaDevolucionDias_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            devolucion = txbFechaDevolucionDias.SelectedDate.Value;
+        }
+
+        private void txbFechaDevolucionSemanas_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
         }
     }
 }

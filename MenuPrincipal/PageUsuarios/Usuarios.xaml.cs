@@ -147,7 +147,7 @@ namespace MenuPrincipal.PageUsuarios
                 MessageBox.Show("No se encontraron usuarios que coincidan con los criterios de búsqueda.");
                 CargarDatos();
                 LimpiarCajas();
-                
+
             }
             else
             {
@@ -157,7 +157,7 @@ namespace MenuPrincipal.PageUsuarios
 
 
 
-            
+
 
         }
 
@@ -167,7 +167,7 @@ namespace MenuPrincipal.PageUsuarios
         {
             labSeleccion.Content = null;
             UsuariosData = (DetallesUsuarios)UsuariosDataGrid.SelectedItem;
-            
+
             if (UsuariosData == null)
             {
                 return;
@@ -245,14 +245,14 @@ namespace MenuPrincipal.PageUsuarios
 
             // Asignar un TextBox al array
             arr[0] = CarnetTextBox;
-          
+
 
             bool validacion = datos.VerifcarTextBox(arr);
 
             if (validacion == true)
             {
                 BuscarUsuarios();
-               
+
             }
             else
 
@@ -290,6 +290,5 @@ namespace MenuPrincipal.PageUsuarios
         }
 
 
-      
     }
 }

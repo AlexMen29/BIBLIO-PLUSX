@@ -13,9 +13,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 using System.Data.SqlClient;
 using System.Data;
 using MenuPrincipal.MenuLibros;
+using MenuPrincipal.DatosGenerales;
 
 namespace MenuPrincipal.Ingreso
 {
@@ -29,6 +31,9 @@ namespace MenuPrincipal.Ingreso
             InitializeComponent();
             Inicializar();
         }
+         
+        DatosGlobales datos= new DatosGlobales();
+
 
         private void Inicializar()
         {
@@ -63,9 +68,14 @@ namespace MenuPrincipal.Ingreso
 
             if (MetodosCredenciales.EncontrarUsuario(txtCorreo, txtPassword) > 0)
             {
+                //Enviar a id
+                DatosGlobales.NivelUsuario = datos.ObtenerID(datos.consultaTipoUsuarioPorCarnet, txtCorreo.Text);
+
 
                 MainWindow ventanaPrincipal = new MainWindow();
                 ventanaPrincipal.Show();
+
+
                 this.Close();
 
             }

@@ -22,7 +22,6 @@ namespace MenuPrincipal.PagePrestamos
         {
             InitializeComponent();
             CargarClasificacionPrestamos();
-            CargarControlPagos();
             CargarDatosComboBox();
         }
 
@@ -31,10 +30,7 @@ namespace MenuPrincipal.PagePrestamos
             dataGridPrestamos.ItemsSource = DatoPrestamo.CargarClasificacionPrestamos();
         }
 
-        private void CargarControlPagos()
-        {
-            dataGridPagos.ItemsSource = DatoPago.CargarControlPagos();
-        }
+       
         private void CargarDatosComboBox()
         {
             datos.LlenarBoxFiltros(datos.consultaTiposPrestamos, TipoPrestamoComboBox, "TipoPrestamo");
@@ -42,19 +38,7 @@ namespace MenuPrincipal.PagePrestamos
         }
    
 
-        private void BtnCalcularPago_Click(object sender, RoutedEventArgs e)
-        {
-            string periodoPago = ((ComboBoxItem)comboBoxPeriodoPago.SelectedItem)?.Content?.ToString();
-            string monto = textBoxMonto.Text;
-
-            if (string.IsNullOrEmpty(periodoPago) || string.IsNullOrEmpty(monto) || !decimal.TryParse(monto, out decimal montoDecimal))
-            {
-                MessageBox.Show("Por favor, completa el período de pago y el monto correctamente.");
-                return;
-            }
-
-            MessageBox.Show($"Pago calculado para el período: {periodoPago}, con un monto de {montoDecimal:C}");
-        }
+        
 
 
         //Metodo para filtrar

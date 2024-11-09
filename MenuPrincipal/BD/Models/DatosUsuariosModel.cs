@@ -8,7 +8,7 @@ namespace MenuPrincipal.BD.Models
 {
     public class DatosUsuariosModel
     {
-    
+
         public int UsuarioID { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
@@ -23,15 +23,16 @@ namespace MenuPrincipal.BD.Models
         public string Estado { get; set; }
         public int EstadoID { get; set; }
         public string TipoUsuario { get; set; }
+        public int TipoUsuarioId { get; set; }
         public string Carrera { get; set; }
-        public string CarreraID { get; set; }
+        public int CarreraID { get; set; }
         public string Colonia { get; set; }
         public string Calle { get; set; }
         public string Casa { get; set; }
         public string Municipio { get; set; }
         public string Departamento { get; set; }
         public string CP { get; set; }
-        
+
 
     }
 }

@@ -224,6 +224,7 @@
     <Compile Include="BD\Models\EdicionesModel.cs" />
     <Compile Include="BD\Models\EditorialesModel.cs" />
     <Compile Include="BD\Models\EstadoModel.cs" />
+    <Compile Include="BD\Models\IngresoPrestamo.cs" />
     <Compile Include="BD\Models\LibrosModel.cs" />
     <Compile Include="BD\Models\ObtenerVistaCliente.cs" />
     <Compile Include="BD\Models\PagosPrestamosModel.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="BD\Services\MetodosCredenciales.cs" />
     <Compile Include="BD\Services\MetodosCRUD.cs" />
     <Compile Include="BD\Services\MetodosDetallesLibros.cs" />
+    <Compile Include="BD\Services\MetodosPrestamos.cs" />
     <Compile Include="CompraDeLibros\CompraLibros.xaml.cs">
       <DependentUpon>CompraLibros.xaml</DependentUpon>
     </Compile>

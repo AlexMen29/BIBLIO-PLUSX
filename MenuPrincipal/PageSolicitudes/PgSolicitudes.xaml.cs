@@ -20,6 +20,8 @@ using System.Windows.Shapes;
 using System.Data.SqlClient;
 using System.Windows.Media.Animation;
 using System.Text.RegularExpressions;
+using MenuPrincipal.PageUsuarios;
+using MenuPrincipal.BD.Services;
 
 namespace MenuPrincipal.PageSolicitudes
 {
@@ -30,11 +32,16 @@ namespace MenuPrincipal.PageSolicitudes
     {
         private ObtenerVistaCliente Libros;
         DatosGlobales datos = new DatosGlobales();
+        MetodosPrestamos metodos = new MetodosPrestamos();
+
         public string titulo;
         public int tipoPrestamo;
         private int contador = 0;
+        public DateTime devolucion;
+        public DateTime prestamo;
+        double costo = 0.0;
         public PgSolicitudes(string titulo, int tipoPrestamo)
-        { 
+        {
             this.titulo = titulo;
             this.tipoPrestamo = tipoPrestamo;
             InitializeComponent();
@@ -44,7 +51,7 @@ namespace MenuPrincipal.PageSolicitudes
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-          
+
             txbTiempo.Visibility = Visibility.Collapsed;
             txblTiempo.Visibility = Visibility.Collapsed;
             txbTiempo.IsEnabled = false;
@@ -55,18 +62,19 @@ namespace MenuPrincipal.PageSolicitudes
             cmbPlazo.SelectedIndex = 0;
             cmbTipoPrestamo.SelectedIndex = 0;
             cmbPlazo.SelectedIndex = 0;
+            txbTiempo.Text = "1-3 días aprox";
 
             if (tipoPrestamo == 1)
             {
                 txbFechaSolicitud.Visibility = Visibility.Collapsed;
                 txblFechaSolicitud.Visibility = Visibility.Collapsed;
             }
-            else {
+            else
+            {
                 txbFechaPrestamo.Visibility = Visibility.Collapsed;
                 txblFechaPrestamo.Visibility = Visibility.Collapsed;
-                tmPickerPrestamo.Visibility= Visibility.Collapsed;
+                tmPickerPrestamo.Visibility = Visibility.Collapsed;
                 btnPrestamo.Content = "Solicitar";
-                txblTiempo.Text = "1-3 días aprox";
             }
 
         }
@@ -118,6 +126,8 @@ namespace MenuPrincipal.PageSolicitudes
                 {
                     tmPickerPrestamo.SelectedTime = DateTime.Now;
                 }
+                devolucion = tmPickerDevolucion.SelectedTime.Value;
+                prestamo = tmPickerPrestamo.SelectedTime.Value;
             }
             else if (cmbPlazo.SelectedIndex == 1)
             {
@@ -130,7 +140,9 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionDias.DisplayDateStart = DateTime.Today;
                 txbFechaDevolucionDias.DisplayDateEnd = txbFechaDevolucionDias.DisplayDateStart.Value.AddDays(5);
                 txblFechaPrestamo.Text = "Fecha del Prestamo";
-                txblFechaDevolucion.Text= "Fecha del Prestamo";
+                txblFechaDevolucion.Text = "Fecha de Devolución";
+                devolucion = txbFechaDevolucionDias.SelectedDate.Value;
+                prestamo = txbFechaPrestamo.SelectedDate.Value;
             }
             else
             {
@@ -143,14 +155,16 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionSemanas.DisplayDateStart = DateTime.Today;
                 txbFechaDevolucionSemanas.DisplayDateEnd = txbFechaDevolucionSemanas.DisplayDateStart.Value.AddDays(28);
                 txblFechaPrestamo.Text = "Fecha del Prestamo";
-                txblFechaDevolucion.Text = "Fecha del Prestamo";
+                txblFechaDevolucion.Text = "Fecha de Devolución";
+                devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
+                prestamo = txbFechaPrestamo.SelectedDate.Value;
             }
         }
 
 
         private void txbCarne_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !Regex.IsMatch(e.Text, "^[0-9]$");
+            //e.Handled = !Regex.IsMatch(e.Text, "^[0-9]$");
         }
 
         private void txbCarne_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -239,6 +253,71 @@ namespace MenuPrincipal.PageSolicitudes
             }
         }
 
+        private void CalcularCosto() {
+            if (cmbPlazo.SelectedIndex == 0)
+            {
+                if (tmPickerPrestamo.SelectedTime.HasValue && tmPickerDevolucion.SelectedTime.HasValue)
+                {
+                    TimeSpan diferencia = tmPickerDevolucion.SelectedTime.Value - tmPickerPrestamo.SelectedTime.Value;
+                    int horas = (int)diferencia.TotalHours;
+                    switch (horas)
+                    {
+                        case 1: costo = 0.05; break;
+                        case 2: costo = 0.10; break;
+                        case 3: costo = 0.15; break;
+                        case 4: costo = 0.20; break;
+                        case 5: costo = 0.25; break;
+                        default:
+                            MessageBox.Show("El préstamo no puede exceder las 5 horas.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                    }
+                }
+            }
+            else if (cmbPlazo.SelectedIndex == 1) // Plazo por días
+            {
+                if (txbFechaPrestamo.SelectedDate.HasValue && txbFechaDevolucionDias.SelectedDate.HasValue)
+                {
+                    TimeSpan diferencia = txbFechaDevolucionDias.SelectedDate.Value - txbFechaPrestamo.SelectedDate.Value;
+                    int dias = diferencia.Days;
+
+                    // Calcular costo basado en la tabla de "días"
+                    switch (dias)
+                    {
+                        case 1: costo = 0.50; break;
+                        case 2: costo = 1.00; break;
+                        case 3: costo = 1.50; break;
+                        case 4: costo = 2.00; break;
+                        case 5: costo = 2.50; break;
+                        default:
+                            MessageBox.Show("El préstamo no puede exceder los 5 días.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                    }
+                }
+            }
+            else if (cmbPlazo.SelectedIndex == 2) // Plazo por semanas
+            {
+                if (txbFechaPrestamo.SelectedDate.HasValue && txbFechaDevolucionSemanas.SelectedDate.HasValue)
+                {
+                    TimeSpan diferencia = txbFechaDevolucionSemanas.SelectedDate.Value - txbFechaPrestamo.SelectedDate.Value;
+                    int semanas = (int)(diferencia.TotalDays / 7);
+
+                    // Calcular costo basado en la tabla de "semanas"
+                    switch (semanas)
+                    {
+                        case 1: costo = 3.00; break;
+                        case 2: costo = 4.00; break;
+                        case 3: costo = 5.00; break;
+                        case 4: costo = 6.00; break;
+                        case 5: costo = 7.00; break;
+                        default:
+                            MessageBox.Show("El préstamo no puede exceder las 5 semanas.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                    }
+                }
+
+            }
+        }
+
         private void btnPrestamo_Click(object sender, RoutedEventArgs e)
         {
             int minLength = 6;
@@ -250,6 +329,20 @@ namespace MenuPrincipal.PageSolicitudes
                        MessageBoxButton.OK,
                        MessageBoxImage.Warning);
             }
+            else
+            {
+                CalcularCosto();
+                MessageBox.Show("El costo del préstamo es: $" + costo.ToString("F2"), "Costo del Préstamo", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (metodos.RegistrarPrestamoCompleto(LlenarDatosBD()) == 0) {
+
+                    MessageBox.Show("Exito papi");
+                }
+                else {
+                    MessageBox.Show("Malo pue");
+                }
+                //MessageBox.Show("Id: " + ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text) );
+            }
+
         }
 
         private void tmPickerDevolucion_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
@@ -262,7 +355,7 @@ namespace MenuPrincipal.PageSolicitudes
                 DateTime tiempoDevolucion = tmPickerDevolucion.SelectedTime.Value;
 
                 // Calcular el tiempo máximo de devolución
-                DateTime tiempoMaximoDevolucion = tiempoPrestamo.AddHours(5);
+                DateTime tiempoMaximoDevolucion = tiempoPrestamo.AddHours(6);
                 DateTime horaActual = DateTime.Now;
 
 
@@ -286,6 +379,59 @@ namespace MenuPrincipal.PageSolicitudes
                     contador = 0;
                 }
             }
+        }
+
+        private IngresoPrestamo LlenarDatosBD()
+        {
+            IngresoPrestamo datos = null;
+
+            int UsuarioID = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
+            int LibroID = ObtenerID("SELECT TOP 1 Libros.LibroID FROM Ediciones JOIN DetallesLibros ON Ediciones.EdicionID = DetallesLibros.EdicionID JOIN Libros ON DetallesLibros.DetallesID = Libros.DetallesID WHERE Ediciones.Titulo = @Titulo;", "Cien años de Soledad");
+            DateTime FechaSolicitud = txbFechaSolicitud.SelectedDate.Value;
+            string EstadoSolicitud = "Aprobada";
+            string TiempoEspera = txbTiempo.Text;
+            DateTime FechaPrestamo = prestamo;
+            DateTime FechaDevolucion = devolucion;
+            string EstadoPrestamo = "Pendiente";
+            string TipoPrestamo = cmbTipoPrestamo.Text;
+            string TiempoEntrega = txbTiempo.Text;
+            int Renovaciones = 0;
+            DateTime FechaRenovacion = DateTime.Today;
+
+            return datos;
+        }
+
+        public int ObtenerID(string consultaSQL, string valor)
+        {
+            int id = -1; // Valor inicial del ID, en caso de que no se encuentre
+
+            using (SqlConnection connection = new SqlConnection(Properties.Settings.Default.conexionDB))
+            {
+                try
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(consultaSQL, connection))
+                    {
+                        // Agregar el parámetro @valor con el valor proporcionado
+                        command.Parameters.AddWithValue("@valor", valor);
+
+                        // Ejecutar la consulta y obtener el resultado
+                        object result = command.ExecuteScalar();
+
+                        // Si el resultado no es nulo, lo convertimos a entero
+                        if (result != null && int.TryParse(result.ToString(), out int parsedID))
+                        {
+                            id = parsedID;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener el ID: " + ex.Message);
+                }
+            }
+
+            return id;
         }
     }
 }

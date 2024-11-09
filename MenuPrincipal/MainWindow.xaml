@@ -84,13 +84,20 @@
                 <Label Content="Biblio Plus" FontSize="16" Foreground="White" FontWeight="Bold"/>
             </Grid>
 
-            <!-- Elementos de menú superior -->
             <StackPanel Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Column="1" Margin="5,0,10,0" Orientation="Horizontal">
-                <Button Background="Transparent" VerticalAlignment="Stretch">
-                    <materialDesign:PackIcon Kind="Cog"/>
+                <!-- Minimizar -->
+                <Button Width="40" Height="25" Click="Minimizar_Click" Background="Transparent" BorderBrush="Transparent" ToolTip="Minimizar">
+                    <TextBlock FontSize="14" Text="—" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Button>
-                <Button VerticalAlignment="Top" Background="Transparent">
-                    <materialDesign:PackIcon Kind="AccountCircle"/>
+
+                <!-- Maximizar/Restaurar -->
+                <Button Width="40" Height="25" Click="MaximizarRestaurar_Click" Background="Transparent" BorderBrush="Transparent" ToolTip="Maximizar">
+                    <TextBlock x:Name="MaximizarIcono" FontSize="12" Text="⬜" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Button>
+
+                <!-- Cerrar -->
+                <Button Width="40" Height="25" Click="Cerrar_Click" Background="Transparent" BorderBrush="Transparent" ToolTip="Cerrar">
+                    <TextBlock FontSize="14" Text="✕" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Button>
             </StackPanel>
 

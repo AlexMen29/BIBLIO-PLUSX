@@ -17,6 +17,7 @@ using MenuPrincipal.PagePrestamos;
 using MenuPrincipal.PageUsuarios;
 using MenuPrincipal.ActualizacionesDatos;
 using MenuPrincipal.CompraDeLibros;
+using MenuPrincipal.DatosGenerales;
 
 
 namespace MenuPrincipal
@@ -31,6 +32,44 @@ namespace MenuPrincipal
         public MainWindow()
         {
             InitializeComponent();
+
+            HabilitarDeshabilitar();
+            
+        }
+
+        private void Minimizar_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizarRestaurar_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+                MaximizarIcono.Text = "⬜";  // Cambiar el ícono a maximizar
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+                MaximizarIcono.Text = "❐";  // Cambiar el ícono a restaurar
+            }
+        }
+
+        private void Cerrar_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+
+        private void HabilitarDeshabilitar()
+        {
+            if (DatosGlobales.NivelUsuario==2)
+            {
+                btnActualizar.Visibility = Visibility.Collapsed;
+                btnComprarLibros.Visibility = Visibility.Collapsed;
+            }
+        
         }
 
 

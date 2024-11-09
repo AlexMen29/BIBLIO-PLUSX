@@ -13,53 +13,49 @@ namespace MenuPrincipal.PagePrestamos.service
     public class DatoPrestamo
     {
         public static List<PrestamoModel> CargarClasificacionPrestamos()
+{
+    List<PrestamoModel> listaPrestamos = new List<PrestamoModel>();
+
+    try
+    {
+        using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.conexionDB))
         {
-            List<PrestamoModel> listaPrestamos = new List<PrestamoModel>();
-
-            try
+            conn.Open();
+            using (SqlCommand command = conn.CreateCommand())
             {
-                using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "SPMOSTRARCLASIFICACIONPRESTAMOS";
+
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    conn.Open();
-                    using (SqlCommand command = conn.CreateCommand())
+                    while (reader.Read())
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "SPMOSTRARCLASIFICACIONPRESTAMOS";
-
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        var prestamo = new PrestamoModel
                         {
-                            while (reader.Read())
-                            {
-                                var prestamo = new PrestamoModel
-                                {
-                                    //Titulo = dr["Titulo"].ToString(),
-                                    PrestamoId = Convert.ToInt32(reader["ID"].ToString()),
-                                    Titulo = reader["Titulo"].ToString(),
-                                    TipoPrestamo = reader["TipoPrestamo"].ToString(),
-                                    FechaPrestamo = Convert.ToDateTime(reader["FechaPrestamo"].ToString()),
-                                    FechaDevolucion = Convert.ToDateTime(reader["FechaDevolucion"].ToString()),
-                                    EstadoPrestamo = reader["EstadoPrestamo"].ToString(),
-                                    TiempoEntrega = Convert.ToInt32(reader["TiempoEntrega"].ToString()),
-                                    Renovaciones = Convert.ToInt32(reader["Renovaciones"].ToString()),
-                                    FechaRenovacion = Convert.ToDateTime(reader["FechaRenovacion"].ToString())
-                                };
-                                listaPrestamos.Add(prestamo);
-
-
-
-
-
-                            }
-                        }
+                            PrestamoId = reader["ID"] != DBNull.Value && int.TryParse(reader["ID"].ToString(), out int prestamoId) ? prestamoId : 0,
+                            Titulo = reader["Titulo"]?.ToString() ?? "N/A",
+                            TipoPrestamo = reader["TipoPrestamo"]?.ToString() ?? "N/A",
+                            FechaPrestamo = DateTime.TryParse(reader["FechaPrestamo"]?.ToString(), out DateTime fechaPrestamo) ? fechaPrestamo : DateTime.MinValue,
+                            FechaDevolucion = DateTime.TryParse(reader["FechaDevolucion"]?.ToString(), out DateTime fechaDevolucion) ? fechaDevolucion : DateTime.MinValue,
+                            EstadoPrestamo = reader["EstadoPrestamo"]?.ToString() ?? "N/A",
+                            TiempoEntrega = reader["TiempoEntrega"] != DBNull.Value && int.TryParse(reader["TiempoEntrega"].ToString(), out int tiempoEntrega) ? tiempoEntrega : 0,
+                            Renovaciones = reader["Renovaciones"] != DBNull.Value && int.TryParse(reader["Renovaciones"].ToString(), out int renovaciones) ? renovaciones : 0,
+                            FechaRenovacion = reader["FechaRenovacion"] != DBNull.Value && DateTime.TryParse(reader["FechaRenovacion"].ToString(), out DateTime fechaRenovacion) ? (DateTime?)fechaRenovacion : null
+                        };
+                        listaPrestamos.Add(prestamo);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar los préstamos: " + ex.Message);
-            }
-
-            return listaPrestamos;
         }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show("Error al cargar los préstamos: " + ex.Message);
+    }
+
+    return listaPrestamos;
+}
+
+
     }
 }

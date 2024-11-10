@@ -22,7 +22,7 @@ namespace MenuPrincipal.PagePrestamos
         ColaModel LibroData;
 
         MetodosPrestamos metodoPrestamo = new MetodosPrestamos();
-        DatosGlobales datos= new DatosGlobales();
+        DatosGlobales datos = new DatosGlobales();
         DatoCola metodoModificar = new DatoCola();
 
         public string estadoPrestamo = "Activo";
@@ -33,10 +33,12 @@ namespace MenuPrincipal.PagePrestamos
         public Prestamos()
         {
             InitializeComponent();
-            //metodoModificar.ModificarAtrasado(ModificarEstado());//No funciona
+
+            //Verifca si algun pago esta atrasado y modifca su estado
             CargarClasificacionPrestamos();
             CargarDatosComboBox();
             dataGridCola.ItemsSource = DatoCola.MostrarDatosCola();
+            ActualizarEstado();
         }
 
         private void CargarClasificacionPrestamos()
@@ -81,7 +83,7 @@ namespace MenuPrincipal.PagePrestamos
                     .ToList();
             }
 
-            
+
 
             if (FechaDevolucionComboBox.SelectedItem != null && ((ComboBoxItem)FechaDevolucionComboBox.SelectedItem).Content.ToString() != "Ninguno")
             {
@@ -148,21 +150,89 @@ namespace MenuPrincipal.PagePrestamos
             aprobacion.FechaPrestamo = DateTime.Now;
             return aprobacion;
 
+
         }
 
-        private ColaModel ModificarEstado()
+
+
+        private void ActualizarEstado()
         {
 
-            // Assuming you have a way to get the value for 'valorSolicitudId'
-            int prestamoId = ObtenerID("SELECT PrestamoID FROM Prestamos WHERE SolicitudID = @valor", valorSolicitudId);
-            ColaModel tardio = new ColaModel
+            try
             {
-                PrestamoId = prestamoId
-            };
+                // Lista para almacenar los ID de los préstamos
+                List<int> idPrestamos = new List<int>();
 
-            return tardio;
+                // Recorremos las filas del DataGrid
+                foreach (var item in dataGridPrestamos.Items)
+                {
+                    // Hacemos un casting del item a la clase de datos que usas para enlazar el DataGrid (ajústalo al tipo de tu modelo, por ejemplo "Prestamo")
+                    var prestamo = item as PrestamoModel;  // Cambia "Prestamo" por la clase que tienes
+
+                    if (prestamo != null && prestamo.Estado != "Pagada")
+                    {
+                        // Si el estado no es "Pagada", agregamos el ID a la lista
+                        idPrestamos.Add(prestamo.PrestamoId);
+                    }
+                }
+
+                foreach (int PrestamoID in idPrestamos)
+                {
+                    metodoModificar.ModificarAtrasado(PrestamoID);
+                }
+                //Actualizar el dataGrid por si se modifico
+                CargarClasificacionPrestamos();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Fallo en la actualizacion de estados");
+            }
 
         }
+
+
+        //Verifcar que id sea valido segun estado()
+        private void HabilitarPagar()
+        {
+            try
+            {
+                // Lista para almacenar los ID de los préstamos con estado "Pagada"
+                List<int> idPrestamosPagados = new List<int>();
+
+                // Recorremos las filas del DataGrid
+                foreach (var item in dataGridPrestamos.Items)
+                {
+                    // Hacemos un casting del item a PrestamoModel
+                    var prestamo = item as PrestamoModel;
+
+                    if (prestamo != null && prestamo.Estado == "Pagado")
+                    {
+                        // Si el estado es "Pagada", agregamos el ID a la lista
+                        idPrestamosPagados.Add(prestamo.PrestamoId);
+                    }
+                }
+
+                // Revisa si el valor de txtIdPago.Text es uno de los ID en la lista
+                if (int.TryParse(txtIdPago.Text, out int idPago))
+                {
+                    // Deshabilitar el botón si el ID se encuentra en la lista de pagos
+                    btnPagar.IsEnabled = !idPrestamosPagados.Contains(idPago);
+                }
+                else
+                {
+                    // Si el valor de txtIdPago.Text no es un número válido, habilitamos el botón
+                    btnPagar.IsEnabled = true;
+                }
+            }
+            catch (Exception e)
+            {
+                // Captura y muestra el error inesperado
+                MessageBox.Show("Error inesperado: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                btnPagar.IsEnabled = true; // Aseguramos que el botón esté habilitado en caso de error
+            }
+        }
+
+
 
 
         private void btnPagar_Click_1(object sender, RoutedEventArgs e)
@@ -174,31 +244,38 @@ namespace MenuPrincipal.PagePrestamos
 
 
             bool validacion = datos.VerifcarTextBox(arr);
-
-            if (validacion == true)
+            if (txtCosto.Text == "N/A")
             {
-                MessageBoxResult resultado = MessageBox.Show("¿Desea continuar con la finalizacion del prestanmo?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (resultado == MessageBoxResult.Yes)
-                {
-
-
-                    if (metodoPrestamo.ActualizarEstadoPago(Convert.ToInt32(txtIdPago.Text)) == true)
-                    {
-                        MessageBox.Show("Pago Realizado", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
-                        CargarClasificacionPrestamos();
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error Inesperado, no se ha podido procesar el pago", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    }
-                }
+                MessageBox.Show("ID ingreado no aplica para esta operacion", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                txtIdPago.Text = null;
             }
             else
             {
-                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (validacion == true)
+                {
+                    MessageBoxResult resultado = MessageBox.Show("¿Desea continuar con la finalizacion del prestanmo?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (resultado == MessageBoxResult.Yes)
+                    {
 
+
+                        if (metodoPrestamo.ActualizarEstadoPago(Convert.ToInt32(txtIdPago.Text)) == true)
+                        {
+                            MessageBox.Show("Pago Realizado", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                            CargarClasificacionPrestamos();
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error Inesperado, no se ha podido procesar el pago", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
             }
 
         }
@@ -214,6 +291,7 @@ namespace MenuPrincipal.PagePrestamos
             }
 
             lblLibro.Content += $"Solicitud Seleccionada: {LibroData.Titulo}";
+
 
             valorSolicitudId = LibroData.SolicitudId.ToString();
             stockActual = int.Parse(LibroData.StockActual.ToString());
@@ -274,12 +352,17 @@ namespace MenuPrincipal.PagePrestamos
         {
             try
             {
+
+
+
+
                 if (txtIdPago != null)
                 {
                     decimal res = metodoPrestamo.CalcularCostoPrestamo(Convert.ToInt32(txtIdPago.Text));
                     if (res > 0)
                     {
                         txtCosto.Text = "$" + res.ToString();
+                        HabilitarPagar();
                     }
                     else
                     {
@@ -293,6 +376,10 @@ namespace MenuPrincipal.PagePrestamos
             }
 
         }
+
+      
+
+
         private void dataGridPrestamos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -310,5 +397,9 @@ namespace MenuPrincipal.PagePrestamos
 
         }
 
+        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            txtIdPago.Text=null;
+        }
     }
 }

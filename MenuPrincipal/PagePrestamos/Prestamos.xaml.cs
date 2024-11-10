@@ -22,7 +22,7 @@ namespace MenuPrincipal.PagePrestamos
         ColaModel LibroData;
 
         MetodosPrestamos metodoPrestamo = new MetodosPrestamos();
-        DatosGlobales datos= new DatosGlobales();
+        DatosGlobales datos = new DatosGlobales();
         DatoCola metodoModificar = new DatoCola();
 
         public string estadoPrestamo = "Activo";
@@ -83,7 +83,7 @@ namespace MenuPrincipal.PagePrestamos
                     .ToList();
             }
 
-            
+
 
             if (FechaDevolucionComboBox.SelectedItem != null && ((ComboBoxItem)FechaDevolucionComboBox.SelectedItem).Content.ToString() != "Ninguno")
             {
@@ -153,7 +153,7 @@ namespace MenuPrincipal.PagePrestamos
 
         }
 
-     
+
 
         private void ActualizarEstado()
         {
@@ -189,6 +189,50 @@ namespace MenuPrincipal.PagePrestamos
             }
 
         }
+
+
+        //Verifcar que id sea valido segun estado()
+        private void HabilitarPagar()
+        {
+            try
+            {
+                // Lista para almacenar los ID de los préstamos con estado "Pagada"
+                List<int> idPrestamosPagados = new List<int>();
+
+                // Recorremos las filas del DataGrid
+                foreach (var item in dataGridPrestamos.Items)
+                {
+                    // Hacemos un casting del item a PrestamoModel
+                    var prestamo = item as PrestamoModel;
+
+                    if (prestamo != null && prestamo.Estado == "Pagado")
+                    {
+                        // Si el estado es "Pagada", agregamos el ID a la lista
+                        idPrestamosPagados.Add(prestamo.PrestamoId);
+                    }
+                }
+
+                // Revisa si el valor de txtIdPago.Text es uno de los ID en la lista
+                if (int.TryParse(txtIdPago.Text, out int idPago))
+                {
+                    // Deshabilitar el botón si el ID se encuentra en la lista de pagos
+                    btnPagar.IsEnabled = !idPrestamosPagados.Contains(idPago);
+                }
+                else
+                {
+                    // Si el valor de txtIdPago.Text no es un número válido, habilitamos el botón
+                    btnPagar.IsEnabled = true;
+                }
+            }
+            catch (Exception e)
+            {
+                // Captura y muestra el error inesperado
+                MessageBox.Show("Error inesperado: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                btnPagar.IsEnabled = true; // Aseguramos que el botón esté habilitado en caso de error
+            }
+        }
+
+
 
 
         private void btnPagar_Click_1(object sender, RoutedEventArgs e)
@@ -308,12 +352,17 @@ namespace MenuPrincipal.PagePrestamos
         {
             try
             {
+
+
+
+
                 if (txtIdPago != null)
                 {
                     decimal res = metodoPrestamo.CalcularCostoPrestamo(Convert.ToInt32(txtIdPago.Text));
                     if (res > 0)
                     {
                         txtCosto.Text = "$" + res.ToString();
+                        HabilitarPagar();
                     }
                     else
                     {
@@ -327,6 +376,10 @@ namespace MenuPrincipal.PagePrestamos
             }
 
         }
+
+      
+
+
         private void dataGridPrestamos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 

@@ -277,6 +277,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>libromesyusuario.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageReport\visualReports\libros.cs">
       <DependentUpon>libros.xsd</DependentUpon>

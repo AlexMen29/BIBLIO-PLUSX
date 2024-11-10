@@ -43,8 +43,7 @@ namespace MenuPrincipal.MenuLibros
         {
             InitializeComponent();
             CargarDatos();
-            CargarLibrosRecientes();
-            CargarLibrosPoesia();
+            CargarLibros();
             this.Nivel = Nivel;
             datos.LlenarBoxFiltros(datos.consultaAutor, AutorComboBox, "NombreAutor");
             datos.LlenarBoxFiltros(datos.consultaEdiorial, EditorialComboBox, "NombreEditorial");
@@ -125,6 +124,23 @@ namespace MenuPrincipal.MenuLibros
             string query = "SELECT TOP 4 e.Titulo, e.Imagen, a.NombreAutor FROM Ediciones e INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID INNER JOIN Autores a ON d.AutorID = a.AutorID WHERE c.CategoriaID = 2 ORDER BY e.EdicionID DESC;";
             CargarElementosPorGenero(query, contentGridPoesia);
         }
+        private void CargarLibrosNovela()
+        {
+            string query = "SELECT TOP 4 e.Titulo, e.Imagen, a.NombreAutor FROM Ediciones e INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID INNER JOIN Autores a ON d.AutorID = a.AutorID WHERE c.CategoriaID = 1 ORDER BY e.EdicionID DESC;";
+            CargarElementosPorGenero(query, contentGridNovela);
+        }        
+        
+        private void CargarLibrosEnsayo()
+        {
+            string query = "SELECT TOP 4 e.Titulo, e.Imagen, a.NombreAutor FROM Ediciones e INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID INNER JOIN Autores a ON d.AutorID = a.AutorID WHERE c.CategoriaID = 3 ORDER BY e.EdicionID DESC;";
+            CargarElementosPorGenero(query, contentGridEnsayo);
+        }        
+        private void CargarLibrosBiografia()
+        {
+            string query = "SELECT TOP 4 e.Titulo, e.Imagen, a.NombreAutor FROM Ediciones e INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID INNER JOIN Autores a ON d.AutorID = a.AutorID WHERE c.CategoriaID = 4 ORDER BY e.EdicionID DESC;";
+            CargarElementosPorGenero(query, contentGridBiografia);
+        }
+        
 
         private void CargarLibrosTodos()
         {
@@ -141,10 +157,13 @@ namespace MenuPrincipal.MenuLibros
 
         }
 
-
-
-
-
+        public void CargarLibros() {
+            CargarLibrosRecientes();
+            CargarLibrosPoesia();
+            CargarLibrosNovela();
+            CargarLibrosEnsayo();
+            CargarLibrosBiografia();
+        }
 
         public void AplicarFiltro()
         {

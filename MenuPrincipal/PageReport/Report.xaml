@@ -34,14 +34,19 @@
                             <ComboBox x:Name="comboBoxAutor" Width="132" Margin="5,0,5,0" Height="24" SelectionChanged="ComboBox_SelectionChanged"/>
 
                             <TextBlock Text="Stock:" VerticalAlignment="Center" Width="45"/>
-                            <ComboBox x:Name="comboBoxEspecialidad" Width="66" Margin="5,0,5,0" Height="30" SelectionChanged="ComboBox_SelectionChanged"/>
-
+                            <ComboBox x:Name="comboBoxStock" Width="66" Margin="5,0,5,0" Height="30" SelectionChanged="comboBoxStock_SelectionChanged">
+                                <ComboBoxItem Content="0" />
+                                <ComboBoxItem Content="5" />
+                                <ComboBoxItem Content="10" />
+                                <ComboBoxItem Content="15" />
+                                <ComboBoxItem Content="Mayores de 15" />
+                            </ComboBox>
                             <Button Content="Generar Reporte" Width="66" Height="30" Margin="10,0,0,0" Click="GenerarReporteLibros"/>
                             <Button Name="btnLimpiar" Content="Limpiar Filtros" Click="btnLimpiar_Click" Width="77" Height="30" Margin="10"/>
                         </StackPanel>
 
                         <!-- Tabla de resultados de libros -->
-                        <DataGrid x:Name="dataGridLibros" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Auto" >
+                        <DataGrid x:Name="dataGridLibros" AutoGenerateColumns="False" IsReadOnly="True" Height="440" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="auto"/>
                                 <DataGridTextColumn Header="Categoría" Binding="{Binding Categoria}" Width="Auto"/>
@@ -57,28 +62,76 @@
             <TabItem Header="Proveedores y Empleados">
                 <Grid>
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
-                        <TextBlock Text="Reporte de Proveedores y Empleados" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="Reporte de Proveedores y Empleados" FontSize="18" FontWeight="Bold" />
 
-                        <!-- Filtros de Proveedores y Empleados -->
-                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
-                            <TextBlock Text="Proveedores:" VerticalAlignment="Center" Width="100"/>
-                            <ComboBox x:Name="comboBoxProveedores" Width="150" Margin="5,0,20,0"/>
+                        <!-- Sección de Usuarios -->
+                        <TextBlock Text="Usuarios" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0" />
 
-                            <TextBlock Text="Empleados:" VerticalAlignment="Center" Width="100"/>
-                            <ComboBox x:Name="comboBoxEmpleados" Width="150" Margin="5,0,20,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <TextBlock Text="Buscar en:" VerticalAlignment="Center" />
+                            <ComboBox x:Name="comboBoxUsuarioColumnas" Width="150" Margin="5,0,10,0">
+                                <ComboBoxItem Content="Nombres" />
+                                <ComboBoxItem Content="Apellidos" />
+                                <ComboBoxItem Content="Carnet" />
+                                <ComboBoxItem Content="Correo1" />
+                                <ComboBoxItem Content="Telefono1" />
+                                <ComboBoxItem Content="Colonia" />
+                                <ComboBoxItem Content="Calle" />
+                                <ComboBoxItem Content="Casa" />
+                                <ComboBoxItem Content="Municipio" />
+                                <ComboBoxItem Content="Departamento" />
+                                <ComboBoxItem Content="TipoUsuario" />
+                            </ComboBox>
 
-                            <Button Content="Generar Reporte" Width="138" Height="30" Click="GenerarReporteProveedoresEmpleados"/>
+                            <TextBox x:Name="textBoxFiltroUsuarios" Width="200" Margin="5,0,10,0" TextChanged="textBoxFiltroUsuarios_TextChanged" />
+                            <Button Content="Generar Reporte Usuarios" Width="150" Click="GenerarReporteUsuarios_Click" />
+                            <Button x:Name="btnLimpiar_Copiar" Content="Limpiar Filtros" Click="btnLimpiar_Copiar_Click" Width="77" Height="30" Margin="7,0,0,0"/>
                         </StackPanel>
 
-                        <!-- Tabla de resultados de proveedores y empleados -->
-                        <DataGrid x:Name="dataGridProveedoresEmpleados" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid x:Name="dataGridUsuarios" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,10" Height="175">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="auto"/>
-                                <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="Auto"/>
+                                <DataGridTextColumn Header="Nombres" Binding="{Binding Nombres}" Width="auto" />
+                                <DataGridTextColumn Header="Apellidos" Binding="{Binding Apellidos}" Width="auto" />
+                                <DataGridTextColumn Header="Carnet" Binding="{Binding Carnet}" Width="auto" />
+                                <DataGridTextColumn Header="Correo" Binding="{Binding Correo1}" Width="auto" />
+                                <DataGridTextColumn Header="Telefono" Binding="{Binding Telefono1}" Width="auto" />
+                                <DataGridTextColumn Header="Colonia" Binding="{Binding Colonia}" Width="auto" />
+                                <DataGridTextColumn Header="Calle" Binding="{Binding Calle}" Width="auto" />
+                                <DataGridTextColumn Header="Casa" Binding="{Binding Casa}" Width="auto" />
+                                <DataGridTextColumn Header="Municipio" Binding="{Binding Municipio}" Width="auto" />
+                                <DataGridTextColumn Header="Departamento" Binding="{Binding Departamento}" Width="auto" />
+                                <DataGridTextColumn Header="TipoUsuario" Binding="{Binding TipoUsuario}" Width="auto" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- Sección de Proveedores -->
+                        <TextBlock Text="Proveedores" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <TextBlock Text="Buscar en:" VerticalAlignment="Center" />
+                            <ComboBox x:Name="comboBoxProveedorColumnas" Width="150" Margin="5,0,10,0">
+                                <ComboBoxItem Content="NombreProveedor" />
+                                <ComboBoxItem Content="DUIProveedor" />
+                                <ComboBoxItem Content="TelefonoProveedor" />
+                                <ComboBoxItem Content="DireccionProveedor" />
+                            </ComboBox>
+
+                            <TextBox x:Name="textBoxFiltroProveedores" Width="200" Margin="5,0,10,0" TextChanged=" textBoxFiltroProveedores_TextChanged" />
+                            <Button Content="Generar Reporte Proveedores" Width="150" Click="GenerarReporteProveedores_Click" />
+                            <Button x:Name="btnLimpiar_Copiar1" Content="Limpiar Filtros" Click="btnLimpiar_Copiar1_Click" Width="77" Height="30" Margin="8,0,0,0"/>
+                        </StackPanel>
+
+                        <DataGrid x:Name="dataGridProveedores" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,10" Height="175">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Nombre Proveedor" Binding="{Binding NombreProveedor}" Width="auto" />
+                                <DataGridTextColumn Header="DUI" Binding="{Binding DUIProveedor}" Width="auto" />
+                                <DataGridTextColumn Header="Teléfono" Binding="{Binding TelefonoProveedor}" Width="auto" />
+                                <DataGridTextColumn Header="Dirección" Binding="{Binding DireccionProveedor}" Width="auto" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
                 </Grid>
+
             </TabItem>
 
             <!-- Análisis de Compras -->
@@ -90,18 +143,19 @@
                         <!-- Filtros para analizar compras -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBlock Text="Últimos Meses:" VerticalAlignment="Center" Width="100"/>
-                            <ComboBox x:Name="comboBoxPeriodoCompras" Width="150" Margin="5,0,20,0"/>
+                            <ComboBox x:Name="comboBoxPeriodoCompras" Width="150" Margin="5,0,20,0" SelectionChanged="ComboBox_SelectionChanged"/>
 
                             <Button Content="Generar Reporte" Width="141" Height="30" Click="GenerarReporteCompras"/>
+                            <Button x:Name="btnLimpiar_Copiar2" Content="Limpiar Filtros" Click="btnLimpiar_Copiar2_Click" Width="77" Height="30" Margin="6,0,0,0"/>
                         </StackPanel>
 
                         <!-- Tabla de análisis de compras -->
-                        <DataGrid x:Name="dataGridCompras" AutoGenerateColumns="False" IsReadOnly="True" VerticalScrollBarVisibility="Visible">
+                        <DataGrid x:Name="dataGridCompras" AutoGenerateColumns="False" IsReadOnly="True" Height="450">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Artículo" Binding="{Binding Articulo}" Width="auto"/>
                                 <DataGridTextColumn Header="Fecha de Compra" Binding="{Binding FechaCompra}" Width="Auto"/>
                                 <DataGridTextColumn Header="Cantidad" Binding="{Binding Cantidad}" Width="Auto"/>
-                                <DataGridTextColumn Header="Precio Total" Binding="{Binding totalcompra}" Width="Auto"/>
+                                <DataGridTextColumn Header="Precio Total" Binding="{Binding PrecioTotal}" Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
@@ -109,14 +163,13 @@
             </TabItem>
 
             <!-- Libros más prestados -->
-            <TabItem Header="Libros más prestados">
+            <TabItem Header="Libros más prestados" Cursor="Hand">
                 <Grid>
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
                         <TextBlock Text="Libros Más Prestados" FontSize="18" FontWeight="Bold"/>
-                        <Button Content="Generar Reporte" Width="142" Height="30" Margin="0,10,0,0" Click="GenerarReporteLibrosMasPrestados"/>
-
+                        <Button Content="Generar Reporte" Width="142" Height="30" Click="GenerarReporteLibrosMasPrestados"/>
                         <!-- Tabla de libros más prestados -->
-                        <DataGrid x:Name="dataGridLibrosMasPrestados" AutoGenerateColumns="False" IsReadOnly="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible">
+                        <DataGrid x:Name="dataGridLibrosMasPrestados" AutoGenerateColumns="False" IsReadOnly="True" Height="460">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="Auto"/>
                                 <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="Auto"/>
@@ -134,10 +187,10 @@
                 <Grid>
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
                         <TextBlock Text="Designación del Lector y Libro del Mes" FontSize="18" FontWeight="Bold"/>
-                        <Button Content="Generar Designación" Width="168" Height="30" Margin="0,10,0,0" Click="GenerarLectorYLibroDelMes"/>
+                        <Button Content="Generar Designación" Width="168" Height="30" Margin="0,10,0,0" Click="Button_Click"  />
 
                         <!-- Resultados de la designación -->
-                        <TextBlock x:Name="textBlockLectorDelMes" Text="Lector del Mes: [Nombre del Lector]" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0"/>
+                        <TextBlock x:Name="textBlockLectorDelMes" Text="Lector del Mes: [Nombre del Lector]" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0" Cursor="Hand"/>
                         <TextBlock x:Name="textBlockLibroDelMes" Text="Libro del Mes: [Título del Libro]" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0"/>
                     </StackPanel>
                 </Grid>

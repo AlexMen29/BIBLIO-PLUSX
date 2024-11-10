@@ -16,12 +16,17 @@ namespace MenuPrincipal.BD.Models
         public DateTime FechaSolicitud {  get; set; }
         public DateTime FechaDevolucion { get; set; }
         public string TipoPrestamo { get; set; }
+        public string Carnet {  get; set; }
 
         //Modificar
         public string EstadoPrestamo { get; set; }
         public DateTime FechaPrestamo { get; set; }
         public string EstadoSolicitud { get; set; }
         public int StockActual {  get; set; }
+
+        //Modificar(Tentativo porque Capaz necesito otra clase)
+        public string Estado { get; set; }
+
 
     }
 }

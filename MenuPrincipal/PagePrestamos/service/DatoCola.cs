@@ -42,7 +42,8 @@ namespace MenuPrincipal.PagePrestamos.service
                                     FechaDevolucion = Convert.ToDateTime(dr["FechaDevolucion"].ToString()),
                                     TipoPrestamo = dr["TipoPrestamo"].ToString(),
                                     EstadoPrestamo = dr["EstadoPrestamo"].ToString(),
-                                    StockActual = int.Parse(dr["StockActual"].ToString())
+                                    StockActual = int.Parse(dr["StockActual"].ToString()),
+                                    Carnet = dr["Carnet"].ToString()
                                 };
                                 lstSolicitudes.Add(cola);
                             }
@@ -76,6 +77,37 @@ namespace MenuPrincipal.PagePrestamos.service
                         command.Parameters.AddWithValue("@EstadoPrestamo", modificacion.EstadoPrestamo);
                         command.Parameters.AddWithValue("@EstadoSolicitud", modificacion.EstadoSolicitud);
                         command.Parameters.AddWithValue("@FechaPrestamo", modificacion.FechaPrestamo);
+
+                        resultado = command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ocurrió un error: " + e.Message, "Error de consulta", MessageBoxButton.OK, MessageBoxImage.Error);
+                resultado = -1; // Retornar un valor específico en caso de error
+            }
+
+            return resultado; // Devolver el resultado de la ejecución
+        } 
+
+        public int ModificarAtrasado(ColaModel atraso)
+        {
+            int resultado = 0; // Variable para almacenar el resultado de la ejecución
+
+            try
+            {
+                using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "sp_ModificarEstadoAtrasado";
+
+                        command.Parameters.AddWithValue("@PrestamoId", atraso.PrestamoId);
+                        command.Parameters.AddWithValue("@FechaDevolucion", atraso.FechaDevolucion);
 
                         resultado = command.ExecuteNonQuery();
                     }

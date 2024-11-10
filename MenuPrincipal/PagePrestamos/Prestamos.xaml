@@ -152,6 +152,7 @@
                             <DataGrid x:Name="dataGridCola" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0" SelectionChanged="dataGridCola_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="ID Solicitudes" Binding="{Binding SolicitudId}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Carnet" Binding="{Binding Carnet}" Width="Auto"/>
                                     <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
                                     <DataGridTextColumn Header="Fecha Solicitud" Binding="{Binding FechaSolicitud, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
                                     <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>

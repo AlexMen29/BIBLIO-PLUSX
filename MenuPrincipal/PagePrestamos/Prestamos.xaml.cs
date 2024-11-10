@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using MaterialDesignThemes.Wpf;
 using MenuPrincipal.PageUsuarios;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 
 namespace MenuPrincipal.PagePrestamos
@@ -19,6 +20,7 @@ namespace MenuPrincipal.PagePrestamos
     public partial class Prestamos : Page
     {
         ColaModel LibroData;
+
         MetodosPrestamos metodoPrestamo = new MetodosPrestamos();
         DatosGlobales datos= new DatosGlobales();
         DatoCola metodoModificar = new DatoCola();
@@ -31,6 +33,7 @@ namespace MenuPrincipal.PagePrestamos
         public Prestamos()
         {
             InitializeComponent();
+            metodoModificar.ModificarAtrasado(ModificarEstado());//No funciona
             CargarClasificacionPrestamos();
             CargarDatosComboBox();
             dataGridCola.ItemsSource = DatoCola.MostrarDatosCola();
@@ -147,6 +150,20 @@ namespace MenuPrincipal.PagePrestamos
 
         }
 
+        private ColaModel ModificarEstado()
+        {
+
+            // Assuming you have a way to get the value for 'valorSolicitudId'
+            int prestamoId = ObtenerID("SELECT PrestamoID FROM Prestamos WHERE SolicitudID = @valor", valorSolicitudId);
+            ColaModel tardio = new ColaModel
+            {
+                PrestamoId = prestamoId
+            };
+
+            return tardio;
+
+        }
+
 
         private void btnPagar_Click_1(object sender, RoutedEventArgs e)
         {
@@ -185,7 +202,6 @@ namespace MenuPrincipal.PagePrestamos
             }
 
         }
-
 
         private void dataGridCola_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -292,7 +308,7 @@ namespace MenuPrincipal.PagePrestamos
             txtIdPago.Text = datos.PrestamoId.ToString();
             txtIdPagoR.Text = datos.PrestamoId.ToString();
 
-
         }
+
     }
 }

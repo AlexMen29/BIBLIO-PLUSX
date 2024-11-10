@@ -94,33 +94,38 @@ namespace MenuPrincipal.DetallesL
 
         private void CargarImgDes()
         {
-                List<object> ListImgDes = datos.ObtenerImgDescripcionPorTitulo(Libros.Titulo); //Cambio Correcto
+            try { 
+                    List<object> ListImgDes = datos.ObtenerImgDescripcionPorTitulo(Libros.Titulo); //Cambio Correcto
 
-                // Asegurarse de que haya datos en la lista
-                if (ListImgDes != null) //Cambio Correcto
-                {
-
-                    // Manejar la imagen
-                    byte[] imagenBytes = ListImgDes[0] as byte[];
-                    if (imagenBytes != null)
+                    // Asegurarse de que haya datos en la lista
+                    if (ListImgDes != null) //Cambio Correcto
                     {
-                        // Convertir los bytes a BitmapImage usando el método
-                        BitmapImage imagen = datos.ConvertirABitmapImage(imagenBytes);
-                        var viewModel = new { ImageData = imagen };
 
-                        // Asignar el DataContext de la ventana o del control que contiene la imagen
-                        this.DataContext = viewModel;
+                        // Manejar la imagen
+                        byte[] imagenBytes = ListImgDes[0] as byte[];
+                        if (imagenBytes != null)
+                        {
+                            // Convertir los bytes a BitmapImage usando el método
+                            BitmapImage imagen = datos.ConvertirABitmapImage(imagenBytes);
+                            var viewModel = new { ImageData = imagen };
 
+                            // Asignar el DataContext de la ventana o del control que contiene la imagen
+                            this.DataContext = viewModel;
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("No se encontró una imagen para esta edición.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("No se encontró una imagen para esta edición.", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("No se encontraron datos para esta edición.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
-                }
-                else
-                {
-                    MessageBox.Show("No se encontraron datos para esta edición.", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
+            }
+            catch (Exception error){
+                MessageBox.Show("ERROR #MIAU33: Error Desconocido en el metodo de mostrar imagenes: " + error);
+            }
         }
 
         private void LlenarDatos() {

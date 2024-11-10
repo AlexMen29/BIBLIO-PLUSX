@@ -109,8 +109,33 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            <TabItem Header="Cola de Espera">
+                <Grid>
+                    <ScrollViewer Margin="0,10,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Cola de Espera" FontSize="18" FontWeight="Bold"/>
 
-           
+                            <!-- Tabla de clasificación de préstamos -->
+                            <DataGrid x:Name="dataGridCola" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID Solicitudes" Binding="{Binding SolicitudId}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Fecha Solicitud" Binding="{Binding FechaSolicitud, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Estado de Solicitud" Binding="{Binding EstadoSolicitud}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Tipo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
+                                <Label Content="Libro Seleccionado: EX" Margin="10,0,200,0"/>
+                                <Button Width="158" Content="Aprobar"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Page>

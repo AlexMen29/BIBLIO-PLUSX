@@ -160,9 +160,12 @@ namespace MenuPrincipal.DetallesL
                 if (boxResult == MessageBoxResult.Yes)
                 {
                     tipoPrestamo = 1;
+                    MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
                     PgSolicitudes pg = new PgSolicitudes(titulo, tipoPrestamo);
-                    MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
                     mainWindow.NavegarAContenido(pg);
+                    
+                   
+                   //MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
                     
                 }
                 this.Close();

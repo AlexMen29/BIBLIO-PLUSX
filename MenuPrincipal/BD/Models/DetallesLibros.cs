@@ -15,6 +15,10 @@ namespace MenuPrincipal.BD.Models
         public string Categoria { get; set; }
         public string Edicion { get; set; }
         public int StockActual { get; set; }
+        public int StockMinimo { get; set; }
+        public int StockMaximo { get; set; }
+ 
+        
 
         public DetallesLibros() { }
     }

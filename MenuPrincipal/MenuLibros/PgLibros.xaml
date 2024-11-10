@@ -210,6 +210,8 @@
                             <DataGridTextColumn Header="Categoría" Binding="{Binding Categoria}" Width="*" />
                             <DataGridTextColumn Header="Edicion" Binding="{Binding Edicion}" Width="*" />
                             <DataGridTextColumn Header="Stock" Binding="{Binding StockActual}" Width="*" />
+                            <DataGridTextColumn Header="Min" Binding="{Binding StockMinimo}" Width="*" />
+                            <DataGridTextColumn Header="Max" Binding="{Binding StockMaximo}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
 

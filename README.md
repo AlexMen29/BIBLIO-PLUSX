@@ -1,2 +1,2 @@
->[!NOTE]
+>[!Warning]
 >Exportar Base de Datos

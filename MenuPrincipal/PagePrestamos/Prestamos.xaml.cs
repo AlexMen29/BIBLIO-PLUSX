@@ -33,7 +33,7 @@ namespace MenuPrincipal.PagePrestamos
         public Prestamos()
         {
             InitializeComponent();
-            metodoModificar.ModificarAtrasado(ModificarEstado());//No funciona
+            //metodoModificar.ModificarAtrasado(ModificarEstado());//No funciona
             CargarClasificacionPrestamos();
             CargarDatosComboBox();
             dataGridCola.ItemsSource = DatoCola.MostrarDatosCola();
@@ -89,13 +89,13 @@ namespace MenuPrincipal.PagePrestamos
 
                 string Fecha = ((ComboBoxItem)FechaDevolucionComboBox.SelectedItem).Content.ToString();
 
-                if (Fecha == "Proximo")
+                if (Fecha == "Más Próximo")
                 {
                     librosFiltrados = librosFiltrados
                         .OrderByDescending(libro => libro.FechaDevolucion) // Ordenar de mayor a menor
                         .ToList();
                 }
-                else if (Fecha == "Entregados")
+                else if (Fecha == "Más Antiguo")
                 {
                     librosFiltrados = librosFiltrados
                         .OrderBy(libro => libro.FechaDevolucion) // Ordenar de menor a mayor

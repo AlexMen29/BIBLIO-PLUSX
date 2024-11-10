@@ -148,7 +148,7 @@ namespace MenuPrincipal.BD.Services
                     using (var command = conn.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "SP_ActualizarEstadoPago"; // Nombre del procedimiento almacenado
+                        command.CommandText = "SP_ActualizarEstadoPagos"; // Nombre del procedimiento almacenado
 
                         // Agregar el parámetro necesario para el procedimiento almacenado
                         command.Parameters.AddWithValue("@PrestamoID", prestamoID);

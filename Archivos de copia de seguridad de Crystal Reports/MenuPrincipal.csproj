@@ -43,9 +43,15 @@
     <Reference Include="Azure.Identity, Version=1.11.4.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\packages\Azure.Identity.1.11.4\lib\netstandard2.0\Azure.Identity.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine">
+      <HintPath>..\..\..\..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win64_x64\dotnet\CrystalDecisions.CrystalReports.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.ReportSource">
+      <HintPath>..\..\..\..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win64_x64\dotnet\CrystalDecisions.ReportSource.dll</HintPath>
+    </Reference>
+    <Reference Include="CrystalDecisions.Shared">
+      <HintPath>..\..\..\..\..\..\program files (x86)\sap businessobjects\crystal reports for .net framework 4.0\common\sap businessobjects enterprise xi 4.0\win64_x64\dotnet\CrystalDecisions.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=2.0.4.3, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.4\lib\net452\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -215,6 +221,7 @@
     <Compile Include="BD\Models\AutoresModel.cs" />
     <Compile Include="BD\Models\CarreraModel.cs" />
     <Compile Include="BD\Models\CategoriasModel.cs" />
+    <Compile Include="BD\Models\ColaModel.cs" />
     <Compile Include="BD\Models\ComprasModel.cs" />
     <Compile Include="BD\Models\CrearDatoLibroModel.cs" />
     <Compile Include="BD\Models\CredencialesModel.cs" />
@@ -263,8 +270,15 @@
     <Compile Include="PagePrestamos\Prestamos.xaml.cs">
       <DependentUpon>Prestamos.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PagePrestamos\service\DatoCola.cs" />
     <Compile Include="PagePrestamos\service\DatoPago.cs" />
     <Compile Include="PagePrestamos\service\DatoPrestamo.cs" />
+    <Compile Include="PageReport\visualReports\libromesyusuario.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>libromesyusuario.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PageReport\visualReports\libros.cs">
       <DependentUpon>libros.xsd</DependentUpon>
     </Compile>
@@ -279,10 +293,34 @@
     <Compile Include="PageReport\subpagereport\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PageReport\visualReports\reportcompras.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>reportcompras.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PageReport\visualReports\reportLibroMasMostrado.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>reportLibroMasMostrado.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PageReport\visualReports\reportLibros.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reportLibros.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PageReport\visualReports\reportproveedore.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>reportproveedore.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PageReport\visualReports\reportProveedoresEmpleados.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>reportProveedoresEmpleados.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageSolicitudes\PgSolicitudes.xaml.cs">
@@ -306,9 +344,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="PageReport\visualReports\libromesyusuario.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>libromesyusuario.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PageReport\visualReports\reportcompras.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>reportcompras.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PageReport\visualReports\reportLibroMasMostrado.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>reportLibroMasMostrado.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="PageReport\visualReports\reportLibros.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>reportLibros.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PageReport\visualReports\reportproveedore.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>reportproveedore.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PageReport\visualReports\reportProveedoresEmpleados.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>reportProveedoresEmpleados.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -417,7 +475,9 @@
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\book-removebg-preview %281%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

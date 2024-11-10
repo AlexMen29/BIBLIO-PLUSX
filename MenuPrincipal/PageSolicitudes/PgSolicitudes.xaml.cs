@@ -366,39 +366,46 @@ namespace MenuPrincipal.PageSolicitudes
             }
             else
             {
-                CalcularCosto();
-                if (costo > 0)
+                int respuesta = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
+                if (respuesta == -1)
                 {
-                    MessageBoxResult boxResult = MessageBox.Show($"El costo del préstamo es: ${costo.ToString("F2")}\n¿Desea Continuar?", "Costo del Préstamo", MessageBoxButton.YesNo, MessageBoxImage.Information);
-
-                    if (boxResult == MessageBoxResult.Yes)
+                    MessageBox.Show("Carnet no encontrado: " + respuesta, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else {        
+                    CalcularCosto();
+                    if (costo > 0)
                     {
-                        try
-                        {
-                            if (cmbPlazo.SelectedIndex == 0)
-                            {
-                                devolucion = tmPickerDevolucion.SelectedTime.Value;
-                            }
-                            else if (cmbPlazo.SelectedIndex == 1)
-                            {
-                                devolucion = txbFechaDevolucionDias.SelectedDate.Value;
-                            }
-                            else
-                            {
-                                devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
-                            }
+                        MessageBoxResult boxResult = MessageBox.Show($"El costo del préstamo es: ${costo.ToString("F2")}\n¿Desea Continuar?", "Costo del Préstamo", MessageBoxButton.YesNo, MessageBoxImage.Information);
 
-                            metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
-                            MessageBox.Show($"prestamo: {prestamo}\ndevolucion: {devolucion}");
-                        }
-                        catch (Exception ex)
+                        if (boxResult == MessageBoxResult.Yes)
                         {
-                            MessageBox.Show("ERROR INESPERADO: " + ex);
+                            try
+                            {
+                                if (cmbPlazo.SelectedIndex == 0)
+                                {
+                                    devolucion = tmPickerDevolucion.SelectedTime.Value;
+                                }
+                                else if (cmbPlazo.SelectedIndex == 1)
+                                {
+                                    devolucion = txbFechaDevolucionDias.SelectedDate.Value;
+                                }
+                                else
+                                {
+                                    devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
+                                }
+
+                                metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
+                                MessageBox.Show($"prestamo: {prestamo}\ndevolucion: {devolucion}");
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("ERROR INESPERADO: " + ex);
+                            }
                         }
+                        PgLibros Page1 = new PgLibros(0);
+                        MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+                        mainWindow.NavegarAContenido(Page1);
                     }
-                    PgLibros Page1 = new PgLibros(0);
-                    MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-                    mainWindow.NavegarAContenido(Page1);
                 }
             }
 

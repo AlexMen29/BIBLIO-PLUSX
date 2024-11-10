@@ -736,5 +736,42 @@ namespace MenuPrincipal.PageReport
         {
             GenerarDesignacionLectorYLibroDelMes();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            // Verificar si el DataGrid tiene datos visibles
+            if (dataGridLibros.Items.Count == 0)
+            {
+                MessageBox.Show("No se encontraron datos para el reporte con los filtros seleccionados.");
+                return;
+            }
+
+            libromesyusuario rpt = new libromesyusuario();
+            libros dsLibros = new libros();
+            DataTable dataTableLibros = dsLibros.Tables["DataTable6"]; // Usar el nombre correcto de la tabla
+
+            if (dataTableLibros == null)
+            {
+                MessageBox.Show("La tabla 'DataTable6' no existe en el DataSet.");
+                return;
+            }
+
+            dataTableLibros.Clear();
+
+            // Añadir una fila con los datos del Lector y Libro del Mes
+            DataRow newRow = dataTableLibros.NewRow();
+            newRow["DataColumn1"] = textBlockLectorDelMes.Text.Replace("Lector del Mes: ", "");
+            newRow["DataColumn2"] = textBlockLibroDelMes.Text.Replace("Libro del Mes: ", "");
+            dataTableLibros.Rows.Add(newRow);
+
+            // Enviar el DataTable al reporte
+            rpt.SetDataSource(dsLibros);
+
+            // Mostrar el reporte en el visor
+            Window1 visor = new Window1();
+            visor.reportelibros.ViewerCore.ReportSource = rpt;
+            visor.ShowDialog();
+        }
+
     }
 }

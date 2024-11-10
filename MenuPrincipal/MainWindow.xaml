@@ -54,7 +54,7 @@
                             <Button x:Name="btnUsuarios" Content="Usuarios" Width="140" Height="30" Margin="0,12,0,0" Cursor="Hand" Click="btnUsuarios_Click"/>
                             <Button x:Name="btnActualizar" Content="Datos" Width="140" Height="30" Margin="0,12,0,0" Cursor="Hand" Click="btnActualizar_Click"/>
                             <Button x:Name="btnComprarLibros" Content="Compra de Libros" Width="140" Height="30" Margin="0,12,0,0" Cursor="Hand" Click="btnComprarLibros_Click"/>
-                            <Button x:Name="btnreport" Content="report" Width="140"  Height="30" Margin="0,12,0,0" Click="btnreport_Click" Cursor="Hand"/>
+                            <Button x:Name="btnreport" Content="Reportes" Width="140"  Height="30" Margin="0,12,0,0" Click="btnreport_Click" Cursor="Hand"/>
                         </StackPanel>
                     </Grid>
                 </Grid>

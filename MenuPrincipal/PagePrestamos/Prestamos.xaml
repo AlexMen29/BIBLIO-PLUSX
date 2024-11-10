@@ -74,7 +74,7 @@
                                         <DataGridTextColumn Header="ID Préstamo" Binding="{Binding PrestamoId}" Width="Auto"/>
                                         <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
                                         <DataGridTextColumn Header="Fecha Prestamo" Binding="{Binding FechaPrestamo, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
-                                        <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                        <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion}" Width="Auto"/>
                                         <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="Auto"/>
                                         <DataGridTextColumn Header="Tipo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
                                         <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
@@ -98,7 +98,7 @@
                                         <Button x:Name="btnPagar" Content="Pagar" Width="150" Height="30" Margin="10,10"
                                     FontWeight="Bold" Cursor="Hand" HorizontalAlignment="Center" Click="btnPagar_Click_1"/>
                                         <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30"
-                                    FontWeight="Bold" Cursor="Hand" HorizontalAlignment="Center"/>
+                                    FontWeight="Bold" Cursor="Hand" HorizontalAlignment="Center" Click="btnCancelar_Click"/>
                                     </StackPanel>
                                 </StackPanel>
 

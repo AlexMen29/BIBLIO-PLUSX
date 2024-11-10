@@ -91,7 +91,7 @@ namespace MenuPrincipal.PagePrestamos.service
             return resultado; // Devolver el resultado de la ejecución
         } 
 
-        public int ModificarAtrasado(ColaModel atraso)
+        public int ModificarAtrasado(int ID)
         {
             int resultado = 0; // Variable para almacenar el resultado de la ejecución
 
@@ -104,11 +104,9 @@ namespace MenuPrincipal.PagePrestamos.service
                     using (var command = conn.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "sp_ModificarEstadoAtrasado";
+                        command.CommandText = "sp_ModificarEstadoAtrasados";
 
-                        command.Parameters.AddWithValue("@PrestamoId", atraso.PrestamoId);
-                        command.Parameters.AddWithValue("@FechaDevolucion", atraso.FechaDevolucion);
-
+                        command.Parameters.AddWithValue("@PrestamoId", ID);
                         resultado = command.ExecuteNonQuery();
                     }
                 }

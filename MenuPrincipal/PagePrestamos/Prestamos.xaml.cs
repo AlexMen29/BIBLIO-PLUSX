@@ -33,10 +33,12 @@ namespace MenuPrincipal.PagePrestamos
         public Prestamos()
         {
             InitializeComponent();
-            //metodoModificar.ModificarAtrasado(ModificarEstado());//No funciona
+
+            //Verifca si algun pago esta atrasado y modifca su estado
             CargarClasificacionPrestamos();
             CargarDatosComboBox();
             dataGridCola.ItemsSource = DatoCola.MostrarDatosCola();
+            ActualizarEstado();
         }
 
         private void CargarClasificacionPrestamos()
@@ -148,19 +150,43 @@ namespace MenuPrincipal.PagePrestamos
             aprobacion.FechaPrestamo = DateTime.Now;
             return aprobacion;
 
+
         }
 
-        private ColaModel ModificarEstado()
+     
+
+        private void ActualizarEstado()
         {
 
-            // Assuming you have a way to get the value for 'valorSolicitudId'
-            int prestamoId = ObtenerID("SELECT PrestamoID FROM Prestamos WHERE SolicitudID = @valor", valorSolicitudId);
-            ColaModel tardio = new ColaModel
+            try
             {
-                PrestamoId = prestamoId
-            };
+                // Lista para almacenar los ID de los préstamos
+                List<int> idPrestamos = new List<int>();
 
-            return tardio;
+                // Recorremos las filas del DataGrid
+                foreach (var item in dataGridPrestamos.Items)
+                {
+                    // Hacemos un casting del item a la clase de datos que usas para enlazar el DataGrid (ajústalo al tipo de tu modelo, por ejemplo "Prestamo")
+                    var prestamo = item as PrestamoModel;  // Cambia "Prestamo" por la clase que tienes
+
+                    if (prestamo != null && prestamo.Estado != "Pagada")
+                    {
+                        // Si el estado no es "Pagada", agregamos el ID a la lista
+                        idPrestamos.Add(prestamo.PrestamoId);
+                    }
+                }
+
+                foreach (int PrestamoID in idPrestamos)
+                {
+                    metodoModificar.ModificarAtrasado(PrestamoID);
+                }
+                //Actualizar el dataGrid por si se modifico
+                CargarClasificacionPrestamos();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Fallo en la actualizacion de estados");
+            }
 
         }
 
@@ -174,31 +200,38 @@ namespace MenuPrincipal.PagePrestamos
 
 
             bool validacion = datos.VerifcarTextBox(arr);
-
-            if (validacion == true)
+            if (txtCosto.Text == "N/A")
             {
-                MessageBoxResult resultado = MessageBox.Show("¿Desea continuar con la finalizacion del prestanmo?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (resultado == MessageBoxResult.Yes)
-                {
-
-
-                    if (metodoPrestamo.ActualizarEstadoPago(Convert.ToInt32(txtIdPago.Text)) == true)
-                    {
-                        MessageBox.Show("Pago Realizado", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
-                        CargarClasificacionPrestamos();
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error Inesperado, no se ha podido procesar el pago", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    }
-                }
+                MessageBox.Show("ID ingreado no aplica para esta operacion", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                txtIdPago.Text = null;
             }
             else
             {
-                MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (validacion == true)
+                {
+                    MessageBoxResult resultado = MessageBox.Show("¿Desea continuar con la finalizacion del prestanmo?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (resultado == MessageBoxResult.Yes)
+                    {
 
+
+                        if (metodoPrestamo.ActualizarEstadoPago(Convert.ToInt32(txtIdPago.Text)) == true)
+                        {
+                            MessageBox.Show("Pago Realizado", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+                            CargarClasificacionPrestamos();
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error Inesperado, no se ha podido procesar el pago", "Error", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                }
             }
 
         }
@@ -214,6 +247,7 @@ namespace MenuPrincipal.PagePrestamos
             }
 
             lblLibro.Content += $"Solicitud Seleccionada: {LibroData.Titulo}";
+
 
             valorSolicitudId = LibroData.SolicitudId.ToString();
             stockActual = int.Parse(LibroData.StockActual.ToString());
@@ -310,5 +344,9 @@ namespace MenuPrincipal.PagePrestamos
 
         }
 
+        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        {
+            txtIdPago.Text=null;
+        }
     }
 }

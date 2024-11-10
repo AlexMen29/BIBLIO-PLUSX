@@ -273,6 +273,11 @@
     <Compile Include="PagePrestamos\service\DatoCola.cs" />
     <Compile Include="PagePrestamos\service\DatoPago.cs" />
     <Compile Include="PagePrestamos\service\DatoPrestamo.cs" />
+    <Compile Include="PageReport\visualReports\libromesyusuario.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>libromesyusuario.rpt</DependentUpon>
+    </Compile>
     <Compile Include="PageReport\visualReports\libros.cs">
       <DependentUpon>libros.xsd</DependentUpon>
     </Compile>
@@ -338,6 +343,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="PageReport\visualReports\libromesyusuario.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>libromesyusuario.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="PageReport\visualReports\reportcompras.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>reportcompras.cs</LastGenOutput>
@@ -465,7 +474,9 @@
   <ItemGroup>
     <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\book-removebg-preview %281%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

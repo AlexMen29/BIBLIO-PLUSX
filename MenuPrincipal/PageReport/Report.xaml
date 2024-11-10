@@ -185,10 +185,10 @@
             <!-- Lector y Libro del Mes -->
             <TabItem Header="Lector y Libro del Mes">
                 <Grid>
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+                    <StackPanel Orientation="Vertical" Margin="0,10,0,10" Cursor="Hand">
                         <TextBlock Text="Designación del Lector y Libro del Mes" FontSize="18" FontWeight="Bold"/>
-                        <Button Content="Generar Designación" Width="168" Height="30" Margin="0,10,0,0" Click="Button_Click"  />
-
+                        <Button Content="Generar Reporte" Width="142" Height="30" Click="Button_Click_1" Cursor="Hand" HorizontalAlignment="Right"/>
+                        <Button Content="Generar Designación" Width="168" Height="30" Click="Button_Click"  />
                         <!-- Resultados de la designación -->
                         <TextBlock x:Name="textBlockLectorDelMes" Text="Lector del Mes: [Nombre del Lector]" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0" Cursor="Hand"/>
                         <TextBlock x:Name="textBlockLibroDelMes" Text="Libro del Mes: [Título del Libro]" FontSize="16" FontWeight="SemiBold" Margin="0,10,0,0"/>

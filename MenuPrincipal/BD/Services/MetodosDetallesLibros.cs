@@ -43,7 +43,9 @@ namespace MenuPrincipal.BD.Services
                                     Categoria = dr["Categoria"].ToString(),
                                     Edicion = dr["Edicion"].ToString(), // Asegúrate de que este sea el tipo correcto
                                     StockActual = int.Parse(dr["StockActual"].ToString()),
-                                    DetalleID = int.Parse(dr["DetalleID"].ToString())
+                                    DetalleID = int.Parse(dr["DetalleID"].ToString()),
+                                    StockMaximo = int.Parse(dr["StockMaximo"].ToString()),
+                                    StockMinimo = int.Parse(dr["StockMinimo"].ToString())
 
                                 };
 

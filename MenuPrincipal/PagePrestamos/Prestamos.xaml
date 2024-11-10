@@ -24,90 +24,123 @@
         <TabControl Margin="20,80,20,20">
             <!-- Clasificación de Préstamos -->
             <TabItem Header="Clasificación de Préstamos">
-                <Grid>
-                    <StackPanel Orientation="Vertical" Margin="0,10,0,10">
-                        <TextBlock Text="Clasificación de Préstamos" FontSize="18" FontWeight="Bold"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <!-- Título principal -->
+                        <TextBlock Text="Control de Préstamos"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,20,0,0"/>
+
+                        <!-- Separador horizontal -->
+                        <Separator Margin="20,60,20,0" VerticalAlignment="Top"/>
+
+                        <!-- Contenido principal del control de préstamos -->
+                        <TabControl Margin="20,80,20,20">
+                            <!-- Clasificación de Préstamos -->
+                            <TabItem Header="Clasificación de Préstamos">
+                                <Grid>
+                                    <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+                                        <TextBlock Text="Clasificación de Préstamos" FontSize="18" FontWeight="Bold"/>
+
+                                        <!-- Filtros -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10">
+                                            <!-- Filtro por Tipo Prestamo -->
+                                            <StackPanel Margin="10,0">
+                                                <TextBlock Text="Filtrar por Tipo de Prestamo" FontWeight="Bold" />
+                                                <ComboBox x:Name="TipoPrestamoComboBox" Width="150" SelectionChanged="TipoPrestamoComboBox_SelectionChanged"  />
+                                            </StackPanel>
+
+                                            <!-- Filtro por Estado -->
+                                            <StackPanel Margin="10,0">
+                                                <TextBlock Text="Filtrar por Estado" FontWeight="Bold" />
+                                                <ComboBox x:Name="EstadoComboBox" Width="150" SelectionChanged="EstadoComboBox_SelectionChanged"  />
+                                            </StackPanel>
+
+                                            <!-- Filtro por FechaDevolucion -->
+                                            <StackPanel Margin="10,0">
+                                                <TextBlock Text="Filtrar por Fecha de Devolucion" FontWeight="Bold" />
+                                                <ComboBox x:Name="FechaDevolucionComboBox" Width="150" SelectionChanged="FechaDevolucionComboBox_SelectionChanged">
+                                                    <ComboBoxItem Content="Proximo"/>
+                                                    <ComboBoxItem Content="Entregados"/>
+                                                </ComboBox>
+                                            </StackPanel>
+
+                                            <!-- Botón Quitar -->
+                                            <Button Name="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click" />
+                                        </StackPanel>
+
+                                        <!-- Tabla de clasificación de préstamos -->
 
 
-                        <!-- Filtros -->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" >
+                                        <DataGrid x:Name="dataGridPrestamos" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0" SelectionChanged="dataGridPrestamos_SelectionChanged">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="ID Préstamo" Binding="{Binding PrestamoId}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Fecha Prestamo" Binding="{Binding FechaPrestamo, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Renovaciones" Binding="{Binding Renovaciones}" Width="Auto"/>
+                                                <DataGridTextColumn Header="FechaRenovacion" Binding="{Binding FechaRenovacion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
+                                                <DataGridTextColumn Header="Estado" Binding="{Binding EstadoSolicitud}" Width="Auto"/>
 
-                            <!-- Filtro por Tipo Prestamo -->
-                            <StackPanel Margin="10,0">
-                                <TextBlock Text="Filtrar por Tipo de Prestamo" FontWeight="Bold" />
-                                <ComboBox x:Name="TipoPrestamoComboBox" Width="150" SelectionChanged="TipoPrestamoComboBox_SelectionChanged"  />
-                            </StackPanel>
-
-                            <!-- Filtro por Estado -->
-                            <StackPanel Margin="10,0">
-                                <TextBlock Text="Filtrar por Estado" FontWeight="Bold" />
-                                <ComboBox x:Name="EstadoComboBox" Width="150" SelectionChanged="EstadoComboBox_SelectionChanged"  />
-                            </StackPanel>
-
-                          
-                            <!-- Filtro por FechaDevolucion -->
-                            <StackPanel Margin="10,0">
-                                <TextBlock Text="Filtrar por Fecha de Devolucion" FontWeight="Bold" />
-                                <ComboBox x:Name="FechaDevolucionComboBox" Width="150" SelectionChanged="FechaDevolucionComboBox_SelectionChanged" >
-                                    <ComboBoxItem Content="Proximo"/>
-                                    <ComboBoxItem Content="Entregados"/>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <!-- Botón Quitar -->
-                            <Button Name ="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click"  />
-                        </StackPanel>
-
-                        <!-- Tabla de clasificación de préstamos -->
-                        <DataGrid x:Name="dataGridPrestamos" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID Préstamo" Binding="{Binding PrestamoId}" Width="Auto"/>
-                                <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
-                                <DataGridTextColumn Header="Fecha Prestamo" Binding="{Binding FechaPrestamo, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
-                                <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
-                                <DataGridTextColumn Header="Estado" Binding="{Binding EstadoPrestamo}" Width="Auto"/>
-                                <DataGridTextColumn Header="Tipo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
-                                <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
-                                <DataGridTextColumn Header="Renovaciones" Binding="{Binding Renovaciones}" Width="Auto"/>
-                                <DataGridTextColumn Header="FechaRenovacion" Binding="{Binding FechaRenovacion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
 
 
-                        <StackPanel>
-                            <Label Content="Cancelar prestamo" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
+                                        <StackPanel>
+                                            <Label Content="Cancelar prestamo" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
 
-                            <!-- TextBox para id pago -->
-                            <TextBox x:Name="txtIdPago"
-                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                          materialDesign:HintAssist.Hint="IdPago"
-                          Width="275" Margin="0,0,0,10"/>
+                                            <!-- TextBox para id pago -->
+                                            <TextBox x:Name="txtIdPago"
+                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                      materialDesign:HintAssist.Hint="ID Prestamo"
+                                      Width="275" Margin="0,0,0,10" TextChanged="txtIdPago_TextChanged"/>
 
-                            <TextBox x:Name="txtCosto" IsEnabled="False"
-                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                          materialDesign:HintAssist.Hint="Costo a pagar"
-                          Width="275" Margin="0,0,0,10"/>
+                                            <TextBox x:Name="txtCosto" IsEnabled="False"
+                                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                      materialDesign:HintAssist.Hint="Costo a pagar"
+                                      Width="275" Margin="0,0,0,10"/>
 
+                                            <!-- Botón de actualización -->
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <Button x:Name="btnPagar" Content="Pagar" Width="150" Height="30" Margin="10,10"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"                 
+                                        HorizontalAlignment="Center" Click="btnPagar_Click_1"/>
 
-                            <!-- Botón de actualización -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </StackPanel>
 
+                                        <StackPanel>
+                                            <Label Content="Renovar Prestamo" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
 
-                                <Button x:Name="btnPagar" Content="Pagar" Width="150" Height="30" Margin="10,10" 
-                             FontWeight="Bold"
-                             Cursor="Hand"                 
-                             HorizontalAlignment="Center" Click="btnPagar_Click_1"/>
+                                            <!-- TextBox para id pago -->
+                                            <TextBox x:Name="txtIdPagoR"
+                                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                     materialDesign:HintAssist.Hint="ID  prestamo"
+                                     Width="275" Margin="0,0,0,10"/>
 
-                                <Button x:Name="btnCancelar" Content="Cancelar" Width="150" Height="30" 
-                            FontWeight="Bold"
-                            Cursor="Hand"
+                                            <DatePicker/>
 
-                            HorizontalAlignment="Center" />
-                            </StackPanel>
-
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
+                                            <Button x:Name="btnRenovar" Content="Renovar" Width="150" Height="30" Margin="10,10"
+                                    FontWeight="Bold"
+                                    Cursor="Hand"                 
+                                    HorizontalAlignment="Center"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Cola de Espera">
                 <Grid>
@@ -116,21 +149,24 @@
                             <TextBlock Text="Cola de Espera" FontSize="18" FontWeight="Bold"/>
 
                             <!-- Tabla de clasificación de préstamos -->
-                            <DataGrid x:Name="dataGridCola" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0">
+                            <DataGrid x:Name="dataGridCola" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,10,0,0" SelectionChanged="dataGridCola_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="ID Solicitudes" Binding="{Binding SolicitudId}" Width="Auto"/>
                                     <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
                                     <DataGridTextColumn Header="Fecha Solicitud" Binding="{Binding FechaSolicitud, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
                                     <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
-                                    <DataGridTextColumn Header="Estado de Solicitud" Binding="{Binding EstadoSolicitud}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Estado del Prestamo" Binding="{Binding EstadoPrestamo}" Width="Auto"/>
                                     <DataGridTextColumn Header="Tipo" Binding="{Binding TipoPrestamo}" Width="Auto"/>
-                                    <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Tiempo Espera" Binding="{Binding TiempoEspera}" Width="Auto"/>
+                                    <DataGridTextColumn Header="Stock Actual" Binding="{Binding StockActual}" Width="Auto"/>
                                 </DataGrid.Columns>
                             </DataGrid>
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,20,0,0">
-                                <Label Content="Libro Seleccionado: EX" Margin="10,0,200,0"/>
-                                <Button Width="158" Content="Aprobar"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+                                <Label  Name="lblLibro" Content="Solicitud Seleccionada: " Margin="10,0,200,0"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,20,0,0">
+                                <Button Name="btnAprobar" Width="158" Content="Aprobar" Click="btnAprobar_Click"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>

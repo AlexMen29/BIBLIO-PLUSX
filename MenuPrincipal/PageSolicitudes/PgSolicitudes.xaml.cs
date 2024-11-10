@@ -36,7 +36,7 @@ namespace MenuPrincipal.PageSolicitudes
         MetodosPrestamos metodos = new MetodosPrestamos();
 
         public string titulo;
-        public int tipoPrestamo;
+        int tipoPrestamoS;
         private int contador = 0;
         public DateTime? devolucion;
         public DateTime? prestamo;
@@ -44,7 +44,7 @@ namespace MenuPrincipal.PageSolicitudes
         public PgSolicitudes(string titulo, int tipoPrestamo)
         {
             this.titulo = titulo;
-            this.tipoPrestamo = tipoPrestamo;
+            this.tipoPrestamoS = tipoPrestamo;
             InitializeComponent();
             LlenarDatos();
             CargarImgDes();
@@ -66,7 +66,7 @@ namespace MenuPrincipal.PageSolicitudes
             txbTiempo.Text = "Inmediata";
             devolucion = tmPickerDevolucion.SelectedTime.Value;
 
-            if (tipoPrestamo == 1)
+            if (tipoPrestamoS == 1)
             {
                 txbFechaSolicitud.Visibility = Visibility.Collapsed;
                 txblFechaSolicitud.Visibility = Visibility.Collapsed;
@@ -126,7 +126,7 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaPrestamo.Visibility = Visibility.Collapsed;
 
                 // Aquí se asegura que estos elementos permanezcan ocultos si tipoPrestamo != 1
-                if (tipoPrestamo == 1)
+                if (tipoPrestamoS == 1)
                 {
                     tmPickerPrestamo.Visibility = Visibility.Visible;
                     tmPickerPrestamo.SelectedTime = DateTime.Now;
@@ -149,7 +149,7 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionDias.Visibility = Visibility.Visible;
 
                 // Misma lógica para que permanezcan colapsados si tipoPrestamo != 1
-                if (tipoPrestamo == 1)
+                if (tipoPrestamoS == 1)
                 {
                     txbFechaPrestamo.Visibility = Visibility.Visible;
                     prestamo = txbFechaPrestamo.SelectedDate.Value;
@@ -175,7 +175,7 @@ namespace MenuPrincipal.PageSolicitudes
                 txbFechaDevolucionSemanas.Visibility = Visibility.Visible;
 
                 // Misma lógica aquí para asegurar colapso si tipoPrestamo != 1
-                if (tipoPrestamo == 1)
+                if (tipoPrestamoS == 1)
                 {
                     txbFechaPrestamo.Visibility = Visibility.Visible;
                     prestamo = txbFechaPrestamo.SelectedDate.Value;
@@ -395,7 +395,8 @@ namespace MenuPrincipal.PageSolicitudes
                                 }
 
                                 metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
-                                MessageBox.Show($"prestamo: {prestamo}\ndevolucion: {devolucion}");
+                                metodos.CrearRegistroPrestamo(costo);
+                                MessageBox.Show($"prestamo: {prestamo}\ndevolucion: {devolucion}\ntipoPrestamoS: {tipoPrestamoS}");
                             }
                             catch (Exception ex)
                             {
@@ -432,15 +433,25 @@ namespace MenuPrincipal.PageSolicitudes
             datos.UsuarioId = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
             datos.LibroId = ObtenerID("SELECT TOP 1 Libros.LibroID FROM Ediciones JOIN DetallesLibros ON Ediciones.EdicionID = DetallesLibros.EdicionID JOIN Libros ON DetallesLibros.DetallesID = Libros.DetallesID WHERE Ediciones.Titulo = @Valor;", titulo);
             datos.FechaSolicitud = txbFechaSolicitud.SelectedDate.Value;
-            datos.EstadoSolicitud = "Aprobada";
             datos.TiempoEspera = txbTiempo.Text;
             datos.FechaPrestamo = prestamo;
             datos.FechaDevolucion = devolucion;
-            datos.EstadoPrestamo = "Activo";
             datos.TipoPrestamo = cmbTipoPrestamo.Text;
             datos.TiempoEntrega = txbTiempo.Text;
             datos.Renovaciones = 0;
             datos.FechaRenovacion = null;
+
+            if (tipoPrestamoS == 2)
+            {
+                datos.EstadoSolicitud = "Pendiente";
+                datos.EstadoPrestamo = "Pendiente";
+
+            }
+            else
+            {
+                datos.EstadoSolicitud = "Aprobada";
+                datos.EstadoPrestamo = "Activo";
+            }
 
             return datos;
         }

@@ -221,6 +221,7 @@
     <Compile Include="BD\Models\AutoresModel.cs" />
     <Compile Include="BD\Models\CarreraModel.cs" />
     <Compile Include="BD\Models\CategoriasModel.cs" />
+    <Compile Include="BD\Models\ColaModel.cs" />
     <Compile Include="BD\Models\ComprasModel.cs" />
     <Compile Include="BD\Models\CrearDatoLibroModel.cs" />
     <Compile Include="BD\Models\CredencialesModel.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="PagePrestamos\Prestamos.xaml.cs">
       <DependentUpon>Prestamos.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PagePrestamos\service\DatoCola.cs" />
     <Compile Include="PagePrestamos\service\DatoPago.cs" />
     <Compile Include="PagePrestamos\service\DatoPrestamo.cs" />
     <Compile Include="PageReport\visualReports\libros.cs">
@@ -289,11 +291,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reportcompras.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageReport\visualReports\reportLibroMasMostrado.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reportLibroMasMostrado.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageReport\visualReports\reportLibros.cs">
       <AutoGen>True</AutoGen>
@@ -305,11 +309,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reportproveedore.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageReport\visualReports\reportProveedoresEmpleados.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>reportProveedoresEmpleados.rpt</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PageSolicitudes\PgSolicitudes.xaml.cs">
       <DependentUpon>PgSolicitudes.xaml</DependentUpon>

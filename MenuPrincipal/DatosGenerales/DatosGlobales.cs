@@ -21,7 +21,7 @@ namespace MenuPrincipal.DatosGenerales
 
         public static int NivelUsuario { get; set; }
 
-
+        public string consultaEstadoP = "Select DISTINCT Estado from PagosPrestamos";
         public string consultaTipoUsuarioPorCarnet = "SELECT iu.TipoUsuarioID FROM Usuarios u JOIN InfoUsuarios iu ON u.InfoID = iu.InfoID WHERE u.Carnet = @Valor";
         public string consultaAutor = "select NombreAutor from Autores";
         public string consultaCategoria = "select NombreCategoria from Categorias";

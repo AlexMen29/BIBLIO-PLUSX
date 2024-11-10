@@ -15,8 +15,6 @@ namespace MenuPrincipal.BD.Services
 {
     public class MetodosDetallesLibros
     {
-
-
         public static List<DetallesLibros> MostrarLibros()
         {
             List<DetallesLibros> lstLibros = new List<DetallesLibros>();

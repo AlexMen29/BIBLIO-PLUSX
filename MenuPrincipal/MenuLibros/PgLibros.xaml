@@ -13,7 +13,7 @@
 
     <StackPanel>
 
-        <TabControl Name="TabControlLibros" Margin="0,0" Height="700">
+        <TabControl Name="TabControlLibros" Margin="0,0,0,0" Height="700" >
 
             <TabItem Header="Últimos libros añadidos">
 

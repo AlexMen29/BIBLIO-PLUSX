@@ -41,7 +41,7 @@
                     <Label Content="LOGIN" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="5" Foreground="Gray" FontSize="18"/>
                     <StackPanel VerticalAlignment="Top" Margin="15,40,15,0">
                         <TextBox x:Name="txtCorreo" Margin="0,10" FontSize="18" FontFamily="Corbel Light"
-                                 materialDesign:HintAssist.Hint="Correo"
+                                 materialDesign:HintAssist.Hint="Carnet"
                                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
                         <PasswordBox x:Name="txtPassword" Margin="0,10" FontSize="18" FontFamily="Corbel Light"
                                      materialDesign:HintAssist.Hint="Contraseña"

@@ -23,6 +23,8 @@ using System.Text.RegularExpressions;
 using MenuPrincipal.PageUsuarios;
 using MenuPrincipal.BD.Services;
 using MenuPrincipal.MenuLibros;
+using MenuPrincipal.PageReport.subpagereport;
+using MenuPrincipal.PageReport.visualReports;
 
 namespace MenuPrincipal.PageSolicitudes
 {
@@ -355,61 +357,156 @@ namespace MenuPrincipal.PageSolicitudes
 
         private void btnPrestamo_Click(object sender, RoutedEventArgs e)
         {
+            // Verificar longitud mínima del carnet
             int minLength = 6;
             if (txbCarne.Text.Length < minLength)
             {
-                // Mostrar un mensaje de error o cambiar alguna propiedad visual
-                MessageBox.Show("Debe ingresar un carnet válido",
-                       "Error",
-                       MessageBoxButton.OK,
-                       MessageBoxImage.Warning);
+                MessageBox.Show("Debe ingresar un carnet válido", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            else
+
+            // Obtener ID de usuario
+            int respuesta = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
+            if (respuesta == -1)
             {
-                int respuesta = ObtenerID("select UsuarioID from Usuarios where Carnet=@Valor", txbCarne.Text);
-                if (respuesta == -1)
+                MessageBox.Show("Carnet no encontrado", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Calcular el costo del préstamo
+            CalcularCosto();
+            if (costo <= 0)
+            {
+                MessageBox.Show("No se ha calculado el costo del préstamo.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // Confirmar costo con el usuario
+            MessageBoxResult boxResult = MessageBox.Show($"El costo del préstamo es: ${costo.ToString("F2")}\n¿Desea Continuar?", "Costo del Préstamo", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (boxResult != MessageBoxResult.Yes)
+                return;
+
+            // Variables para almacenar los datos del estudiante
+            string nombre = "", apellido = "", carrera = "";
+
+            // Conectar a la base de datos y obtener nombre, apellido y carrera según el Carnet
+            using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))
+            {
+                string query = @"
+            SELECT u.Nombres, u.Apellidos, c.NombreCarrera
+            FROM Usuarios u
+            JOIN InfoUsuarios iu ON u.UsuarioID = iu.TipoUsuarioID
+            JOIN Carrera c ON iu.CarreraID = c.CarreraID
+            WHERE u.Carnet = @Carne";
+
+                SqlCommand command = new SqlCommand(query, conDB);
+                command.Parameters.AddWithValue("@Carne", txbCarne.Text);
+
+                try
                 {
-                    MessageBox.Show("Carnet no encontrado: " + respuesta, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else {        
-                    CalcularCosto();
-                    if (costo > 0)
+                    conDB.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
                     {
-                        MessageBoxResult boxResult = MessageBox.Show($"El costo del préstamo es: ${costo.ToString("F2")}\n¿Desea Continuar?", "Costo del Préstamo", MessageBoxButton.YesNo, MessageBoxImage.Information);
-
-                        if (boxResult == MessageBoxResult.Yes)
-                        {
-                            try
-                            {
-                                if (cmbPlazo.SelectedIndex == 0)
-                                {
-                                    devolucion = tmPickerDevolucion.SelectedTime.Value;
-                                }
-                                else if (cmbPlazo.SelectedIndex == 1)
-                                {
-                                    devolucion = txbFechaDevolucionDias.SelectedDate.Value;
-                                }
-                                else
-                                {
-                                    devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
-                                }
-
-                                metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
-                                metodos.CrearRegistroPrestamo(costo);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show("ERROR INESPERADO: " + ex);
-                            }
-                        }
-                        PgLibros Page1 = new PgLibros(0);
-                        MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-                        mainWindow.NavegarAContenido(Page1);
+                        // Asignación de datos sin prefijos
+                        nombre = reader["Nombres"].ToString();
+                        apellido = reader["Apellidos"].ToString();
+                        carrera = reader["NombreCarrera"].ToString();
                     }
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener datos del estudiante: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
             }
 
+            // Configurar datos de préstamo
+            DateTime devolucion;
+            try
+            {
+                if (cmbPlazo.SelectedIndex == 0)
+                {
+                    devolucion = tmPickerDevolucion.SelectedTime.Value;
+                }
+                else if (cmbPlazo.SelectedIndex == 1)
+                {
+                    devolucion = txbFechaDevolucionDias.SelectedDate.Value;
+                }
+                else
+                {
+                    devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
+                }
+
+                // Registrar el préstamo
+                metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
+                metodos.CrearRegistroPrestamo(costo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR INESPERADO: " + ex.Message);
+                return;
+            }
+
+            // Crear el reporte y asignar los valores obtenidos
+            SolicitudPrestamo rpt = new SolicitudPrestamo();
+            libros dsLibros = new libros();
+            DataTable dataTableLibros = dsLibros.Tables["DataTable7"];
+
+            if (dataTableLibros == null)
+            {
+                MessageBox.Show("La tabla 'DataTable7' no existe en el DataSet.");
+                return;
+            }
+
+            dataTableLibros.Clear();
+
+            // Crear una nueva fila y asignar los valores de los controles, incluyendo el costo y datos del estudiante
+            DataRow newRow = dataTableLibros.NewRow();
+            newRow["Carne"] = txbCarne.Text;
+            newRow["TipoPrestamo"] = cmbTipoPrestamo.SelectedItem != null ? ((ComboBoxItem)cmbTipoPrestamo.SelectedItem).Content.ToString() : "";
+            newRow["Plazo"] = cmbPlazo.SelectedItem != null ? ((ComboBoxItem)cmbPlazo.SelectedItem).Content.ToString() : "";
+            newRow["FechaSolicitud"] = txbFechaSolicitud.SelectedDate.HasValue ? txbFechaSolicitud.SelectedDate.Value.ToString("yyyy-MM-dd") : "";
+            newRow["TituloLibro"] = lblTitulo.Content != null ? lblTitulo.Content.ToString() : "";
+            newRow["AutorLibro"] = lblAutor.Content != null ? lblAutor.Content.ToString() : "";
+            newRow["Costo"] = costo;
+
+            // Asignar la fecha de devolución según el tipo de plazo
+            if (cmbPlazo.SelectedIndex == 0)
+            {
+                newRow["HoraDevolucion"] = tmPickerDevolucion.SelectedTime.HasValue ? tmPickerDevolucion.SelectedTime.Value.ToString("HH:mm") : "";
+            }
+            else if (cmbPlazo.SelectedIndex == 1)
+            {
+                newRow["FechaDevolucionDias"] = txbFechaDevolucionDias.SelectedDate.HasValue ? txbFechaDevolucionDias.SelectedDate.Value.ToString("yyyy-MM-dd") : "";
+            }
+            else if (cmbPlazo.SelectedIndex == 2)
+            {
+                newRow["FechaDevolucionSemanas"] = txbFechaDevolucionSemanas.SelectedDate.HasValue ? txbFechaDevolucionSemanas.SelectedDate.Value.ToString("yyyy-MM-dd") : "";
+            }
+
+            // Asignar datos adicionales del estudiante: Nombre, Apellido y Carrera
+            newRow["Nombre"] = nombre;
+            newRow["Apellido"] = apellido;
+            newRow["Carrera"] = carrera;
+
+            // Agregar la nueva fila al DataTable
+            dataTableLibros.Rows.Add(newRow);
+
+            // Configurar y mostrar el reporte
+            rpt.SetDataSource(dsLibros);
+            rpt.Refresh();
+            Window1 visor = new Window1();
+            visor.reportelibros.ViewerCore.ReportSource = rpt;
+            visor.ShowDialog();
+
+            // Navegar a la página principal después del préstamo
+            PgLibros Page1 = new PgLibros(0);
+            MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
+            mainWindow.NavegarAContenido(Page1);
         }
+
 
         private void tmPickerDevolucion_SelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
         {

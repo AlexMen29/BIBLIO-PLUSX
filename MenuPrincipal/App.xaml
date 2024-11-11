@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 
              xmlns:local="clr-namespace:MenuPrincipal"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Ingreso/Previstas.xaml">
 
     <Application.Resources>
         <ResourceDictionary>

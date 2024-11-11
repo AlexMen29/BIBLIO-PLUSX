@@ -33,6 +33,7 @@ namespace MenuPrincipal.PageUsuarios
 
         public List<DetallesUsuarios> ListaDataGrid;
         int idActual;
+        int AdminOrEstudiante=0;
         DetallesUsuarios UsuariosData;
 
         public Usuarios()
@@ -401,11 +402,14 @@ namespace MenuPrincipal.PageUsuarios
             if (tipoUsuarioComboBox.SelectedItem?.ToString() != "Estudiante")
             {
                 carreraComboBox.IsEnabled = false;
+                AdminOrEstudiante = 1;
+                carreraComboBox.SelectedValue = "N/A";
                 contraseñatxt.IsEnabled = true;
 
             }
             else
             {
+                AdminOrEstudiante = 0;
                 carreraComboBox.IsEnabled = true;
                 contraseñatxt.IsEnabled = false;
             }
@@ -428,10 +432,29 @@ namespace MenuPrincipal.PageUsuarios
         {
             try
             {
-                int[] ids = IdTipoCarreraEstado(tipoUsuarioBox, estadoBox, carreraBox);
-                int tipoUsuarioID = ids[0];
-                int carreraID = ids[1];
-                int estadoID = ids[2];
+                int[] ids = new int [2];
+                int tipoUsuarioID = 0;
+                int carreraID = 0;
+                int estadoID = 0;
+
+
+
+                if (AdminOrEstudiante == 0)
+                {
+                    ids = IdTipoCarreraEstado(tipoUsuarioBox, estadoBox, carreraBox);
+                    tipoUsuarioID = ids[0];
+                    carreraID = ids[1];
+                    estadoID = ids[2];
+                }
+                else
+                {
+                    carreraBox.SelectedValue = "N/A";
+                    ids = IdTipoCarreraEstado(tipoUsuarioBox, estadoBox, carreraBox);
+                    tipoUsuarioID = ids[0];
+                    carreraID = ids[1];
+                    estadoID = ids[2];
+                }
+          
 
                 using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.conexionDB))
                 {

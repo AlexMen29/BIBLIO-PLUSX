@@ -38,9 +38,10 @@ namespace MenuPrincipal.BD.Services
                                     usuario.Nombres = dr["Nombres"].ToString();
                                     usuario.Apellidos = dr["Apellidos"].ToString();
                                     //usuario.Direccion = dr["Direccion"].ToString();
-                                    usuario.Telefono1 = !string.IsNullOrEmpty(dr["Telefono1"].ToString()) ? int.Parse(dr["Telefono1"].ToString()) : 0;
-                                    usuario.Telefono2 = !string.IsNullOrEmpty(dr["Telefono2"].ToString()) ? int.Parse(dr["Telefono2"].ToString()) : 0;
-                                    usuario.TelefonoFijo = !string.IsNullOrEmpty(dr["TelefonoFijo"].ToString()) ? int.Parse(dr["TelefonoFijo"].ToString()) : 0;
+                                    usuario.Telefono1 = !string.IsNullOrEmpty(dr["Telefono1"].ToString()) ? dr["Telefono1"].ToString() : string.Empty;
+                                    usuario.Telefono2 = !string.IsNullOrEmpty(dr["Telefono2"].ToString()) ? dr["Telefono2"].ToString() : string.Empty;
+                                    usuario.TelefonoFijo = !string.IsNullOrEmpty(dr["TelefonoFijo"].ToString()) ? dr["TelefonoFijo"].ToString() : string.Empty;
+
                                     usuario.FechaRegistro = DateTime.Parse(dr["FechaRegistro"].ToString());
                                     usuario.Carnet = dr["Carnet"].ToString();
                                     usuario.UsuarioID = int.Parse(dr["UsuarioID"].ToString());

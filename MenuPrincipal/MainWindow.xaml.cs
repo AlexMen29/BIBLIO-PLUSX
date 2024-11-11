@@ -68,6 +68,7 @@ namespace MenuPrincipal
             {
                 btnActualizar.Visibility = Visibility.Collapsed;
                 btnComprarLibros.Visibility = Visibility.Collapsed;
+                btnreport.Visibility = Visibility.Collapsed;
             }
         
         }

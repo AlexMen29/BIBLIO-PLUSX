@@ -195,5 +195,16 @@ namespace MenuPrincipal
             frContenido.Visibility = Visibility.Visible;
             ImgLogo.Visibility = Visibility.Visible;
         }
+
+        private void btnSalir_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult boxresult = MessageBox.Show("¿Seguro que quiere cerrar sesión?","Cerrar sesión", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            if (boxresult == MessageBoxResult.Yes)
+            {
+                Previstas vntn = new Previstas();
+                vntn.Show();
+                this.Close();
+            }
+        }
     }
 }

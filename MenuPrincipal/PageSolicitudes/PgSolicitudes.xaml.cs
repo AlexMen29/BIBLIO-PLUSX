@@ -296,7 +296,7 @@ namespace MenuPrincipal.PageSolicitudes
                 if (tmPickerPrestamo.SelectedTime.HasValue && tmPickerDevolucion.SelectedTime.HasValue)
                 {
                     TimeSpan diferencia = tmPickerDevolucion.SelectedTime.Value - tmPickerPrestamo.SelectedTime.Value;
-                    int horas = (int)diferencia.TotalHours;
+                    int horas = (int)diferencia.TotalHours + 1;
                     switch (horas)
                     {
                         case 1: costo = 0.05; break;
@@ -305,7 +305,7 @@ namespace MenuPrincipal.PageSolicitudes
                         case 4: costo = 0.20; break;
                         case 5: costo = 0.25; break;
                         default:
-                            MessageBox.Show("El préstamo no puede exceder las 5 horas.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            MessageBox.Show("El préstamo debe estar entre un rango de 1 - 5 horas a partir de ahora.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;
                     }
                 }

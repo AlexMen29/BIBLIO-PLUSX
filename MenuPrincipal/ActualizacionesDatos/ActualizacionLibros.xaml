@@ -7,7 +7,7 @@
 
         xmlns:local="clr-namespace:MenuPrincipal.ActualizacionesDatos"
         mc:Ignorable="d"
-        Title="ActualizacionLibros" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="ActualizacionLibros" Height="450" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
 
     <Grid>
         <!-- Fondo con gradiente -->
@@ -46,7 +46,7 @@
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                      materialDesign:HintAssist.Hint="Titulo"/>
 
-                    <TextBox x:Name="EditDescripcionTextBox" Margin="5" Foreground="Black"
+                    <TextBox x:Name="EditDescripcionTextBox" Margin="5" Foreground="Black" IsEnabled="False"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      materialDesign:HintAssist.Hint="Descripción" AcceptsReturn="True" Height="100"/>
 

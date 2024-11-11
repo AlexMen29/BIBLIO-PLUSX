@@ -432,7 +432,7 @@ namespace MenuPrincipal.PagePrestamos
         {
             if (dateRenovacion.SelectedDate.HasValue)
             {
-                MessageBoxResult boxResult = MessageBox.Show("¿Desea renovar este registro?", "Confirmación", MessageBoxButton.YesNo,MessageBoxImage.Question);
+                MessageBoxResult boxResult = MessageBox.Show("¿Desea renovar este registro? (Se agregaran $0.25 al nuevo pago)", "Confirmación", MessageBoxButton.YesNo,MessageBoxImage.Question);
 
                 if (boxResult == MessageBoxResult.Yes)
                 {

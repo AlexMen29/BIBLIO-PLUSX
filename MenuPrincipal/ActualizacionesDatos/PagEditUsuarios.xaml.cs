@@ -84,12 +84,20 @@ namespace MenuPrincipal.ActualizacionesDatos
 
         private void HabilitarObjetos()
         {
+
             NombresTxt.IsEnabled = true;
             ApellidosTxt.IsEnabled = true;
             EstadoCivilBox.IsEnabled = true;
             ApellidoCasadaTxt.IsEnabled = true;
             EstadoBox.IsEnabled = true;
-            TipoUsuarioBox.IsEnabled = true;
+            if (DatosGlobales.NivelUsuario == 2)
+            {
+                TipoUsuarioBox.IsEnabled = false;
+            }
+            else
+            {
+                TipoUsuarioBox.IsEnabled = true;
+            }
             CarreraBox.IsEnabled = true;
 
             Correo1Txt.IsEnabled = true;
@@ -229,7 +237,6 @@ namespace MenuPrincipal.ActualizacionesDatos
             datos.Carnet = CarnetTxt.Text;
             datos.EstadoID = datosG.ObtenerID("select EstadoID from Estado where Estado=@Valor", EstadoBox.SelectedItem.ToString());
             datos.TipoUsuarioId = datosG.ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString());
-            //MessageBox.Show($"dato id {ObtenerID("select TipoUsuarioID from TipoUsuario where Tipo = @Valor", TipoUsuarioBox.SelectedItem.ToString())}");
 
             if (TipoUsuarioBox.SelectedItem.ToString() == "Estudiante" || TipoUsuarioBox.SelectedItem == null)
             {
@@ -247,8 +254,6 @@ namespace MenuPrincipal.ActualizacionesDatos
             datos.Municipio = MunicipioTxt.Text;
             datos.Departamento = DepartamentoTxt.Text;
             datos.CP = CPTxt.Text;
-
-            MessageBox.Show($"EstadoID: {datos.EstadoID}, TipoUsuarioId: {datos.TipoUsuarioId}, CarreraID: {datos.CarreraID}");
 
             return datos;
 

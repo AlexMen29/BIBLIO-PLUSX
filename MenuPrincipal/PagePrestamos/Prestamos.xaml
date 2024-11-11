@@ -145,7 +145,7 @@
                                 <Label  Name="lblLibro" Content="Solicitud Seleccionada: " Margin="10,0,200,0"/>
                             </StackPanel>
                             <StackPanel Margin="0,20,0,0">
-                                <Button Name="btnAprobar" Width="158" Content="Aprobar" Click="btnAprobar_Click"/>
+                                <Button Name="btnAprobar" Width="158" Content="Aprobar" Click="btnAprobar_Click" IsEnabled="False"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>

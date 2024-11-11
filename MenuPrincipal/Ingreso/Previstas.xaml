@@ -52,9 +52,7 @@
                         <CheckBox Content="Mostrar contraseña" Checked="Mostrar" Unchecked="Ocultar" Foreground="#FF877B7B" Background="#FF3F474D" />
                     </StackPanel>
                 </Grid>
-
                 <Button x:Name="btnIngresar" Content="Ingresar" Width="150" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,353,0,0" Click="BtnIngresar_Click" />
-                <TextBlock Text="¿Olvidó su contraseña?" HorizontalAlignment="Center" Margin="0,424,0,0" Foreground="Gray" Cursor="Hand" Height="16" VerticalAlignment="Top" />
                 <Image Margin="0,20,0,0" Width="100" Source="/Assets/book.png" HorizontalAlignment="Center" Height="100" VerticalAlignment="Top" />
             </Grid>
 

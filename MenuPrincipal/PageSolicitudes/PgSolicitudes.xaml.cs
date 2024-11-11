@@ -596,5 +596,15 @@ namespace MenuPrincipal.PageSolicitudes
         {
             devolucion = txbFechaDevolucionSemanas.SelectedDate.Value;
         }
+
+        private void btnInformacion_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Tarifas por préstamo\r\n\r\n" +
+                "Por Hora: $0.05 por cada hora (hasta un máximo de 5 horas).\r\n\r\n" +
+                "Por Día: $0.50 por cada día (hasta un máximo de 5 días).\r\n\r\n" +
+                "Por Semana: $3.00 por semana, con un incremento de $1.00 " +
+                "por cada semana adicional (hasta un máximo de 5 semanas). ", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        }
     }
 }

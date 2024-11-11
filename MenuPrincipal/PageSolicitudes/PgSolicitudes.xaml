@@ -81,8 +81,9 @@
             </StackPanel>
             <Label x:Name="lblTitulo" Content="Titulo" FontSize="15" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" FontWeight="Bold" Margin="-10" />
             <Label x:Name="lblAutor" Content="Autor" FontSize="12" Foreground="Black" Height="31" Width="204"  HorizontalContentAlignment="Center" Margin="0" FontStyle="Italic" />
+           
             <Button x:Name="btnPrestamo" Content="Prestamo" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="btnPrestamo_Click"/>
-
+            <Button x:Name="btnInformacion" Content="¿Precios?" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="btnInformacion_Click"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -173,5 +173,14 @@ namespace MenuPrincipal
             frContenido.NavigationService.Navigate(pageCompraLibros);
             ImgLogo.Visibility = Visibility.Hidden;
         }
+
+        private void btnInicio_Click(object sender, RoutedEventArgs e)
+        {
+            // Limpiar cualquier contenido anterior en el Frame
+             frContenido.Content = null;
+            // Mostrar el Frame y la Image
+            frContenido.Visibility = Visibility.Visible;
+            ImgLogo.Visibility = Visibility.Visible;
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace MenuPrincipal.PagePrestamos.Models
 
         public DateTime? FechaRenovacion { get; set; } // Cambiado a DateTime?
         public string EstadoSolicitud { get; set; }
+        public string Carnet {  get; set; }
 
 
     }

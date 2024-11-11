@@ -22,8 +22,12 @@ namespace MenuPrincipal.PagePrestamos
         ColaModel LibroData;
 
         MetodosPrestamos metodoPrestamo = new MetodosPrestamos();
+        DatoPrestamo metodoRenovacion = new DatoPrestamo();
         DatosGlobales datos = new DatosGlobales();
         DatoCola metodoModificar = new DatoCola();
+        private string valorCeldaEstado;
+        private int valorRenovaciones;
+        private int valorPrestamoId;
 
         public string estadoPrestamo = "Activo";
         public DateTime fechaPrestamo = DateTime.Now;
@@ -149,11 +153,7 @@ namespace MenuPrincipal.PagePrestamos
             aprobacion.EstadoSolicitud = "Aprobada";
             aprobacion.FechaPrestamo = DateTime.Now;
             return aprobacion;
-
-
         }
-
-
 
         private void ActualizarEstado()
         {
@@ -189,7 +189,19 @@ namespace MenuPrincipal.PagePrestamos
             }
 
         }
+        //renovar
 
+        private PrestamoModel RenovarPrestamo() {
+
+            PrestamoModel renovar = new PrestamoModel();
+
+            renovar.PrestamoId = valorPrestamoId;
+            renovar.FechaRenovacion = DateTime.Now;
+            renovar.FechaDevolucion = dateRenovacion.SelectedDate.Value;
+            renovar.Renovaciones = valorRenovaciones;
+
+            return renovar;
+        }    
 
         //Verifcar que id sea valido segun estado()
         private void HabilitarPagar()
@@ -231,9 +243,6 @@ namespace MenuPrincipal.PagePrestamos
                 btnPagar.IsEnabled = true; // Aseguramos que el botón esté habilitado en caso de error
             }
         }
-
-
-
 
         private void btnPagar_Click_1(object sender, RoutedEventArgs e)
         {
@@ -353,9 +362,6 @@ namespace MenuPrincipal.PagePrestamos
             try
             {
 
-
-
-
                 if (txtIdPago != null)
                 {
                     decimal res = metodoPrestamo.CalcularCostoPrestamo(Convert.ToInt32(txtIdPago.Text));
@@ -377,13 +383,19 @@ namespace MenuPrincipal.PagePrestamos
 
         }
 
-      
-
-
         private void dataGridPrestamos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-            //dataGridPrestamos
+            capturarEstadoPago();
+            if (valorCeldaEstado == "Pendiente")
+            {
+                btnRenovar.IsEnabled = true;
+                dateRenovacion.IsEnabled = true;
+                valorRenovaciones = + 1;
+            }
+            else {
+                btnRenovar.IsEnabled = false;
+                dateRenovacion.IsEnabled = false;
+            }
 
             PrestamoModel datos = (PrestamoModel)dataGridPrestamos.SelectedItem;
 
@@ -397,9 +409,50 @@ namespace MenuPrincipal.PagePrestamos
 
         }
 
+        private void capturarEstadoPago()
+        {
+            var filaSeleccionada = dataGridPrestamos.SelectedItem as PrestamoModel;
+
+            if (filaSeleccionada != null)
+            {
+                valorCeldaEstado = filaSeleccionada.Estado.ToString();
+                valorRenovaciones = int.Parse(filaSeleccionada.Renovaciones.ToString());
+                valorPrestamoId = int.Parse(filaSeleccionada.PrestamoId.ToString());
+
+            }
+
+        }
+
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
         {
             txtIdPago.Text=null;
+        }
+
+        private void btnRenovar_Click(object sender, RoutedEventArgs e)
+        {
+            if (dateRenovacion.SelectedDate.HasValue)
+            {
+                MessageBoxResult boxResult = MessageBox.Show("¿Desea renovar este registro?", "Confirmación", MessageBoxButton.YesNo,MessageBoxImage.Question);
+
+                if (boxResult == MessageBoxResult.Yes)
+                {
+                    metodoRenovacion.RenovarPrestamos(RenovarPrestamo());
+                    MessageBox.Show("Registro Renovado con éxito","",MessageBoxButton.OK,MessageBoxImage.Information);
+                    CargarClasificacionPrestamos();
+                }
+
+            }
+            else {
+                MessageBox.Show("Por favor, seleccione una fecha valida", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
+
+        }
+
+        private void dateRenovacion_Loaded(object sender, RoutedEventArgs e)
+        {
+            dateRenovacion.DisplayDateStart = DateTime.Now;
+            dateRenovacion.DisplayDateEnd = dateRenovacion.DisplayDateStart.Value.AddDays(28);
         }
     }
 }

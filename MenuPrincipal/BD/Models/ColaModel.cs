@@ -24,8 +24,6 @@ namespace MenuPrincipal.BD.Models
         public string EstadoSolicitud { get; set; }
         public int StockActual {  get; set; }
 
-        //Modificar(Tentativo porque Capaz necesito otra clase)
-        public string Estado { get; set; }
 
 
     }

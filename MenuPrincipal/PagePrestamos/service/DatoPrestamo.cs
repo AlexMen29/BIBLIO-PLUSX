@@ -1,4 +1,5 @@
-﻿using MenuPrincipal.PagePrestamos.Models;
+﻿using MenuPrincipal.BD.Models;
+using MenuPrincipal.PagePrestamos.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -41,7 +42,8 @@ namespace MenuPrincipal.PagePrestamos.service
                                     TiempoEntrega = reader["TiempoEntrega"] != DBNull.Value && int.TryParse(reader["TiempoEntrega"].ToString(), out int tiempoEntrega) ? tiempoEntrega : 0,
                                     Renovaciones = reader["Renovaciones"] != DBNull.Value && int.TryParse(reader["Renovaciones"].ToString(), out int renovaciones) ? renovaciones : 0,
                                     FechaRenovacion = reader["FechaRenovacion"] != DBNull.Value && DateTime.TryParse(reader["FechaRenovacion"].ToString(), out DateTime fechaRenovacion) ? (DateTime?)fechaRenovacion : null,
-                                    EstadoSolicitud = reader["EstadoSolicitud"].ToString()
+                                    EstadoSolicitud = reader["EstadoSolicitud"].ToString(),
+                                    Carnet = reader["Carnet"].ToString()
 
                                 };
                                 listaPrestamos.Add(prestamo);
@@ -56,6 +58,41 @@ namespace MenuPrincipal.PagePrestamos.service
             }
 
             return listaPrestamos;
+        }
+
+        public int RenovarPrestamos(PrestamoModel renovacion)
+        {
+            int resultado = 0; // Variable para almacenar el resultado de la ejecución
+
+            try
+            {
+                using (var conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conn.Open();
+
+                    using (var command = conn.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "SP_RenovarPrestamo";
+
+                        command.Parameters.AddWithValue("@PrestamoId", renovacion.PrestamoId);
+                        command.Parameters.AddWithValue("@FechaDevolucion", renovacion.FechaDevolucion);
+                        command.Parameters.AddWithValue("@FechaRenovacion", renovacion.FechaRenovacion);
+                        command.Parameters.AddWithValue("@Renovaciones", renovacion.Renovaciones);
+
+                        resultado = command.ExecuteNonQuery();
+
+                        //resultado = command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ocurrió un error: " + e.Message, "Error de consulta", MessageBoxButton.OK, MessageBoxImage.Error);
+                resultado = -1; // Retornar un valor específico en caso de error
+            }
+
+            return resultado; // Devolver el resultado de la ejecución
         }
 
 

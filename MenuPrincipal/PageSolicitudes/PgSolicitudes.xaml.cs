@@ -396,7 +396,6 @@ namespace MenuPrincipal.PageSolicitudes
 
                                 metodos.RegistrarPrestamoCompleto(LlenarDatosBD());
                                 metodos.CrearRegistroPrestamo(costo);
-                                MessageBox.Show($"prestamo: {prestamo}\ndevolucion: {devolucion}\ntipoPrestamoS: {tipoPrestamoS}");
                             }
                             catch (Exception ex)
                             {

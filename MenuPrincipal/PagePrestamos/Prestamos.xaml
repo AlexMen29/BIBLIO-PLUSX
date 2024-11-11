@@ -72,6 +72,7 @@
                               MaxHeight="300" SelectionChanged="dataGridPrestamos_SelectionChanged">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="ID Préstamo" Binding="{Binding PrestamoId}" Width="Auto"/>
+                                        <DataGridTextColumn Header="Carnet" Binding="{Binding Carnet}" Width="Auto"/>
                                         <DataGridTextColumn Header="Libro" Binding="{Binding Titulo}" Width="Auto"/>
                                         <DataGridTextColumn Header="Fecha Prestamo" Binding="{Binding FechaPrestamo, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
                                         <DataGridTextColumn Header="Fecha Devolución" Binding="{Binding FechaDevolucion}" Width="Auto"/>
@@ -80,7 +81,6 @@
                                         <DataGridTextColumn Header="Entrega" Binding="{Binding TiempoEntrega}" Width="Auto"/>
                                         <DataGridTextColumn Header="Renovaciones" Binding="{Binding Renovaciones}" Width="Auto"/>
                                         <DataGridTextColumn Header="FechaRenovacion" Binding="{Binding FechaRenovacion, StringFormat={}{0:dd/MM/yyyy}}" Width="Auto"/>
-                                        <DataGridTextColumn Header="Estado" Binding="{Binding EstadoSolicitud}" Width="Auto"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
 
@@ -104,12 +104,15 @@
 
                                 <StackPanel>
                                     <Label Content="Renovar Prestamo" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center"/>
-                                    <TextBox x:Name="txtIdPagoR" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                                 materialDesign:HintAssist.Hint="ID  prestamo"
+                                    <TextBox x:Name="txtIdPagoR" Style="{StaticResource MaterialDesignFloatingHintTextBox}" IsEnabled="False"
+                                 materialDesign:HintAssist.Hint="ID prestamo"
                                  Width="275" Margin="0,0,0,10"/>
-                                    <DatePicker/>
-                                    <Button x:Name="btnRenovar" Content="Renovar" Width="150" Height="30" Margin="10,10"
-                                FontWeight="Bold" Cursor="Hand" HorizontalAlignment="Center"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Button x:Name="btnRenovar" Content="Renovar" Width="150" Height="30" Margin="10,10" IsEnabled="False"
+                                                FontWeight="Bold" Cursor="Hand" HorizontalAlignment="Center" Click="btnRenovar_Click"/>
+                                        <DatePicker Name="dateRenovacion" Width="150" IsEnabled="False" SelectedDateFormat="Short" Loaded="dateRenovacion_Loaded">
+                                        </DatePicker>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

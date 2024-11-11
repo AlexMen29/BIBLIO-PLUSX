@@ -68,16 +68,22 @@ namespace MenuPrincipal.PageReport
 
         private void CargarDatosLibrosMasPrestados()
         {
-            string consultaSQL = "SELECT e.EdicionID AS ID, e.Titulo, c.NombreCategoria AS Tema, a.NombreAutor AS Autor, " +
-                     "COUNT(p.PrestamoID) AS CantidadPrestamos " +
-                     "FROM Ediciones e " +
-                     "INNER JOIN DetallesLibros d ON e.EdicionID = d.EdicionID " +
-                     "INNER JOIN Categorias c ON d.CategoriaID = c.CategoriaID " +
-                     "INNER JOIN Autores a ON d.AutorID = a.AutorID " +
-                     "LEFT JOIN RefSolicitudes rs ON d.DetallesID = rs.LibroID " +
-                     "LEFT JOIN Prestamos p ON rs.ReferenciaID = p.SolicitudID " +
-                     "GROUP BY e.EdicionID, e.Titulo, c.NombreCategoria, a.NombreAutor " +
-                     "ORDER BY CantidadPrestamos DESC";
+            string consultaSQL = "SELECT e.EdicionID AS ID," +
+    "e.Titulo, " +
+    "c.NombreCategoria AS Tema, " +
+    "a.NombreAutor AS Autor, " +
+    "COUNT(pr.PrestamoID) AS CantidadPrestamos " + // Contar la cantidad de préstamos por libro
+    "FROM Prestamos pr " +
+    "INNER JOIN Solicitudes s ON pr.SolicitudID = s.SolicitudID " +
+    "INNER JOIN RefSolicitudes rs ON s.SolicitudID = rs.ReferenciaID " +
+    "INNER JOIN Libros l ON rs.LibroID = l.LibroID " +
+    "INNER JOIN DetallesLibros dl ON l.DetallesID = dl.DetallesID " +
+    "INNER JOIN Ediciones e ON dl.EdicionID = e.EdicionID " +
+    "INNER JOIN Categorias c ON dl.CategoriaID = c.CategoriaID " + // Obtener el tema del libro
+    "INNER JOIN Autores a ON dl.AutorID = a.AutorID " + // Obtener el autor del libro
+    "GROUP BY e.Titulo, c.NombreCategoria, a.NombreAutor,e.EdicionID " +
+    "ORDER BY CantidadPrestamos DESC";
+
 
 
             using (SqlConnection conDB = new SqlConnection(MenuPrincipal.Properties.Settings.Default.conexionDB))

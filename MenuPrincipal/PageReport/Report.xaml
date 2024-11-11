@@ -41,8 +41,8 @@
                                 <ComboBoxItem Content="15" />
                                 <ComboBoxItem Content="Mayores de 15" />
                             </ComboBox>
-                            <Button Content="Generar Reporte" Width="66" Height="30" Margin="10,0,0,0" Click="GenerarReporteLibros"/>
-                            <Button Name="btnLimpiar" Content="Limpiar Filtros" Click="btnLimpiar_Click" Width="77" Height="30" Margin="10"/>
+                            <Button Content="Generar Reporte" Width="138" Height="30" Margin="10,0,0,0" Click="GenerarReporteLibros"/>
+                            <Button Name="btnLimpiar" Content="Limpiar Filtros" Click="btnLimpiar_Click" Width="81" Height="30" Margin="10"/>
                         </StackPanel>
 
                         <!-- Tabla de resultados de libros -->
@@ -84,8 +84,8 @@
                             </ComboBox>
 
                             <TextBox x:Name="textBoxFiltroUsuarios" Width="200" Margin="5,0,10,0" TextChanged="textBoxFiltroUsuarios_TextChanged" />
-                            <Button Content="Generar Reporte Usuarios" Width="150" Click="GenerarReporteUsuarios_Click" />
-                            <Button x:Name="btnLimpiar_Copiar" Content="Limpiar Filtros" Click="btnLimpiar_Copiar_Click" Width="77" Height="30" Margin="7,0,0,0"/>
+                            <Button Content="Generar Reporte" Width="139" Click="GenerarReporteUsuarios_Click" />
+                            <Button x:Name="btnLimpiar_Copiar" Content="Limpiar Filtros" Click="btnLimpiar_Copiar_Click" Width="83" Height="30" Margin="7,0,0,0"/>
                         </StackPanel>
 
                         <DataGrid x:Name="dataGridUsuarios" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,10" Height="175">
@@ -117,8 +117,8 @@
                             </ComboBox>
 
                             <TextBox x:Name="textBoxFiltroProveedores" Width="200" Margin="5,0,10,0" TextChanged=" textBoxFiltroProveedores_TextChanged" />
-                            <Button Content="Generar Reporte Proveedores" Width="150" Click="GenerarReporteProveedores_Click" />
-                            <Button x:Name="btnLimpiar_Copiar1" Content="Limpiar Filtros" Click="btnLimpiar_Copiar1_Click" Width="77" Height="30" Margin="8,0,0,0"/>
+                            <Button Content="Generar Reporte" Width="138" Click="GenerarReporteProveedores_Click" />
+                            <Button x:Name="btnLimpiar_Copiar1" Content="Limpiar Filtros" Click="btnLimpiar_Copiar1_Click" Width="83" Height="30" Margin="8,0,0,0"/>
                         </StackPanel>
 
                         <DataGrid x:Name="dataGridProveedores" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,10" Height="175">
@@ -146,7 +146,7 @@
                             <ComboBox x:Name="comboBoxPeriodoCompras" Width="150" Margin="5,0,20,0" SelectionChanged="ComboBox_SelectionChanged"/>
 
                             <Button Content="Generar Reporte" Width="141" Height="30" Click="GenerarReporteCompras"/>
-                            <Button x:Name="btnLimpiar_Copiar2" Content="Limpiar Filtros" Click="btnLimpiar_Copiar2_Click" Width="77" Height="30" Margin="6,0,0,0"/>
+                            <Button x:Name="btnLimpiar_Copiar2" Content="Limpiar Filtros" Click="btnLimpiar_Copiar2_Click" Width="83" Height="30" Margin="6,0,0,0"/>
                         </StackPanel>
 
                         <!-- Tabla de análisis de compras -->

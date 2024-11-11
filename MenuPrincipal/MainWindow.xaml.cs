@@ -18,6 +18,7 @@ using MenuPrincipal.PageUsuarios;
 using MenuPrincipal.ActualizacionesDatos;
 using MenuPrincipal.CompraDeLibros;
 using MenuPrincipal.DatosGenerales;
+using MenuPrincipal.Ingreso;
 
 
 namespace MenuPrincipal
@@ -41,6 +42,17 @@ namespace MenuPrincipal
         {
             this.WindowState = WindowState.Minimized;
         }
+        private void btnRegresarLogin_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("¿Estás seguro de que quieres salir y regresar al login?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                Previstas loginWindow = new Previstas();
+                loginWindow.Show();
+                this.Close();
+            }
+        }
+
 
         private void MaximizarRestaurar_Click(object sender, RoutedEventArgs e)
         {

@@ -45,7 +45,7 @@ namespace MenuPrincipal.ActualizacionesDatos
                 txtNuevoNombre.Focus();
             }
 
-            
+
 
         }
 
@@ -61,7 +61,7 @@ namespace MenuPrincipal.ActualizacionesDatos
 
             // Asignar un TextBox al array
             arr[0] = txtNuevoNombre;
-          
+
 
             bool validacion = datos.VerifcarTextBox(arr);
 
@@ -128,6 +128,35 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox[] arr = new TextBox[1];
+
+            arr[0] = txtNuevoNombre;
+
+            bool validacion = datos.VerifcarTextBox(arr);
+
+            if (validacion == true)
+            {
+
+                MessageBoxResult resultado = MessageBox.Show("¿Estás seguro de que deseas agregar este elemento?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    datosCategoria = new CategoriasModel();
+                    datosCategoria.NombreCategoria = txtNuevoNombre.Text;
+                    btnAgregar.IsEnabled = true;
+
+                    AgregarDatos(datosCategoria);
+                    CargarDataGrid();
+                }
+            }
+            else
+            {
+                MessageBoxResult resultado = MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
+
         private void ActualizarDato(CategoriasModel datosCategoria)
         {
             // Quitar las comillas en @NuevoNombre
@@ -163,10 +192,44 @@ namespace MenuPrincipal.ActualizacionesDatos
             }
         }
 
+        private void AgregarDatos(CategoriasModel datosCategoria)
+        {
+            string consulta = "INSERT INTO Categorias (NombreCategoria) VALUES (@NombreCategoria)";
+
+            try
+            {
+                using (var conDb = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    conDb.Open();
+
+                    using (var cmd = conDb.CreateCommand())
+                    {
+                        cmd.CommandText = consulta;
+                        cmd.Parameters.AddWithValue("@NombreCategoria", datosCategoria.NombreCategoria);
 
 
-        #endregion
+
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                            MessageBox.Show("Carrera agregada exitosamente", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error inesperado, no se ha podido agregar la carrera", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado : " + e.Message);
+            }
 
 
+
+            #endregion
+
+
+        }
     }
 }

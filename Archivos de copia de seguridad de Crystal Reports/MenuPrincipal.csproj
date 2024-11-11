@@ -323,6 +323,12 @@
       <DependentUpon>reportProveedoresEmpleados.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PageReport\visualReports\SolicitudPrestamo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SolicitudPrestamo.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PageSolicitudes\PgSolicitudes.xaml.cs">
       <DependentUpon>PgSolicitudes.xaml</DependentUpon>
     </Compile>
@@ -367,6 +373,10 @@
     <EmbeddedResource Include="PageReport\visualReports\reportProveedoresEmpleados.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>reportProveedoresEmpleados.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PageReport\visualReports\SolicitudPrestamo.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SolicitudPrestamo.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

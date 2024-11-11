@@ -10,86 +10,195 @@
       Title="Usuarios" Background="White">
 
     <Grid>
-        <StackPanel Orientation="Vertical" Margin="0,10,0,10">
+        <TabControl>
+            <TabItem Header="Vista de Usuarios">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" >
 
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10" >
+
+                            <!-- Filtro por Tipo de Usuario -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Tipo Usuario" FontWeight="Bold" />
+                                <ComboBox x:Name="TipoUsuarioComboBox" Width="150" SelectionChanged="TipoUsuarioComboBox_SelectionChanged"  />
+                            </StackPanel>
+
+                            <!-- Filtro por Carrera -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Carrera" FontWeight="Bold" />
+                                <ComboBox x:Name="CarreraComboBox" Width="150" SelectionChanged="CarreraComboBox_SelectionChanged"  />
+                            </StackPanel>
+
+                            <!-- Filtro por Estado -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Estado" FontWeight="Bold" />
+                                <ComboBox x:Name="estadoComboBox" Width="150" SelectionChanged="estadoComboBox_SelectionChanged"  />
+                            </StackPanel>
+
+                            <!-- Filtro por Fecha de ingreso -->
+                            <StackPanel Margin="10,0">
+                                <TextBlock Text="Filtrar por Fecha Ingreso" FontWeight="Bold" />
+                                <ComboBox x:Name="FechaComboBox" Width="150" SelectionChanged="FechaComboBox_SelectionChanged"  >
+                                    <ComboBoxItem Content="Mas Reciente"/>
+                                    <ComboBoxItem Content="Mas Antiguo"/>
+                                    <ComboBoxItem Content="Ninguno"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Botón Filtrar -->
+                            <Button  Name ="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click"  />
 
 
+                        </StackPanel>
 
-                <!-- Filtro por Tipo de Usuario -->
-                <StackPanel Margin="10,0">
-                    <TextBlock Text="Filtrar por Tipo Usuario" FontWeight="Bold" />
-                    <ComboBox x:Name="TipoUsuarioComboBox" Width="150" SelectionChanged="TipoUsuarioComboBox_SelectionChanged"  />
-                </StackPanel>
+                        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0" Width="780">
 
-                <!-- Filtro por Carrera -->
-                <StackPanel Margin="10,0">
-                    <TextBlock Text="Filtrar por Carrera" FontWeight="Bold" />
-                    <ComboBox x:Name="CarreraComboBox" Width="150" SelectionChanged="CarreraComboBox_SelectionChanged"  />
-                </StackPanel>
+                            <!-- Filtro por Carnet -->
+                            <StackPanel Margin="10,30">
+                                <TextBlock Text="Filtrar por Carnet" FontWeight="Bold" />
+                                <TextBox x:Name="CarnetTextBox" Width="150" />
+                            </StackPanel>
 
-                <!-- Filtro por Estado -->
-                <StackPanel Margin="10,0">
-                    <TextBlock Text="Filtrar por Estado" FontWeight="Bold" />
-                    <ComboBox x:Name="estadoComboBox" Width="150" SelectionChanged="estadoComboBox_SelectionChanged"  />
-                </StackPanel>
+                            <Button Name ="btnBuscar" Content="Buscar" Width="80" Height="25" Margin="10,0,0,0" Click="btnBuscar_Click"  />
+                        </StackPanel>
 
-                <!-- Filtro por Fecha de ingreso -->
-                <StackPanel Margin="10,0">
-                    <TextBlock Text="Filtrar por Fecha Ingreso" FontWeight="Bold" />
-                    <ComboBox x:Name="FechaComboBox" Width="150" SelectionChanged="FechaComboBox_SelectionChanged"  >
-                        <ComboBoxItem Content="Mas Reciente"/>
-                        <ComboBoxItem Content="Mas Antiguo"/>
-                        <ComboBoxItem Content="Ninguno"/>
-                    </ComboBox>
-                </StackPanel>
+                        <!-- DataGrid para mostrar usuario -->
+                        <DataGrid x:Name="UsuariosDataGrid" AutoGenerateColumns="False" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,60" 
+                        IsReadOnly="True"  ItemsSource="{Binding}" SelectionChanged="UsuariosDataGrid_SelectionChanged"  >
 
-                <!-- Botón Filtrar -->
-                <Button  Name ="btnQuitarFiltros" Content="Quitar" Width="80" Height="25" Margin="10,15,0,0" Click="btnQuitarFiltros_Click"  />
+                            <!-- Columnas del DataGrid -->
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="IdUsuario" Binding="{Binding UsuarioID}" Width="*" />
+                                <DataGridTextColumn Header="Nombres" Binding="{Binding Nombres}" Width="*" />
+                                <DataGridTextColumn Header="Apellidos" Binding="{Binding Apellidos}" Width="*" />
+                                <DataGridTextColumn Header="Registro" Binding="{Binding FechaRegistro}" Width="*" />
+                                <DataGridTextColumn Header="Carnet" Binding="{Binding Carnet}" Width="*" />
+                                <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="*" />
+                                <DataGridTextColumn Header="TipoUsuario" Binding="{Binding TipoUsuario}" Width="*" />
+                                <DataGridTextColumn Header="Carrera" Binding="{Binding Carrera}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
 
-
-            </StackPanel>
-
-            <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0" Width="780">
-
-                <!-- Filtro por Carnet -->
-                <StackPanel Margin="10,30">
-                    <TextBlock Text="Filtrar por Carnet" FontWeight="Bold" />
-                    <TextBox x:Name="CarnetTextBox" Width="150" />
-                </StackPanel>
-
-                <Button Name ="btnBuscar" Content="Buscar" Width="80" Height="25" Margin="10,0,0,0" Click="btnBuscar_Click"  />
-            </StackPanel>
-
-            <!-- DataGrid para mostrar usuario -->
-            <DataGrid x:Name="UsuariosDataGrid" AutoGenerateColumns="False" 
-        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,60" 
-        IsReadOnly="True"  ItemsSource="{Binding}" SelectionChanged="UsuariosDataGrid_SelectionChanged"  >
-
-                <!-- Columnas del DataGrid -->
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="IdUsuario" Binding="{Binding UsuarioID}" Width="*" />
-                    <DataGridTextColumn Header="Nombres" Binding="{Binding Nombres}" Width="*" />
-                    <DataGridTextColumn Header="Apellidos" Binding="{Binding Apellidos}" Width="*" />
-                    <DataGridTextColumn Header="Registro" Binding="{Binding FechaRegistro}" Width="*" />
-                    <DataGridTextColumn Header="Carnet" Binding="{Binding Carnet}" Width="*" />
-                    <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="*" />
-                    <DataGridTextColumn Header="TipoUsuario" Binding="{Binding TipoUsuario}" Width="*" />
-                    <DataGridTextColumn Header="Carrera" Binding="{Binding Carrera}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-
-
-        </StackPanel>
-
-        <Frame VerticalAlignment="Top" Margin="18,250,22,10" x:Name="frContenidoUsuarios" NavigationUIVisibility="Hidden" />
+                        <Frame VerticalAlignment="Top" Margin="18,0,22,10" x:Name="frContenidoUsuarios" NavigationUIVisibility="Hidden" />
 
 
 
 
-        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,20,0,20">
-            <Label Name="labSeleccion" Content="Elemento Seleccionado: "   Margin="0,10,0,10"/>
-        </StackPanel>
+                        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,100,0,20">
+                            <Label Name="labSeleccion" Content="Elemento Seleccionado: "   Margin="0,20,0,10"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Agregar Usuario">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="0" Margin="20,0,11,0" Height="422" >
+                    <StackPanel Cursor="">
+                        <Label Content="Agregar Usuarios" FontWeight="Bold" FontSize="24" Foreground="Black" Margin="5"/>
+                        <TextBox x:Name="nombrestxt" Margin="5" Foreground="Black"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        materialDesign:HintAssist.Hint="Nombres"/>
+
+                        <TextBox x:Name="apellidostxt" Margin="5" Foreground="Black"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        materialDesign:HintAssist.Hint="Apellidos"/>
+
+                        <TextBlock Text="Estado Civil" Foreground="#FF2196F3" Opacity="0.75" Margin="10,0,0,0"/>
+                        <ComboBox x:Name="estadoCivilBox" Margin="5" Foreground="Black" 
+         Style="{StaticResource MaterialDesignComboBox}" SelectionChanged="estadoCivilBox_SelectionChanged" />
+
+                        <TextBox x:Name="nombreCasadatxt" Margin="5" Foreground="Black"
+         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         materialDesign:HintAssist.Hint="Nombre de Casada" IsEnabled="false"/>
+
+                        <TextBlock Text="Fecha Actual" Foreground="#FF2196F3" Opacity="0.75" Margin="5,0,0,0" />
+                        <DatePicker x:Name="DateFechaRegistro" HorizontalAlignment="Left" IsEnabled="False"
+                 DisplayDateStart="1900-01-01"
+                 DisplayDateEnd="2100-12-31"
+                 Width="275"
+                 Margin="5,5,5,0"
+         materialDesign:HintAssist.Hint="Fecha de registro"/>
+
+                        <TextBox x:Name="Carnettxt" Margin="5" Foreground="Black"
+         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         materialDesign:HintAssist.Hint="Carnet"/>
+
+                        <Label Content="Contactos del Usuario" FontWeight="Bold" FontSize="20" Foreground="Black" Margin="5"/>
+                        <TextBox x:Name="correo1txt" Margin="5" Foreground="Black"
+         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         materialDesign:HintAssist.Hint="Correo 1"/>
+
+                        <TextBox x:Name="correo2txt" Margin="5" Foreground="Black"
+         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         materialDesign:HintAssist.Hint="Correo 2"/>
+
+                        <TextBox x:Name="telefono1txt" Margin="5" Foreground="Black"
+         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         materialDesign:HintAssist.Hint="Telefono 1"/>
+
+                        <TextBox x:Name="telefono2txt" Margin="5" Foreground="Black"
+         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         materialDesign:HintAssist.Hint="Telefono 2"/>
+
+                        <TextBox x:Name="telefonoFijotxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint="Telefono Fijo"/>
+
+                        <Label Content="Direcciones" FontWeight="Bold" FontSize="20" Foreground="Black" Margin="5"/>
+                        <TextBox x:Name="coloniatxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint="Colonia"/>
+
+                        <TextBox x:Name="calletxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint="Calle"/>
+
+                        <TextBox x:Name="casatxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint="Casa"/>
+
+                        <TextBox x:Name="municipiotxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint="Municipios"/>
+
+                        <TextBox x:Name="departamentotxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint ="Departamento"/>
+
+                        <TextBox x:Name="cptxt" Margin="5" Foreground="Black"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 materialDesign:HintAssist.Hint="Codigo Postal"/>
+
+                        <Label Content="Tipo de Usuario" FontWeight="Bold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                        <TextBlock Text="Tipo de usuario" Foreground="#FF2196F3" Opacity="0.75" Margin="5,0,0,0"/>
+                        <ComboBox x:Name="tipoUsuarioComboBox" Margin="5" Foreground="Black" 
+                 Style="{StaticResource MaterialDesignComboBox}" SelectionChanged="tipoUsuarioBox_SelectionChanged"/>
+
+                        <StackPanel>
+                            <Label Content="Credenciales" FontWeight="Bold" FontSize="20" Foreground="Black" Margin="10,0,0,0"/>
+                            <TextBox x:Name="contraseñatxt" Margin="5" Foreground="Black"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     materialDesign:HintAssist.Hint="Contraseña" IsEnabled="false"/>
+                        </StackPanel>
+
+                        <Label Content="Carrera" FontWeight="Bold" FontSize="20" Foreground="Black" Margin="5"/>
+                        <TextBlock Text="Carrera" Foreground="#FF2196F3" Opacity="0.75" Margin="5,0,0,0"/>
+                        <ComboBox x:Name="carreraComboBox" Margin="5" Foreground="Black" 
+         Style="{StaticResource MaterialDesignComboBox}" SelectionChanged="carreraBox_SelectionChanged" IsEnabled="false"/>
+
+                        <Label Content="Estado" FontWeight="Bold" FontSize="20" Foreground="Black" Margin="5"/>
+                        <TextBlock Text="Estado" Foreground="#FF2196F3" Opacity="0.75" Margin="5,0,0,0"/>
+                        <ComboBox x:Name="estadoComboBox2" Margin="5" Foreground="Black" 
+         Style="{StaticResource MaterialDesignComboBox}" SelectionChanged="estadoBox_SelectionChanged"/>
+
+
+                        <Button  Name ="btnAgregarUsuario" Content="Agregar" Width="100" Height="25" Margin="10,15,0,0" Cursor="Hand" Click="btnAgregarUsuario_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Page>

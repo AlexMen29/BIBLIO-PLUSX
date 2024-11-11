@@ -44,6 +44,10 @@ namespace MenuPrincipal.PageUsuarios
             LlenarBoxFiltros(datos.consultaTipoUsuario, TipoUsuarioComboBox, "Tipo");
             LlenarBoxFiltros(datos.consultaCarrera, CarreraComboBox, "NombreCarrera");
             LlenarBoxFiltros(datos.consultaEstado, estadoComboBox, "Estado");
+            LlenarBoxFiltros(datos.consultaEstadoCivil, estadoCivilBox, "EstadoCivil");
+            LlenarBoxFiltros(datos.consultaTipoUsuario, tipoUsuarioComboBox, "Tipo");
+            LlenarBoxFiltros(datos.consultaCarrera, carreraComboBox, "NombreCarrera");
+            LlenarBoxFiltros(datos.consultaEstado, estadoComboBox2, "Estado");
         }
 
 
@@ -289,6 +293,247 @@ namespace MenuPrincipal.PageUsuarios
             CargarDatos();
         }
 
+        #region Agregar Usuarios
 
+
+
+        private void btnAgregarUsuario_Click(object sender, RoutedEventArgs e)
+        {
+            // Declarar un array de TextBox
+            TextBox[] arrCajas = new TextBox[11];
+            ComboBox[] arrCombo = new ComboBox[3];
+
+            // Asignar TextBox al array
+            arrCajas[0] = nombrestxt;
+            arrCajas[1] = apellidostxt;
+            arrCajas[2] = Carnettxt;
+            arrCajas[3] = correo1txt;
+            arrCajas[4] = telefono1txt;
+            arrCajas[5] = coloniatxt;
+            arrCajas[6] = calletxt;
+            arrCajas[7] = casatxt;
+            arrCajas[8] = municipiotxt;
+            arrCajas[9] = departamentotxt;
+            arrCajas[10] = cptxt;
+
+
+            // Asignar Combobox al array
+            arrCombo[0] = estadoCivilBox;
+            arrCombo[1] = tipoUsuarioComboBox;
+            arrCombo[2] = estadoComboBox2;
+
+
+            bool validacionCajas = datos.VerifcarTextBox(arrCajas);
+            bool validacionCombo = datos.VerifcarComboBox(arrCombo);
+
+            if (validacionCajas == true && validacionCombo == true)
+            {
+                MessageBoxResult resultado = MessageBox.Show("¿Esta seguro de agregar el usuario?", "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (resultado == MessageBoxResult.Yes)
+                {
+                    // Suponiendo que tienes controles de entrada para cada dato en tu formulario
+                    string nombres = nombrestxt.Text;
+                    string apellidos = apellidostxt.Text;
+                    string estadoCivil = estadoCivilBox.Text;
+                    string ApellidoCasada = nombreCasadatxt.Text;
+                    DateTime fechaRegistro = DateFechaRegistro.SelectedDate ?? DateTime.Now;
+
+                    string correo1 = correo1txt.Text;
+                    string correo2 = correo2txt.Text;
+                    string telefono1 = telefono1txt.Text;
+                    string telefono2 = telefono2txt.Text;
+                    string telefonoFijo = telefonoFijotxt.Text;
+
+                    string colonia = coloniatxt.Text;
+                    string calle = calletxt.Text;
+                    string casa = casatxt.Text;
+                    string municipio = municipiotxt.Text;
+                    string departamento = departamentotxt.Text;
+                    string cp = cptxt.Text;
+
+                    string clave = contraseñatxt.Text;
+                    string carnet = Carnettxt.Text;
+
+                    ComboBox tipoUsuarioBox = tipoUsuarioComboBox;
+                    ComboBox estadoBox = estadoComboBox2;
+                    ComboBox carreraBox = carreraComboBox;
+
+                    AgregarUsuario(
+                        nombres, apellidos, estadoCivil, ApellidoCasada, fechaRegistro,
+                        correo1, correo2, telefono1, telefono2, telefonoFijo,
+                        colonia, calle, casa, municipio, departamento, cp, clave,
+                        carnet, tipoUsuarioBox, estadoBox, carreraBox
+                    );
+                    CargarDatos();
+
+                    MessageBox.Show("Datos guardados exitosamente.");
+
+                }
+
+            }
+            else
+
+            {
+                MessageBoxResult resultado = MessageBox.Show("Datos Incompletos, por favor complete los campos requeridos", "Informacion", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            }
+        }
+
+        private void estadoCivilBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LlenarBoxFiltros(datos.consultaEstadoCivil, estadoCivilBox, "EstadoCivil");
+            if (estadoCivilBox.SelectedItem?.ToString() != "Soltero")
+            {
+                nombreCasadatxt.IsEnabled = true;
+
+            }
+            else
+            {
+                nombreCasadatxt.IsEnabled = false;
+            }
+        }
+
+        private void tipoUsuarioBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LlenarBoxFiltros(datos.consultaTipoUsuario, tipoUsuarioComboBox, "Tipo");
+            // Obtener el valor seleccionado del ComboBox como texto.
+
+            if (tipoUsuarioComboBox.SelectedItem?.ToString() != "Estudiante")
+            {
+                carreraComboBox.IsEnabled = false;
+                contraseñatxt.IsEnabled = true;
+
+            }
+            else
+            {
+                carreraComboBox.IsEnabled = true;
+                contraseñatxt.IsEnabled = false;
+            }
+        }
+
+        private void carreraBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LlenarBoxFiltros(datos.consultaCarrera, carreraComboBox, "NombreCarrera");
+        }
+
+        private void estadoBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LlenarBoxFiltros(datos.consultaEstado, estadoComboBox2, "Estado");
+        }
+
+        private void AgregarUsuario(string nombres, string apellidos, string estadoCivil, string ApellidoCasada, DateTime fechaRegistro,
+        string correo1, string correo2, string telefono1, string telefono2, string telefonoFijo,
+         string colonia, string calle, string casa, string municipio, string departamento, string cp, string clave,
+        string carnet, ComboBox tipoUsuarioBox, ComboBox estadoBox, ComboBox carreraBox)
+        {
+            try
+            {
+                int[] ids = IdTipoCarreraEstado(tipoUsuarioBox, estadoBox, carreraBox);
+                int tipoUsuarioID = ids[0];
+                int carreraID = ids[1];
+                int estadoID = ids[2];
+
+                using (SqlConnection conn = new SqlConnection(Properties.Settings.Default.conexionDB))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_AgregarUsuario", conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Nombres", nombres);
+                    cmd.Parameters.AddWithValue("@Apellidos", apellidos);
+                    cmd.Parameters.AddWithValue("@EstadoCivil", estadoCivil);
+                    cmd.Parameters.AddWithValue("@ApellidoCasada", ApellidoCasada);
+                    cmd.Parameters.AddWithValue("@FechaRegistro", fechaRegistro);
+                    cmd.Parameters.AddWithValue("@Correo1", correo1);
+                    cmd.Parameters.AddWithValue("@Correo2", correo2);
+                    cmd.Parameters.AddWithValue("@Telefono1", telefono1);
+                    cmd.Parameters.AddWithValue("@Telefono2", telefono2);
+                    cmd.Parameters.AddWithValue("@TelefonoFijo", telefonoFijo);
+                    cmd.Parameters.AddWithValue("@Colonia", colonia);
+                    cmd.Parameters.AddWithValue("@Calle", calle);
+                    cmd.Parameters.AddWithValue("@Casa", casa);
+                    cmd.Parameters.AddWithValue("@Municipio", municipio);
+                    cmd.Parameters.AddWithValue("@Departamento", departamento);
+                    cmd.Parameters.AddWithValue("@CP", cp);
+                    cmd.Parameters.AddWithValue("@contrasena", clave);
+                    cmd.Parameters.AddWithValue("@Carnet", carnet);
+                    cmd.Parameters.AddWithValue("@TipoUsuarioID", tipoUsuarioID);
+                    cmd.Parameters.AddWithValue("@EstadoID", estadoID);
+                    cmd.Parameters.AddWithValue("@CarreraID", carreraID);
+
+                    conn.Open();
+                    if (cmd.ExecuteNonQuery() != 0)
+                    {
+                        MessageBox.Show("Dato agregado exitosamente", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error inesperado, no se ha podido agregar", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error inesperado : " + e.Message);
+            }
+        }
+
+
+        private int[] IdTipoCarreraEstado(ComboBox tipo, ComboBox carrera, ComboBox estado)
+        {
+            int[] ids = new int[3];
+
+            string consultaTipoUsuario = "SELECT TipoUsuarioID FROM TipoUsuario WHERE Tipo = @Tipo";
+            ids[0] = ObtenerIdLocal(consultaTipoUsuario, "@Tipo", tipoUsuarioComboBox, 0);
+
+            string consultaCarrera = "SELECT CarreraID FROM Carrera WHERE NombreCarrera = @Carrera";
+            ids[1] = ObtenerIdLocal(consultaCarrera, "@Carrera", carreraComboBox, 0);
+
+            string consultaEstado = "SELECT EstadoID FROM Estado WHERE Estado = @Estado";
+            ids[2] = ObtenerIdLocal(consultaEstado, "@Estado", estadoComboBox2, 0);
+
+            return ids;
+        }
+
+        private int ObtenerIdLocal(string consulta, string clave, ComboBox valor, int Edicion)
+        {
+            if (Edicion > 0)
+            {
+                string consultaSql = consulta;
+                Dictionary<string, object> parametros = new Dictionary<string, object>
+                {
+                    { clave, Edicion } // Reemplaza con el ISBN correspondiente
+                };
+
+                // Llamar al método y obtener el resultado
+                int id = MetodosCRUD.ObtenerId(consultaSql, parametros);
+                return id;
+            }
+            else
+            {
+                string consultaSql = consulta;
+                Dictionary<string, object> parametros = new Dictionary<string, object>
+                {
+                    { clave, valor.Text } // Reemplaza con el ISBN correspondiente
+                };
+
+                // Llamar al método y obtener el resultado
+                int id = MetodosCRUD.ObtenerId(consultaSql, parametros);
+                return id;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #endregion
     }
 }

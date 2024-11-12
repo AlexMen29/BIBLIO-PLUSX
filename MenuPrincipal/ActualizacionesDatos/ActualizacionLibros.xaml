@@ -46,11 +46,11 @@
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                      materialDesign:HintAssist.Hint="Titulo"/>
 
-                    <TextBox x:Name="EditDescripcionTextBox" Margin="5" Foreground="Black" IsEnabled="False"
+                    <TextBox x:Name="EditDescripcionTextBox" Margin="5" Foreground="Black" 
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      materialDesign:HintAssist.Hint="Descripción" AcceptsReturn="True" Height="100"/>
 
-                    <TextBox x:Name="EditEdicionTextBox" Margin="5" Foreground="Black" 
+                    <TextBox x:Name="EditEdicionTextBox" Margin="5" Foreground="Black" IsEnabled="False"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                      materialDesign:HintAssist.Hint="Edición"/>
 
@@ -76,14 +76,6 @@
                         <ComboBox x:Name="EditCategoriaComboBox"  Foreground="Black" 
                       Style="{StaticResource MaterialDesignComboBox}"/>
                     </StackPanel>
-
-
-
-
-
-
-
-
 
                     <!-- Botón de Modificar -->
                     <Button Name="bntModificar" Content="Modificar" Width="125" Margin="10" Background="#9e1717" Foreground="White" Click="bntModificar_Click" />

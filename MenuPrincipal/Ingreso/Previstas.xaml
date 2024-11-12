@@ -42,7 +42,7 @@
                     <StackPanel VerticalAlignment="Top" Margin="15,40,15,0">
                         <TextBox x:Name="txtCorreo" Margin="0,10" FontSize="18" FontFamily="Corbel Light"
                                  materialDesign:HintAssist.Hint="Carnet"
-                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" PreviewKeyDown="txtCorreo_PreviewKeyDown" />
                         <PasswordBox x:Name="txtPassword" Margin="0,10" FontSize="18" FontFamily="Corbel Light"
                                      materialDesign:HintAssist.Hint="Contraseña"
                                      Style="{StaticResource MaterialDesignFilledPasswordBox}" Cursor="IBeam" KeyDown="txtPassword_KeyDown" />

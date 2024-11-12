@@ -173,5 +173,16 @@ namespace MenuPrincipal.Ingreso
             }
 
         }
+
+        private void txtCorreo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            // Verificar si se excede el límite de 6 caracteres
+            if (textBox.Text.Length >= 6 && e.Key != Key.Back)
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

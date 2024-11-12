@@ -315,7 +315,7 @@ namespace MenuPrincipal.PageSolicitudes
                 if (txbFechaPrestamo.SelectedDate.HasValue && txbFechaDevolucionDias.SelectedDate.HasValue)
                 {
                     TimeSpan diferencia = txbFechaDevolucionDias.SelectedDate.Value - txbFechaPrestamo.SelectedDate.Value;
-                    int dias = diferencia.Days;
+                    int dias = diferencia.Days + 1;
 
                     // Calcular costo basado en la tabla de "días"
                     switch (dias)
@@ -336,7 +336,7 @@ namespace MenuPrincipal.PageSolicitudes
                 if (txbFechaPrestamo.SelectedDate.HasValue && txbFechaDevolucionSemanas.SelectedDate.HasValue)
                 {
                     TimeSpan diferencia = txbFechaDevolucionSemanas.SelectedDate.Value - txbFechaPrestamo.SelectedDate.Value;
-                    int semanas = (int)(diferencia.TotalDays / 7);
+                    int semanas = (int)(diferencia.TotalDays / 7 + 1);
 
                     // Calcular costo basado en la tabla de "semanas"
                     switch (semanas)
